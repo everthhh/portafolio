@@ -1,0 +1,1799 @@
+<!doctype html>
+<html lang="es-MX" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evert Pascual · Excel, Python y web</title>
+<meta name="description" content="Evert Pascual: hojas de cálculo, scripts de Python y páginas web para negocios. Excel, Google Sheets, Python y landing pages, en español e inglés.">
+<meta property="og:title" content="Evert Pascual · Excel, Python y web">
+<meta property="og:description" content="Evert Pascual: hojas de cálculo, scripts de Python y páginas web para negocios. Excel, Google Sheets, Python y landing pages, en español e inglés.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/og-es.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0F18" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='24' height='24' rx='2' fill='%23fff' stroke='%231F4FE0' stroke-width='3'/%3E%3Crect x='24' y='24' width='7' height='7' fill='%231F4FE0'/%3E%3Ctext x='15' y='20' font-family='monospace' font-weight='700' font-size='11' text-anchor='middle' fill='%230D1626'%3EEP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400..800&display=swap">
+<style>/* Layout: una hoja de cálculo viva. La página se apoya en una cuadrícula de celdas tenue,
+   el encabezado es una barra de fórmulas que sigue la sección, la navegación son pestañas de hoja
+   y lo que eliges se marca con el contorno de selección y su controlador de relleno. */
+:root{
+  --paper:#F4F6F9; --sheet:#FFFFFF; --band:#EBEFF4; --head:#E6EBF1;
+  --ink:#0D1626; --ink-2:#465267; --ink-3:#768296;
+  --line:#D7DEE7; --line-2:#C3CCD8; --grid:rgba(13,22,38,.055);
+  --accent:#1F4FE0; --accent-ink:#FFFFFF; --accent-soft:rgba(31,79,224,.09); --accent-line:rgba(31,79,224,.35);
+  --mark:#FFC531; --mark-soft:rgba(255,197,49,.45);
+  --good:#0E7F47; --good-soft:#E1F3E8; --bad:#C93434; --bad-soft:#FBE4E4;
+  --r1:#1F4FE0; --r2:#D2550F; --r3:#7A3BDB; --r4:#0E7F47;
+  --shadow:0 28px 60px -28px rgba(13,22,38,.32);
+  --scrim:rgba(13,22,38,.42);
+  --display:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
+  --body:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --cell:48px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0A0F18; --sheet:#111A28; --band:#0E1521; --head:#162133;
+  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#717E93;
+  --line:#223049; --line-2:#2E3E5C; --grid:rgba(231,236,244,.045);
+  --accent:#7D9CFF; --accent-ink:#0A0F18; --accent-soft:rgba(125,156,255,.13); --accent-line:rgba(125,156,255,.45);
+  --mark:#FFCB45; --mark-soft:rgba(255,203,69,.30);
+  --good:#46D08E; --good-soft:rgba(70,208,142,.13); --bad:#FF7B7B; --bad-soft:rgba(255,123,123,.13);
+  --r1:#7D9CFF; --r2:#FF9A5C; --r3:#BE97FF; --r4:#46D08E;
+  --shadow:0 30px 60px -30px rgba(0,0,0,.75);
+  --scrim:rgba(3,6,12,.6);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#0A0F18; --sheet:#111A28; --band:#0E1521; --head:#162133;
+  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#717E93;
+  --line:#223049; --line-2:#2E3E5C; --grid:rgba(231,236,244,.045);
+  --accent:#7D9CFF; --accent-ink:#0A0F18; --accent-soft:rgba(125,156,255,.13); --accent-line:rgba(125,156,255,.45);
+  --mark:#FFCB45; --mark-soft:rgba(255,203,69,.30);
+  --good:#46D08E; --good-soft:rgba(70,208,142,.13); --bad:#FF7B7B; --bad-soft:rgba(255,123,123,.13);
+  --r1:#7D9CFF; --r2:#FF9A5C; --r3:#BE97FF; --r4:#46D08E;
+  --shadow:0 30px 60px -30px rgba(0,0,0,.75);
+  --scrim:rgba(3,6,12,.6);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
+     padding-bottom:calc(52px + env(safe-area-inset-bottom,0px));overflow-x:hidden}
+:root:not([data-lang="en"]) [data-l="en"],:root[data-lang="en"] [data-l="es"]{display:none!important}
+[hidden]{display:none!important}
+a{color:var(--accent)}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.mono{font-family:var(--mono);font-feature-settings:"calt" 0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--accent);color:var(--accent-ink);padding:10px 14px;border-radius:8px;font-weight:700}
+.skip:focus{top:calc(10px + env(safe-area-inset-top,0px))}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}}
+
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em}
+h1{font-size:clamp(2.35rem,4.5vw,4.1rem);line-height:1.02;font-weight:800;font-stretch:118%}
+h2{font-size:clamp(1.9rem,3.4vw,2.9rem);line-height:1.05;font-weight:800;font-stretch:115%}
+h3{font-size:1.14rem;line-height:1.25;font-weight:720;font-stretch:104%;letter-spacing:-.005em}
+p{margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0}
+mark{color:inherit;background:linear-gradient(to top,var(--mark-soft) 0 40%,transparent 40%);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;cursor:pointer;font-weight:650;text-decoration:none;
+     border-radius:10px;padding:13px 20px;line-height:1.1;transition:transform .15s ease,background .15s,box-shadow .15s,color .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn-accent{background:var(--accent);color:var(--accent-ink);box-shadow:0 10px 24px -12px var(--accent)}
+.btn-ghost{background:var(--sheet);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.btn-link{background:none;color:var(--accent);padding-inline:6px;text-decoration:underline;text-underline-offset:4px}
+.btn-sm{padding:10px 14px;font-size:.93rem}
+.btn-xs{padding:7px 11px;font-size:.84rem;border-radius:8px}
+.icon-btn{all:unset;box-sizing:border-box;cursor:pointer;height:38px;min-width:38px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+          border-radius:10px;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line)}
+.icon-btn:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+.icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kbd{font-family:var(--mono);font-size:.72rem;padding:2px 6px;border-radius:5px;background:var(--head);color:var(--ink-2)}
+.seg{display:inline-flex;padding:3px;border-radius:10px;background:var(--head);gap:2px;flex-wrap:wrap}
+.seg button{all:unset;box-sizing:border-box;cursor:pointer;padding:7px 12px;border-radius:8px;font-weight:650;font-size:.88rem;color:var(--ink-2);transition:background .15s,color .15s}
+.seg button[aria-pressed="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg button:focus-visible{outline:2px solid var(--accent)}
+
+/* ---------- barra de fórmulas ---------- */
+.fx{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--paper) 86%,transparent);
+    -webkit-backdrop-filter:saturate(1.4) blur(12px);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.fx-in{display:flex;align-items:center;gap:12px;height:62px;max-width:1440px;margin:0 auto;
+       padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none}
+.brand-cell{position:relative;width:36px;height:36px;display:grid;place-items:center;font-family:var(--mono);font-weight:800;font-size:.86rem;
+            border:2px solid var(--accent);border-radius:3px;color:var(--ink);background:var(--sheet)}
+.brand-cell::after{content:"";position:absolute;right:-5px;bottom:-5px;width:7px;height:7px;background:var(--accent);border:2px solid var(--sheet)}
+.brand-name{font-family:var(--display);font-weight:800;font-stretch:115%;font-size:1.05rem;letter-spacing:-.01em;white-space:nowrap}
+.fbar{flex:1;min-width:0;display:flex;align-items:stretch;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--sheet);overflow:hidden}
+.namebox{display:flex;align-items:center;padding:0 12px;min-width:104px;max-width:150px;border-right:1px solid var(--line);font-family:var(--mono);font-size:.8rem;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fx-sign{display:flex;align-items:center;padding:0 10px;color:var(--ink-3);font-family:var(--mono);font-size:.85rem;border-right:1px solid var(--line)}
+.fx-sign i{font-family:Georgia,serif;font-size:1.05em}
+.formula{display:flex;align-items:center;padding:0 12px;font-family:var(--mono);font-size:.84rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.formula .fn{color:var(--accent)}
+.formula .str{color:var(--good)}
+.formula.flash{animation:fflash .5s ease}
+@keyframes fflash{from{background:var(--accent-soft)}to{background:transparent}}
+.i-moon{display:none}
+:root[data-theme="dark"] .i-sun{display:none}:root[data-theme="dark"] .i-moon{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .i-sun{display:none}:root:not([data-theme="light"]) .i-moon{display:block}}
+@media (max-width:1100px){.brand-name{display:none}}
+@media (max-width:860px){.search-btn .kbd,.cta-top{display:none}}
+@media (max-width:560px){.namebox{display:none}.fx-in{gap:8px}.search-btn{display:none}.fbar{height:36px}.formula{font-size:.76rem;padding:0 8px}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--line);
+      background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+      background-size:var(--cell) var(--cell);background-position:-1px 27px}
+.cols{position:absolute;top:0;left:0;right:0;height:28px;display:flex;background:var(--head);border-bottom:1px solid var(--line);z-index:-1;overflow:hidden}
+.cols span{flex:none;width:var(--cell);text-align:center;font-family:var(--mono);font-size:.68rem;line-height:28px;color:var(--ink-3);border-right:1px solid var(--line)}
+.cols span.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.cellhi{position:absolute;width:calc(var(--cell) + 1px);height:calc(var(--cell) + 1px);border:2px solid var(--accent);pointer-events:none;z-index:-1;opacity:0;transition:opacity .2s,transform .08s linear;background:var(--accent-soft)}
+.cellhi::after{content:"";position:absolute;right:-5px;bottom:-5px;width:7px;height:7px;background:var(--accent);border:2px solid var(--paper)}
+.hero-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:center;padding-block:76px 72px}
+.hero-copy{min-width:0}
+.hero h1{margin-top:18px}
+.lede{font-size:1.12rem;color:var(--ink-2);max-width:54ch;margin-top:22px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;align-items:center}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 22px;list-style:none;padding:0;margin:30px 0 0;color:var(--ink-2);font-size:.92rem}
+.hero-meta li{display:flex;align-items:center;gap:8px}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 var(--good);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--good) 50%,transparent)}80%,100%{box-shadow:0 0 0 9px transparent}}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr;gap:40px;padding-block:60px 56px}}
+
+/* ventanas de hoja */
+.win{background:var(--sheet);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;min-width:0;margin:0}
+.win-bar{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 14px;border-bottom:1px solid var(--line);background:var(--head)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line-2)}
+.win-title{font-size:.8rem;color:var(--ink-2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.win-fx{display:flex;align-items:stretch;border-bottom:1px solid var(--line);font-size:.78rem;height:32px}
+.win-fx .nb{display:flex;align-items:center;padding:0 10px;min-width:54px;border-right:1px solid var(--line);color:var(--ink-2)}
+.win-fx .fx-sign{border-right:1px solid var(--line)}
+.win-fx > span:last-child{display:flex;align-items:center;padding:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.run{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-weight:650;font-size:.85rem}
+.run:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.run-ico{width:0;height:0;border-left:8px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.run.redo .run-ico{width:10px;height:10px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%}
+.grid-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sheet{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.78rem;font-variant-numeric:tabular-nums}
+.sheet th,.sheet td{border:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap;position:relative}
+.sheet thead th{background:var(--head);color:var(--ink-3);font-weight:500;text-align:center;font-size:.7rem;padding:4px}
+.sheet .rn{background:var(--head);color:var(--ink-3);font-weight:500;text-align:center;width:34px;font-size:.7rem;padding:4px}
+.sheet tr.hdr td{font-weight:700;color:var(--ink);background:color-mix(in srgb,var(--head) 50%,var(--sheet))}
+.sheet td.n{text-align:right}
+.sheet td.bad{background:var(--bad-soft);color:var(--bad)}
+.sheet td.fixing{outline:2px solid var(--accent);outline-offset:-2px;z-index:1}
+.sheet td.fixed{background:var(--good-soft);color:var(--ink);transition:background 1.2s}
+.sheet td.fixed.settle{background:transparent}
+.sheet tr.dupline td{text-decoration:line-through;color:var(--ink-3)!important;background:var(--bad-soft)}
+.sheet tr.total td{font-weight:800;border-top:2px solid var(--ink)}
+.sheet tr.total .tl{font-family:var(--body)}
+.dim{color:var(--ink-3);font-weight:400}
+.live .sheet{font-size:.74rem}
+.live .sheet td{white-space:pre}
+.live-foot{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;padding:14px 16px;border-top:1px solid var(--line)}
+.chart-mini{display:grid;gap:6px;min-width:0}
+.bar-row{display:grid;grid-template-columns:130px 1fr 74px;gap:10px;align-items:center;font-size:.76rem}
+.bar-row span{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-row i{display:block;height:10px;border-radius:3px;background:var(--accent);width:calc(var(--v) * 1%);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.bar-row b{font-family:var(--mono);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.status{font-size:.74rem;color:var(--ink-3);text-align:right;max-width:24ch}
+.status.ok{color:var(--good)}
+@media (max-width:560px){.live-foot{grid-template-columns:1fr}.status{text-align:left;max-width:none}.bar-row{grid-template-columns:110px 1fr 64px}}
+
+/* ---------- prueba ---------- */
+.proof{border-bottom:1px solid var(--line);background:var(--sheet)}
+.proof-k{font-size:.72rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;padding-top:26px}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);margin:14px 0 0;padding-bottom:30px}
+.proof-grid div{padding:6px 24px 0;border-left:1px solid var(--line);min-width:0}
+.proof-grid div:first-child{border-left:0;padding-left:0}
+.num{font-family:var(--display);font-weight:800;font-stretch:120%;font-size:clamp(2rem,3.2vw,2.8rem);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.proof dd{margin:10px 0 0;color:var(--ink-2);font-size:.9rem;line-height:1.45;max-width:30ch}
+@media (max-width:860px){.proof-grid{grid-template-columns:1fr 1fr;row-gap:26px}.proof-grid div:nth-child(3){border-left:0;padding-left:0}}
+@media (max-width:440px){.proof-grid{grid-template-columns:1fr}.proof-grid div{border-left:0;padding-left:0}}
+
+/* ---------- secciones ---------- */
+main > section{padding-block:96px}
+.band{background:var(--band);border-block:1px solid var(--line)}
+.sec-head{max-width:760px;margin-bottom:38px}
+.sec-head h2{margin-top:12px}
+.sec-lede{color:var(--ink-2);font-size:1.06rem;margin-top:14px;max-width:60ch}
+@media (max-width:700px){main > section{padding-block:68px}}
+
+/* servicios */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.filter{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line-2);background:var(--sheet);border-radius:8px;font-weight:600;font-size:.92rem;transition:all .15s}
+.filter .af{font-size:.7rem;color:var(--ink-3)}
+.filter .cnt{font-size:.72rem;padding:1px 6px;border-radius:5px;background:var(--head);color:var(--ink-2)}
+.filter.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.filter.on .af{color:inherit}.filter.on .cnt{background:rgba(255,255,255,.22);color:inherit}
+.filter:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:1180px){.svc-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:880px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.svc-grid{grid-template-columns:1fr}}
+.sel{position:relative;transition:box-shadow .15s,transform .2s}
+.sel > .handle{position:absolute;right:-5px;bottom:-5px;width:9px;height:9px;background:var(--accent);border:2px solid var(--paper);opacity:0;transition:opacity .15s}
+.sel:hover,.sel:focus-within,.sel.lit{box-shadow:0 0 0 2px var(--accent)}
+.sel:hover > .handle,.sel:focus-within > .handle,.sel.lit > .handle{opacity:1}
+.svc{background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.svc.hide{display:none}
+.svc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:26px}
+.fmt{font-size:.72rem;color:var(--ink-3)}
+.demo-chip{font-size:.74rem;font-weight:700;color:var(--good);background:var(--good-soft);padding:3px 8px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.demo-chip::before{content:"● ";font-size:.7em;vertical-align:1px}
+.svc p{color:var(--ink-2);font-size:.93rem;line-height:1.55}
+.inc{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.88rem;flex:1;align-content:start}
+.inc li{display:grid;grid-template-columns:16px 1fr;gap:8px}
+.inc li::before{content:"";width:12px;height:12px;margin-top:5px;border-radius:3px;background:var(--accent-soft);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.svc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;border-top:1px dashed var(--line-2);flex-wrap:wrap}
+.days{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;color:var(--ink-2)}
+.price{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:1.15rem;white-space:nowrap}
+.price small{font-family:var(--body);font-weight:500;font-size:.72rem;color:var(--ink-3);font-stretch:100%}
+.price.soft{font-family:var(--body);font-stretch:100%;font-weight:650;font-size:.85rem;color:var(--accent)}
+
+/* demos */
+.tabs-demo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.tabs-demo button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:10px;background:var(--sheet);border:1px solid var(--line);font-weight:700;font-size:.98rem;transition:all .15s}
+.tabs-demo button .mono{font-size:.72rem;color:var(--ink-3);font-weight:500}
+.tabs-demo button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent);color:var(--accent)}
+.tabs-demo button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:760px){.tabs-demo{grid-template-columns:1fr 1fr}}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:16px;padding:28px}
+@media (max-width:600px){.panel{padding:16px;border-radius:12px}}
+.panel-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:36px;align-items:start}
+.panel-copy{display:grid;gap:14px;min-width:0}
+.panel-copy h3{font-size:1.45rem;font-stretch:112%}
+.panel-copy > p{color:var(--ink-2)}
+.ticks{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.92rem}
+.ticks li{display:grid;grid-template-columns:18px 1fr;gap:8px}
+.ticks li::before{content:"✓";font-family:var(--mono);color:var(--good);font-weight:700}
+.panel-copy .btn{justify-self:start}
+@media (max-width:960px){.panel-grid{grid-template-columns:1fr;gap:24px}}
+.xl{box-shadow:none}
+#p-hoja .panel-grid{grid-template-columns:.6fr 1.4fr}
+@media (max-width:960px){#p-hoja .panel-grid{grid-template-columns:1fr}}
+.xl .sheet{font-size:.74rem}
+.xl .sheet td{padding:6px 8px}
+.xl .sheet td{cursor:cell}
+.xl .sheet td.ed{color:var(--accent);padding:0}
+.xl .sheet td.ed input{all:unset;box-sizing:border-box;width:100%;min-width:60px;padding:7px 10px;text-align:right;font-family:var(--mono);color:var(--accent);font-weight:600;cursor:text}
+.xl .sheet td.ed input:focus{background:var(--accent-soft)}
+.xl .sheet td.sel-cell{outline:2px solid var(--accent);outline-offset:-2px;z-index:2}
+.xl .sheet td.sel-cell::after{content:"";position:absolute;right:-4px;bottom:-4px;width:6px;height:6px;background:var(--accent);border:1.5px solid var(--sheet);z-index:3}
+.xl .sheet td.ref1{box-shadow:inset 0 0 0 2px var(--r1);background:color-mix(in srgb,var(--r1) 9%,transparent)}
+.xl .sheet td.ref2{box-shadow:inset 0 0 0 2px var(--r2);background:color-mix(in srgb,var(--r2) 9%,transparent)}
+.xl .sheet td.ref3{box-shadow:inset 0 0 0 2px var(--r3);background:color-mix(in srgb,var(--r3) 9%,transparent)}
+.xl .sheet td.ref4{box-shadow:inset 0 0 0 2px var(--r4);background:color-mix(in srgb,var(--r4) 9%,transparent)}
+.xl .sheet td.pop{animation:pop .6s ease}
+@keyframes pop{0%{background:var(--mark-soft)}100%{background:transparent}}
+.xl .st{display:inline-block;padding:1px 7px;border-radius:999px;font-family:var(--body);font-weight:700;font-size:.72rem}
+.xl .st.ok{background:var(--good-soft);color:var(--good)}
+.xl .st.re{background:var(--bad-soft);color:var(--bad)}
+.xl .sheet tr.sum td{font-weight:700}
+.xl .sheet tr.gap td,.xl .sheet tr.gap th{height:14px;padding:0}
+.fx-c .fn{color:var(--accent)}.fx-c .r1{color:var(--r1)}.fx-c .r2{color:var(--r2)}.fx-c .r3{color:var(--r3)}.fx-c .r4{color:var(--r4)}.fx-c .str{color:var(--good)}
+
+.cleaner{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px;align-items:start}
+.cl-in{display:grid;gap:10px;min-width:0}
+.cl-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.8rem;color:var(--ink-2)}
+.cl-actions{display:flex;gap:8px}
+textarea{font:inherit;width:100%;border:1px solid var(--line-2);border-radius:10px;background:var(--paper);color:var(--ink);padding:12px 14px;resize:vertical}
+#cl-text{font-family:var(--mono);font-size:.76rem;line-height:1.7;min-height:280px;white-space:pre;overflow:auto}
+textarea:focus,select:focus,input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.hint{font-size:.84rem;color:var(--ink-3)}
+.cl-out{display:grid;gap:12px;min-width:0}
+.cl-stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{display:inline-flex;align-items:baseline;gap:6px;padding:6px 10px;border-radius:8px;background:var(--paper);border:1px solid var(--line);font-size:.82rem;color:var(--ink-2)}
+.stat b{font-family:var(--mono);color:var(--ink);font-size:.95rem}
+.stat.g b{color:var(--good)}.stat.r b{color:var(--bad)}
+.cl-table{max-height:330px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.sheet.tight{font-size:.74rem}
+.sheet.tight th{position:sticky;top:0;background:var(--head);color:var(--ink-2);font-weight:600;text-align:left;font-size:.72rem;padding:7px 10px;z-index:1}
+.sheet.tight td.chg{background:var(--good-soft)}
+details.problems,details.code{border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+details.problems summary,details.code summary{cursor:pointer;padding:10px 14px;font-weight:650;font-size:.9rem}
+details.problems ul{margin:0;padding:0 14px 12px 32px;font-size:.84rem;color:var(--ink-2);display:grid;gap:3px}
+details.code pre{margin:0;padding:0 14px 14px;font-size:.72rem;line-height:1.6;overflow:auto;max-height:340px;color:var(--ink-2)}
+@media (max-width:900px){.cleaner{grid-template-columns:1fr}}
+
+.dash{display:grid;gap:20px}
+.dash-top{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.dash-top h3{font-size:1.3rem;font-stretch:110%}
+.dash-top .hint{margin-top:6px;max-width:62ch}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{padding:16px;border-radius:12px;border:1px solid var(--line);background:var(--paper);min-width:0}
+.kpi p{font-size:.8rem;color:var(--ink-2)}
+.kpi b{display:block;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.65rem;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.kpi small{font-size:.76rem;color:var(--ink-3)}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+.dash-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}
+@media (max-width:900px){.dash-grid{grid-template-columns:1fr}}
+.chart-card{border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0;background:var(--sheet)}
+.chart-t{font-weight:700;font-size:.92rem;margin-bottom:10px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart .bar{fill:var(--accent);transition:height .5s cubic-bezier(.2,.8,.2,1),y .5s cubic-bezier(.2,.8,.2,1),opacity .2s}
+.chart .bar.hl{fill:var(--mark)}
+.chart .axis{fill:var(--ink-3);font-family:var(--mono);font-size:10px}
+.chart .gridl{stroke:var(--line);stroke-width:1}
+.chart .val{fill:var(--ink);font-family:var(--mono);font-size:10px;font-weight:600}
+.hbars{display:grid;gap:9px}
+.hb{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:.84rem}
+.hb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-2)}
+.hb b{font-family:var(--mono);font-size:.8rem;font-variant-numeric:tabular-nums}
+.hb i{grid-column:1/-1;height:8px;border-radius:3px;background:var(--head);overflow:hidden}
+.hb i::after{content:"";display:block;height:100%;width:calc(var(--v) * 1%);background:var(--accent);border-radius:3px;transition:width .5s}
+
+.landing-grid{grid-template-columns:.7fr 1.3fr}
+.device{margin:0 auto;width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--line-2);background:var(--head);box-shadow:var(--shadow);transition:max-width .4s ease}
+.device-bar{display:flex;align-items:center;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.device .url{font-size:.74rem;color:var(--ink-3);background:var(--sheet);padding:3px 12px;border-radius:6px;flex:1;max-width:280px}
+.device-screen{position:relative;overflow:hidden;background:#fff}
+.device iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;background:#fff}
+.device.desk .device-screen{aspect-ratio:16/10}
+.device.phone{max-width:320px;border-radius:36px;border:10px solid var(--ink);background:var(--ink)}
+.device.phone .device-bar{display:none}
+.device.phone .device-screen{aspect-ratio:390/780;border-radius:26px}
+
+/* proyectos */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:820px){.proj-grid{grid-template-columns:1fr}}
+.proj{background:var(--sheet);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.proj-img{aspect-ratio:16/10;overflow:hidden;background:var(--head);border-bottom:1px solid var(--line)}
+.proj-img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.proj:hover .proj-img img{transform:scale(1.03)}
+.proj-body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.proj-body h3{font-size:1.3rem;font-stretch:110%}
+.proj-body > p:not(.fmt){color:var(--ink-2);font-size:.95rem}
+.verify{font-size:.86rem!important;padding:10px 12px;border-radius:8px;background:var(--good-soft);color:var(--ink)!important}
+.verify .mono{color:var(--good);font-weight:700}
+.proj-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+
+/* proceso */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--sheet)}
+.steps li{padding:24px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:10px;position:relative}
+.steps li:first-child{border-left:0}
+.step-n{display:inline-grid;place-items:center;width:40px;height:40px;border:2px solid var(--accent);border-radius:3px;font-weight:700;color:var(--accent);font-size:.9rem}
+.steps p{color:var(--ink-2);font-size:.92rem;flex:1}
+.step-t{font-size:.76rem;color:var(--ink-3);padding-top:10px;border-top:1px dashed var(--line-2)}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}.steps li:nth-child(3){border-left:0}.steps li:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}.steps li{border-left:0;border-top:1px solid var(--line)}.steps li:first-child{border-top:0}}
+
+/* precios */
+.pk-tabs{margin-bottom:22px}
+.pk{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:stretch}
+@media (max-width:880px){.pk{grid-template-columns:1fr}}
+.tier{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative}
+.tier.pop{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.tier.pop::after{content:"";position:absolute;right:-5px;bottom:-5px;width:9px;height:9px;background:var(--accent);border:2px solid var(--paper)}
+.tier-k{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3)}
+.tier-p{font-family:var(--display);font-weight:800;font-stretch:118%;font-size:2.9rem;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tier-p .cur{font-size:.55em;vertical-align:.55em;margin-right:2px;color:var(--ink-3)}
+.tier-p small{font-family:var(--body);font-size:.85rem;font-weight:600;color:var(--ink-3);margin-left:6px;font-stretch:100%;letter-spacing:0}
+.tier-w{color:var(--ink-2);font-size:.94rem;flex:1}
+.tier-d{display:grid;grid-template-columns:1fr 1fr;margin:0;border-top:1px dashed var(--line-2);padding-top:12px}
+.tier-d dt{font-size:.76rem;color:var(--ink-3)}
+.tier-d dd{margin:0;font-weight:700;font-family:var(--mono);font-size:.9rem}
+
+/* brief */
+.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media (max-width:940px){.brief-grid{grid-template-columns:1fr;gap:28px}}
+.brief-form{display:grid;gap:18px}
+fieldset{border:0;margin:0;padding:0}
+legend{font-weight:700;margin-bottom:10px;padding:0}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick label{position:relative;cursor:pointer}
+.pick input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.pick label > span{display:inline-flex;padding:9px 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--sheet);font-weight:600;font-size:.92rem;transition:all .15s}
+.pick input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pick input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-weight:650;font-size:.94rem}
+select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--sheet);color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:center;cursor:pointer;font-size:.95rem}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.brief-out{display:grid;gap:14px;position:sticky;top:90px}
+@media (max-width:940px){.brief-out{position:static}}
+.memo .ex{font-size:.72rem;color:var(--ink-3);border:1px solid var(--line-2);border-radius:5px;padding:1px 6px}
+.memo-txt{margin:0;padding:18px 20px;font-family:var(--mono);font-size:.8rem;line-height:1.7;white-space:pre-wrap;word-break:break-word;min-height:300px;color:var(--ink)}
+.memo-meta{padding:12px 20px;border-top:1px solid var(--line);font-size:.86rem;color:var(--ink-2);background:var(--paper)}
+.memo-meta b{color:var(--ink)}
+.send{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.send-links{display:flex;flex-wrap:wrap;gap:8px}
+
+/* faq */
+.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:48px;align-items:start}
+.faq-grid .sec-head{position:sticky;top:96px}
+@media (max-width:900px){.faq-grid{grid-template-columns:1fr;gap:12px}.faq-grid .sec-head{position:static}}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 0;font-weight:700;font-size:1.06rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);width:28px;height:28px;flex:none;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:3px;color:var(--accent);transition:transform .2s}
+.faq details[open] summary::after{content:"−"}
+.faq details p{padding:0 0 20px;color:var(--ink-2);max-width:68ch}
+
+/* sobre mí */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
+@media (max-width:900px){.about{grid-template-columns:1fr;gap:28px}}
+.about-card{display:grid;gap:20px}
+.avatar{position:relative;width:132px;height:132px;display:grid;place-items:center;font-size:2.6rem;font-weight:800;border:3px solid var(--accent);border-radius:4px;background:var(--sheet)}
+.avatar::after{content:"";position:absolute;right:-7px;bottom:-7px;width:11px;height:11px;background:var(--accent);border:3px solid var(--band)}
+.avatar span{position:absolute;top:-24px;left:0;font-size:.72rem;color:var(--ink-3);font-weight:500}
+.about-role{color:var(--ink-2);margin-top:8px}
+.about-copy{display:grid;gap:24px}
+.about-copy > p{font-size:1.08rem;color:var(--ink-2);max-width:62ch}
+.principles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.principles li{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--sheet);font-size:.9rem;color:var(--ink-2);display:grid;gap:4px}
+.principles b{color:var(--ink);font-size:.98rem}
+@media (max-width:640px){.principles{grid-template-columns:1fr}}
+.stack{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.stack li{font-size:.78rem;padding:5px 10px;border:1px solid var(--line-2);border-radius:5px;background:var(--sheet);color:var(--ink-2)}
+
+/* pie */
+.foot{border-top:1px solid var(--line);padding-block:48px 36px}
+.foot-in{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:start}
+.foot-note{color:var(--ink-2);font-size:.92rem;margin-top:14px;max-width:46ch}
+.foot-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.foot-legal{grid-column:1/-1;font-size:.75rem;color:var(--ink-3);padding-top:20px;border-top:1px solid var(--line)}
+@media (max-width:700px){.foot-in{grid-template-columns:1fr}.foot-links{justify-content:flex-start}}
+
+/* pestañas de hoja */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--head);border-top:1px solid var(--line-2);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs-in{display:flex;align-items:stretch;height:44px;overflow-x:auto;scrollbar-width:none;max-width:1440px;margin:0 auto;
+         padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.tabs-in::-webkit-scrollbar{display:none}
+.tabs-nav{display:flex;align-items:center;padding:0 12px;color:var(--ink-3);font-size:.8rem;letter-spacing:.2em;flex:none}
+.tabs a{flex:none;display:flex;align-items:center;padding:0 16px;font-size:.86rem;font-weight:600;color:var(--ink-2);text-decoration:none;border-right:1px solid var(--line);position:relative;white-space:nowrap}
+.tabs a:hover{color:var(--ink);background:color-mix(in srgb,var(--sheet) 50%,transparent)}
+.tabs a[aria-current="true"]{background:var(--sheet);color:var(--accent)}
+.tabs a[aria-current="true"]::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+.tabs a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* paleta de búsqueda */
+.palette{position:fixed;inset:0;z-index:90;background:var(--scrim);display:flex;justify-content:center;align-items:flex-start;padding:12vh max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+.pal-box{width:min(640px,100%);background:var(--sheet);border:1px solid var(--line-2);border-radius:14px;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);overflow:hidden;animation:palin .16s ease}
+@keyframes palin{from{transform:translateY(-8px) scale(.98)}to{transform:none}}
+.pal-in{display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.pal-in input{all:unset;flex:1;padding:16px 0;font-size:1.02rem;color:var(--ink)}
+.pal-in input:focus-visible{outline:none}
+.pal-in:focus-within{box-shadow:inset 0 -2px 0 var(--accent)}
+#pal-list{list-style:none;margin:0;padding:6px;max-height:min(420px,60vh);overflow:auto}
+#pal-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:.95rem}
+#pal-list li small{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);white-space:nowrap}
+#pal-list li[aria-selected="true"]{background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent)}
+#pal-list li.empty{color:var(--ink-3);cursor:default}
+
+.toast{position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-weight:600;font-size:.92rem;opacity:0;pointer-events:none;transition:all .25s;z-index:95}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* movimiento: solo desplazamiento, nada queda oculto */
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .svc,.proj,.tier,.steps li,.principles li,.kpi{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
+  }
+}
+@keyframes rise{from{transform:translateY(26px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#servicios"><span data-l="es">Saltar al contenido</span><span data-l="en">Skip to content</span></a>
+
+<header class="fx" id="top">
+  <div class="fx-in">
+    <a class="brand" href="#inicio" aria-label="Evert Pascual, inicio" data-al-es="Evert Pascual, inicio" data-al-en="Evert Pascual, home">
+      <span class="brand-cell" aria-hidden="true">EP</span>
+      <span class="brand-name">Evert Pascual</span>
+    </a>
+    <div class="fbar" aria-hidden="true">
+      <span class="namebox" id="namebox"><span data-l="es">Inicio</span><span data-l="en">Home</span></span>
+      <span class="fx-sign"><i>f</i>x</span>
+      <code class="formula" id="formula">=TRABAJA.POR.TI("Excel", "Python", "Web")</code>
+    </div>
+    <button class="icon-btn search-btn" type="button" id="open-palette" aria-label="Buscar en el sitio" data-al-es="Buscar en el sitio" data-al-en="Search the site">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <span class="kbd" id="kbd-hint">Ctrl K</span>
+    </button>
+    <div class="seg lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="icon-btn" type="button" id="theme" aria-label="Cambiar tema claro u oscuro" data-al-es="Cambiar tema claro u oscuro" data-al-en="Toggle light or dark theme">
+      <svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+      <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    </button>
+    <a class="btn btn-accent btn-sm cta-top" href="#brief"><span data-l="es">Cotiza tu proyecto</span><span data-l="en">Get a quote</span></a>
+  </div>
+</header>
+
+<main>
+<!-- ============ INICIO ============ -->
+<section class="hero" id="inicio" data-sec="0">
+  <div class="cols" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span><span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span><span>AA</span><span>AB</span><span>AC</span><span>AD</span><span>AE</span><span>AF</span><span>AG</span><span>AH</span></div>
+  <div class="cellhi" id="cellhi" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow mono">Excel · Google Sheets · Python · Web</p>
+      <h1><span data-l="es">Hojas de cálculo, scripts y páginas web que <mark>trabajan por ti.</mark></span><span data-l="en">Spreadsheets, scripts and websites that <mark>do the work for you.</mark></span></h1>
+      <p class="lede"><span data-l="es">Soy Evert, estudiante de Ingeniería en Ciencia de Datos y Matemáticas en el Tec de Monterrey. Construyo herramientas en Excel, Google Sheets, Python y web para negocios que hacen a mano el mismo trabajo cada semana. Todo lo que entrego está probado.</span><span data-l="en">I'm Evert, a Data Science and Mathematics Engineering student at Tecnológico de Monterrey. I build Excel, Google Sheets, Python and web tools for businesses that do the same work by hand every week. Everything I deliver is tested.</span></p>
+      <div class="cta-row">
+        <a class="btn btn-accent" href="#brief"><span data-l="es">Arma tu brief en 1 minuto</span><span data-l="en">Write your brief in 1 minute</span>
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="#demos"><span data-l="es">Probar las demos</span><span data-l="en">Try the demos</span></a>
+      </div>
+      <ul class="hero-meta">
+        <li><span class="pulse" aria-hidden="true"></span><span data-l="es">Respondo en menos de 24 h</span><span data-l="en">Replies within 24 h</span></li>
+        <li><span data-l="es">Español · Inglés</span><span data-l="en">Spanish · English</span></li>
+        <li><span data-l="es">México · GMT-6</span><span data-l="en">Mexico · GMT-6</span></li>
+      </ul>
+    </div>
+
+    <figure class="win live" id="live" aria-labelledby="live-cap">
+      <div class="win-bar">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="win-title mono" id="live-file">ventas_marzo.csv</span>
+        <button class="run" type="button" id="live-run"><span class="run-ico" aria-hidden="true"></span><span id="live-run-txt"><span data-l="es">Limpiar datos</span><span data-l="en">Clean data</span></span></button>
+      </div>
+      <div class="win-fx mono" aria-hidden="true"><span class="nb" id="live-nb">A1</span><span class="fx-sign"><i>f</i>x</span><span id="live-fx">Fecha de Venta</span></div>
+      <div class="grid-scroll">
+        <table class="sheet" id="live-sheet">
+          <thead><tr><th class="rn"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+          <tbody>
+            <tr class="hdr"><th class="rn">1</th><td><span data-l="es">Fecha</span><span data-l="en">Date</span></td><td><span data-l="es">Cliente</span><span data-l="en">Customer</span></td><td><span data-l="es">Producto</span><span data-l="en">Product</span></td><td class="n"><span data-l="es">Cant.</span><span data-l="en">Qty</span></td><td class="n"><span data-l="es">Importe</span><span data-l="en">Amount</span></td></tr>
+            <tr data-row="2"><th class="rn">2</th><td class=" bad" data-ref="A2" data-clean="2026-02-12" data-fx="=FECHANUMERO(A2)" data-fx-en="=DATEVALUE(A2)">Feb 12, 2026</td><td class="" data-ref="B2">Papelería Sol</td><td class="" data-ref="C2">Caja de plumas (12)</td><td class="n" data-ref="D2">1</td><td class="n bad" data-ref="E2" data-clean="85.00" data-fx="=VALOR(SUSTITUIR(E2, &quot;,&quot;, &quot;.&quot;))" data-fx-en="=VALUE(SUBSTITUTE(E2, &quot;,&quot;, &quot;.&quot;))">85,00</td></tr>
+            <tr data-row="3"><th class="rn">3</th><td class=" bad" data-ref="A3" data-clean="2026-01-27" data-fx="=FECHANUMERO(A3)" data-fx-en="=DATEVALUE(A3)">27-1-26</td><td class="" data-ref="B3">Comercial del Bajío</td><td class="" data-ref="C3">Carpeta lefort</td><td class="n" data-ref="D3">5</td><td class="n" data-ref="E3">320.00</td></tr>
+            <tr data-row="4"><th class="rn">4</th><td class="" data-ref="A4">2026-06-26</td><td class=" bad" data-ref="B4" data-clean="Papelería Sol" data-fx="=BUSCARX(ESPACIOS(B4), Clientes[clave], Clientes[nombre])" data-fx-en="=XLOOKUP(TRIM(B4), Customers[key], Customers[name])">papeleria sol</td><td class="" data-ref="C4">Resma papel carta</td><td class="n" data-ref="D4">3</td><td class="n bad" data-ref="E4" data-clean="294.00" data-fx="=VALOR(SUSTITUIR(E4, &quot;$&quot;, &quot;&quot;))" data-fx-en="=VALUE(SUBSTITUTE(E4, &quot;$&quot;, &quot;&quot;))">$294.00</td></tr>
+            <tr data-row="5"><th class="rn">5</th><td class=" bad" data-ref="A5" data-clean="2026-05-30" data-fx="=FECHANUMERO(A5)" data-fx-en="=DATEVALUE(A5)">30/05/2026</td><td class="" data-ref="B5">Papelería Sol</td><td class="" data-ref="C5">Carpeta lefort</td><td class="n" data-ref="D5">3</td><td class="n bad" data-ref="E5" data-clean="192.00" data-fx="=VALOR(SUSTITUIR(E5, &quot; MXN&quot;, &quot;&quot;))" data-fx-en="=VALUE(SUBSTITUTE(E5, &quot; MXN&quot;, &quot;&quot;))">192 MXN</td></tr>
+            <tr data-row="6"><th class="rn">6</th><td class=" bad" data-ref="A6" data-clean="2026-05-22" data-fx="=FECHANUMERO(A6)" data-fx-en="=DATEVALUE(A6)">22/05/2026</td><td class=" bad" data-ref="B6" data-clean="Comercial del Bajío" data-fx="=BUSCARX(ESPACIOS(B6), Clientes[clave], Clientes[nombre])" data-fx-en="=XLOOKUP(TRIM(B6), Customers[key], Customers[name])">comercial  del bajío</td><td class="" data-ref="C6">Engrapadora</td><td class="n" data-ref="D6">5</td><td class="n" data-ref="E6">1050.00</td></tr>
+            <tr data-row="7" data-dup="1"><th class="rn">7</th><td class=" bad" data-ref="A7">22/05/2026</td><td class=" bad" data-ref="B7">comercial  del bajío</td><td class="" data-ref="C7">Engrapadora</td><td class="n" data-ref="D7">5</td><td class="n" data-ref="E7">1050.00</td></tr>
+            <tr data-row="8"><th class="rn">8</th><td class=" bad" data-ref="A8" data-clean="2026-06-28" data-fx="=FECHANUMERO(A8)" data-fx-en="=DATEVALUE(A8)">28 jun 2026</td><td class=" bad" data-ref="B8" data-clean="Ana López" data-fx="=NOMPROPIO(ESPACIOS(B8))" data-fx-en="=PROPER(TRIM(B8))">ana lópez</td><td class="" data-ref="C8">Calculadora científica</td><td class="n" data-ref="D8">2</td><td class="n bad" data-ref="E8" data-clean="778.00" data-fx="=VALOR(SUSTITUIR(E8, &quot;,&quot;, &quot;.&quot;))" data-fx-en="=VALUE(SUBSTITUTE(E8, &quot;,&quot;, &quot;.&quot;))">778,00</td></tr>
+            <tr class="total"><th class="rn">9</th><td colspan="4" class="tl"><span data-l="es">Total</span><span data-l="en">Total</span> <span class="mono dim"><span data-l="es">=SUMA(E2:E8)</span><span data-l="en">=SUM(E2:E8)</span></span></td><td class="n" id="live-total">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="live-foot">
+        <div class="chart-mini" id="live-chart" aria-hidden="true">
+          <div class="bar-row"><span>Papelería Sol</span><i style="--v:0"></i><b>—</b></div>
+          <div class="bar-row"><span>Comercial del Bajío</span><i style="--v:0"></i><b>—</b></div>
+          <div class="bar-row"><span>Ana López</span><i style="--v:0"></i><b>—</b></div>
+        </div>
+        <p class="status mono" id="live-status"><span data-l="es">7 filas · 14 celdas con problemas · 1 duplicado</span><span data-l="en">7 rows · 14 problem cells · 1 duplicate</span></p>
+      </div>
+      <figcaption class="sr" id="live-cap"><span data-l="es">Demostración: una exportación de ventas desordenada que se limpia sola</span><span data-l="en">Demo: a messy sales export that cleans itself</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="proof">
+  <div class="wrap">
+    <p class="proof-k mono"><span data-l="es">Medido en los proyectos de muestra</span><span data-l="en">Measured on the sample projects</span></p>
+    <dl class="proof-grid">
+      <div><dt class="num" data-count="8280">8,280</dt><dd><span data-l="es">fórmulas sin un solo error en la plantilla de ventas, comparadas contra un cálculo independiente en pandas</span><span data-l="en">formulas with zero errors in the sales template, checked against an independent pandas calculation</span></dd></div>
+      <div><dt class="num" data-count="23">23</dt><dd><span data-l="es">pruebas automáticas que pasan en el limpiador de reportes de Python</span><span data-l="en">automated tests passing in the Python report cleaner</span></dd></div>
+      <div><dt class="num" data-count="16">16</dt><dd><span data-l="es">servicios que puedo entregar completos, de la fórmula al sitio web</span><span data-l="en">services I can deliver end to end, from a formula to a website</span></dd></div>
+      <div><dt class="num" data-count="0">0</dt><dd><span data-l="es">plantillas o constructores en este sitio: HTML, CSS y JavaScript escritos a mano</span><span data-l="en">templates or site builders behind this site: hand-written HTML, CSS and JavaScript</span></dd></div>
+    </dl>
+  </div>
+</div>
+
+<!-- ============ SERVICIOS ============ -->
+<section id="servicios" data-sec="1">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow mono">16 <span data-l="es">servicios</span><span data-l="en">services</span></p>
+      <h2><span data-l="es">Lo que puedo entregar</span><span data-l="en">What I can deliver</span></h2>
+      <p class="sec-lede"><span data-l="es">Cada servicio termina en un archivo o una página que puedes usar el mismo día, con instrucciones. Filtra por tipo:</span><span data-l="en">Every service ends in a file or a page you can use the same day, with instructions. Filter by type:</span></p>
+    </header>
+    <div class="filters" role="group" aria-label="Filtrar servicios" data-al-es="Filtrar servicios" data-al-en="Filter services">
+      <button type="button" class="filter on" data-filter="all" aria-pressed="true">
+        <span class="af" aria-hidden="true">▾</span><span data-l="es">Todo</span><span data-l="en">All</span><span class="cnt mono">16</span></button>
+      <button type="button" class="filter" data-filter="sheets" aria-pressed="false">
+        <span class="af" aria-hidden="true">▾</span><span data-l="es">Hojas de cálculo</span><span data-l="en">Spreadsheets</span><span class="cnt mono">5</span></button>
+      <button type="button" class="filter" data-filter="python" aria-pressed="false">
+        <span class="af" aria-hidden="true">▾</span><span data-l="es">Python y datos</span><span data-l="en">Python and data</span><span class="cnt mono">6</span></button>
+      <button type="button" class="filter" data-filter="web" aria-pressed="false">
+        <span class="af" aria-hidden="true">▾</span><span data-l="es">Web</span><span data-l="en">Web</span><span class="cnt mono">3</span></button>
+      <button type="button" class="filter" data-filter="extras" aria-pressed="false">
+        <span class="af" aria-hidden="true">▾</span><span data-l="es">Extras</span><span data-l="en">Extras</span><span class="cnt mono">2</span></button>
+    </div>
+    <div class="svc-grid" id="svc-grid">
+      <article class="svc sel" id="svc-formulas" data-cat="sheets" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx · Sheets</span><a class="demo-chip" href="#demos" data-open-demo="hoja"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Fórmulas que no se rompen</span><span data-l="en">Formulas that don't break</span></h3>
+        <p><span data-l="es">Arreglo o creo las fórmulas de tu archivo: BUSCARX, SUMAR.SI.CONJUNTO, ÍNDICE/COINCIDIR y manejo de errores.</span><span data-l="en">I fix or build the formulas in your file: XLOOKUP, SUMIFS, INDEX/MATCH and error handling.</span></p>
+        <ul class="inc"><li><span data-l="es">Hasta 3 fórmulas o un problema puntual</span><span data-l="en">Up to 3 formulas or one specific issue</span></li><li><span data-l="es">Cada fórmula explicada</span><span data-l="en">Every formula explained</span></li><li><span data-l="es">Funciona en Excel y Google Sheets</span><span data-l="en">Works in Excel and Google Sheets</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">2 días</span><span data-l="en">2 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $20 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-dashboards" data-cat="sheets" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx · Sheets</span><a class="demo-chip" href="#demos" data-open-demo="dashboard"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Dashboards y reportes</span><span data-l="en">Dashboards and reports</span></h3>
+        <p><span data-l="es">Un resumen que se actualiza solo: indicadores, gráficas, comparativo mensual y filtros.</span><span data-l="en">A summary that updates itself: KPIs, charts, month-over-month comparison and filters.</span></p>
+        <ul class="inc"><li><span data-l="es">Indicadores y gráficas</span><span data-l="en">KPIs and charts</span></li><li><span data-l="es">Por mes, producto o vendedor</span><span data-l="en">By month, product or sales rep</span></li><li><span data-l="es">Instrucciones dentro del archivo</span><span data-l="en">Instructions inside the file</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">5 días</span><span data-l="en">5 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $120 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-trackers" data-cat="sheets" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx · Sheets</span><a class="demo-chip" href="#demos" data-open-demo="hoja"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Trackers y plantillas a la medida</span><span data-l="en">Custom trackers and templates</span></h3>
+        <p><span data-l="es">Inventario, ventas, presupuesto, pedidos o asistencia, con listas desplegables, validación y alertas de color.</span><span data-l="en">Inventory, sales, budget, orders or attendance, with drop-downs, validation and color alerts.</span></p>
+        <ul class="inc"><li><span data-l="es">Captura sin errores con validación</span><span data-l="en">Error-proof data entry</span></li><li><span data-l="es">Alertas con formato condicional</span><span data-l="en">Conditional-format alerts</span></li><li><span data-l="es">Versión en español e inglés</span><span data-l="en">Spanish and English versions</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">3–5 días</span><span data-l="en">3–5 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $55 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-cleanup" data-cat="sheets" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx · Sheets</span><a class="demo-chip" href="#demos" data-open-demo="limpiador"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Orden y limpieza de tu base</span><span data-l="en">Spreadsheet clean-up</span></h3>
+        <p><span data-l="es">Quito duplicados, unifico fechas y nombres, convierto números guardados como texto y dejo la base lista para analizar.</span><span data-l="en">I remove duplicates, unify dates and names, convert numbers stored as text and leave the data ready to analyze.</span></p>
+        <ul class="inc"><li><span data-l="es">Hasta ~2,000 filas</span><span data-l="en">Up to ~2,000 rows</span></li><li><span data-l="es">Hoja con los cambios hechos</span><span data-l="en">A sheet listing every change</span></li><li><span data-l="es">Fórmulas que dejan de fallar</span><span data-l="en">Formulas that stop failing</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">3 días</span><span data-l="en">3 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $55 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-appsscript" data-cat="sheets" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.gs · Sheets</span></div>
+        <h3><span data-l="es">Automatización de Google Sheets</span><span data-l="en">Google Sheets automation</span></h3>
+        <p><span data-l="es">Apps Script para que tu hoja trabaje sola: formularios que llenan la hoja, correos o recordatorios automáticos y reportes programados.</span><span data-l="en">Apps Script so your sheet works on its own: forms that fill the sheet, automatic emails or reminders, and scheduled reports.</span></p>
+        <ul class="inc"><li><span data-l="es">Menú propio dentro de tu hoja</span><span data-l="en">A custom menu in your sheet</span></li><li><span data-l="es">Se ejecuta por hora o por evento</span><span data-l="en">Runs on a schedule or on events</span></li><li><span data-l="es">Código comentado</span><span data-l="en">Commented code</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">3–5 días</span><span data-l="en">3–5 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-exports" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.py · .csv · .xlsx</span><a class="demo-chip" href="#demos" data-open-demo="limpiador"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Limpieza de exportaciones</span><span data-l="en">Messy export clean-up</span></h3>
+        <p><span data-l="es">Un script que convierte la exportación desordenada de tu sistema en datos limpios, en segundos y cada vez que lo necesites.</span><span data-l="en">A script that turns your system's messy export into clean data, in seconds, every time you need it.</span></p>
+        <ul class="inc"><li><span data-l="es">Fechas, montos y nombres unificados</span><span data-l="en">Dates, amounts and names unified</span></li><li><span data-l="es">Filas con problemas en hoja aparte</span><span data-l="en">Problem rows in a separate sheet</span></li><li><span data-l="es">Pruebas automáticas</span><span data-l="en">Automated tests</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">2 días</span><span data-l="en">2 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $30 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-reports" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.py · .xlsx · .pdf</span></div>
+        <h3><span data-l="es">Reportes automáticos</span><span data-l="en">Automated reports</span></h3>
+        <p><span data-l="es">De tus archivos a un Excel o PDF con resúmenes y gráficas, listo para mandar.</span><span data-l="en">From your files to an Excel or PDF report with summaries and charts, ready to send.</span></p>
+        <ul class="inc"><li><span data-l="es">Resúmenes por mes, cliente o producto</span><span data-l="en">Summaries by month, customer or product</span></li><li><span data-l="es">Gráficas incluidas</span><span data-l="en">Charts included</span></li><li><span data-l="es">Lanzador de doble clic en Windows</span><span data-l="en">Double-click launcher on Windows</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">4 días</span><span data-l="en">4 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $80 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-merge" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.py · .xlsx</span></div>
+        <h3><span data-l="es">Unir y conciliar archivos</span><span data-l="en">Merge and reconcile files</span></h3>
+        <p><span data-l="es">Junto varios Excel o CSV en uno, los cruzo contra otra fuente (por ejemplo, un estado de cuenta) y marco las diferencias.</span><span data-l="en">I combine several Excel or CSV files, match them against another source (a bank statement, say) and flag the differences.</span></p>
+        <ul class="inc"><li><span data-l="es">Coincidencias y faltantes marcados</span><span data-l="en">Matches and gaps flagged</span></li><li><span data-l="es">Reglas que tú apruebas</span><span data-l="en">Rules you approve</span></li><li><span data-l="es">Reporte de diferencias</span><span data-l="en">Difference report</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">4–6 días</span><span data-l="en">4–6 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $80 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-pdf" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.pdf → .xlsx</span></div>
+        <h3><span data-l="es">De PDF a Excel</span><span data-l="en">PDF to spreadsheet</span></h3>
+        <p><span data-l="es">Saco las tablas de facturas, estados de cuenta o reportes en PDF y las dejo en Excel. Funciona con PDF de texto; los escaneos los reviso antes de aceptar.</span><span data-l="en">I extract tables from invoices, statements or PDF reports into Excel. Works with text PDFs; I review scans before accepting.</span></p>
+        <ul class="inc"><li><span data-l="es">Muchos archivos a la vez</span><span data-l="en">Many files at once</span></li><li><span data-l="es">Columnas con el formato correcto</span><span data-l="en">Correctly typed columns</span></li><li><span data-l="es">Revisión de totales</span><span data-l="en">Totals check</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">2–4 días</span><span data-l="en">2–4 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-analysis" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.ipynb · .pdf</span></div>
+        <h3><span data-l="es">Análisis de datos con gráficas</span><span data-l="en">Data analysis with charts</span></h3>
+        <p><span data-l="es">Respondo preguntas concretas con tus datos: qué se vende, cuándo, a quién y qué cambió. Entrego un reporte claro con gráficas.</span><span data-l="en">I answer specific questions with your data: what sells, when, to whom and what changed. You get a clear report with charts.</span></p>
+        <ul class="inc"><li><span data-l="es">Estadística descriptiva y comparativos</span><span data-l="en">Descriptive stats and comparisons</span></li><li><span data-l="es">Gráficas que se entienden</span><span data-l="en">Charts people understand</span></li><li><span data-l="es">Notebook o PDF</span><span data-l="en">Notebook or PDF</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">3–6 días</span><span data-l="en">3–6 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-forecast" data-cat="python" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx · .ipynb</span></div>
+        <h3><span data-l="es">Pronósticos sencillos</span><span data-l="en">Simple forecasts</span></h3>
+        <p><span data-l="es">Estimo ventas o demanda de los próximos meses con un método explicado (tendencia y estacionalidad) y te digo qué tan confiable es.</span><span data-l="en">I estimate sales or demand for the coming months with an explained method (trend and seasonality) and tell you how reliable it is.</span></p>
+        <ul class="inc"><li><span data-l="es">Método explicado en palabras simples</span><span data-l="en">Method explained in plain words</span></li><li><span data-l="es">Rango de error, no solo un número</span><span data-l="en">An error range, not just one number</span></li><li><span data-l="es">Archivo que puedes actualizar</span><span data-l="en">A file you can update</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">5–7 días</span><span data-l="en">5–7 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-landing" data-cat="web" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.html</span><a class="demo-chip" href="#demos" data-open-demo="landing"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Landing pages</span><span data-l="en">Landing pages</span></h3>
+        <p><span data-l="es">Una página rápida que explica qué vendes, cuánto cuesta y cómo contactarte, y que se ve bien en el celular.</span><span data-l="en">A fast page that explains what you sell, what it costs and how to reach you, and looks right on phones.</span></p>
+        <ul class="inc"><li><span data-l="es">Botón de WhatsApp con mensaje listo</span><span data-l="en">WhatsApp button with a ready message</span></li><li><span data-l="es">SEO básico y vista previa para redes</span><span data-l="en">Basic SEO and social preview</span></li><li><span data-l="es">Publicación gratis en Netlify o GitHub Pages</span><span data-l="en">Free hosting on Netlify or GitHub Pages</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">3–7 días</span><span data-l="en">3–7 days</span></span><span class="price"><small><span data-l="es">desde</span><span data-l="en">from</span></small> $80 <small>USD</small></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-webtools" data-cat="web" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.html · .js</span><a class="demo-chip" href="#demos" data-open-demo="landing"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Herramientas web pequeñas</span><span data-l="en">Small web tools</span></h3>
+        <p><span data-l="es">Cotizadores, calculadoras, catálogos o formularios que arman el pedido y lo mandan por WhatsApp. Sin mensualidades.</span><span data-l="en">Quote builders, calculators, catalogs or forms that put the order together and send it on WhatsApp. No monthly fees.</span></p>
+        <ul class="inc"><li><span data-l="es">Funciona sin servidor</span><span data-l="en">Works without a server</span></li><li><span data-l="es">Precios fáciles de editar</span><span data-l="en">Prices easy to edit</span></li><li><span data-l="es">Español e inglés</span><span data-l="en">Spanish and English</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">4–7 días</span><span data-l="en">4–7 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-webdash" data-cat="web" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.html</span><a class="demo-chip" href="#demos" data-open-demo="dashboard"><span data-l="es">Demo en vivo</span><span data-l="en">Live demo</span></a></div>
+        <h3><span data-l="es">Dashboards web interactivos</span><span data-l="en">Interactive web dashboards</span></h3>
+        <p><span data-l="es">Tus datos en una página con filtros y gráficas que se abre en cualquier navegador, sin pagar licencias.</span><span data-l="en">Your data on a page with filters and charts that opens in any browser, with no licenses to pay.</span></p>
+        <ul class="inc"><li><span data-l="es">Filtros y gráficas interactivas</span><span data-l="en">Interactive filters and charts</span></li><li><span data-l="es">Se actualiza cambiando un archivo</span><span data-l="en">Update it by swapping one file</span></li><li><span data-l="es">Se comparte con un enlace</span><span data-l="en">Share it with a link</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">4–7 días</span><span data-l="en">4–7 days</span></span><span class="price soft"><span data-l="es">Cotización en 24 h</span><span data-l="en">Quote within 24 h</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-bilingual" data-cat="extras" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">ES ⇄ EN</span></div>
+        <h3><span data-l="es">Versiones en español e inglés</span><span data-l="en">Spanish and English versions</span></h3>
+        <p><span data-l="es">Traduzco y adapto hojas, sitios e instrucciones para que tu equipo o tus clientes los usen en su idioma.</span><span data-l="en">I translate and adapt sheets, sites and instructions so your team or customers can use them in their language.</span></p>
+        <ul class="inc"><li><span data-l="es">Fórmulas y etiquetas traducidas</span><span data-l="en">Formulas and labels translated</span></li><li><span data-l="es">Formatos de fecha y moneda correctos</span><span data-l="en">Correct date and currency formats</span></li><li><span data-l="es">Revisión de redacción</span><span data-l="en">Copy review</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">+1 día</span><span data-l="en">+1 day</span></span><span class="price soft"><span data-l="es">Complemento</span><span data-l="en">Add-on</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+      <article class="svc sel" id="svc-templates" data-cat="extras" tabindex="-1">
+        <div class="svc-top"><span class="fmt mono">.xlsx</span></div>
+        <h3><span data-l="es">Plantillas listas para usar</span><span data-l="en">Ready-made templates</span></h3>
+        <p><span data-l="es">Plantillas probadas de ventas e inventario para Excel y Google Sheets, en español e inglés, para empezar hoy.</span><span data-l="en">Tested sales and inventory templates for Excel and Google Sheets, in Spanish and English, to start today.</span></p>
+        <ul class="inc"><li><span data-l="es">Instrucciones dentro del archivo</span><span data-l="en">Instructions inside the file</span></li><li><span data-l="es">Sin macros</span><span data-l="en">No macros</span></li><li><span data-l="es">Español e inglés</span><span data-l="en">Spanish and English</span></li></ul>
+        <div class="svc-foot">
+          <span class="days"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-l="es">Inmediata</span><span data-l="en">Instant</span></span><span class="price soft"><span data-l="es">Próximamente</span><span data-l="en">Coming soon</span></span>
+        </div>
+        <span class="handle" aria-hidden="true"></span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMOS ============ -->
+<section id="demos" data-sec="2" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow mono"><span data-l="es">Sin descargar nada</span><span data-l="en">Nothing to download</span></p>
+      <h2><span data-l="es">Pruébalo aquí mismo</span><span data-l="en">Try it right here</span></h2>
+      <p class="sec-lede"><span data-l="es">Cuatro versiones pequeñas de lo que entrego. Edita, filtra y limpia: todo corre en tu navegador.</span><span data-l="en">Four small versions of what I deliver. Edit, filter and clean: it all runs in your browser.</span></p>
+    </header>
+    <div class="tabs-demo" role="tablist" aria-label="Demos" data-al-es="Demos" data-al-en="Demos">
+      <button role="tab" id="tab-hoja" aria-controls="p-hoja" aria-selected="true" data-demo="hoja"><span class="mono">01</span><span data-l="es">Hoja viva</span><span data-l="en">Live sheet</span></button>
+      <button role="tab" id="tab-limpiador" aria-controls="p-limpiador" aria-selected="false" tabindex="-1" data-demo="limpiador"><span class="mono">02</span><span data-l="es">Limpiador de datos</span><span data-l="en">Data cleaner</span></button>
+      <button role="tab" id="tab-dashboard" aria-controls="p-dashboard" aria-selected="false" tabindex="-1" data-demo="dashboard"><span class="mono">03</span>Dashboard</button>
+      <button role="tab" id="tab-landing" aria-controls="p-landing" aria-selected="false" tabindex="-1" data-demo="landing"><span class="mono">04</span>Landing page</button>
+    </div>
+
+    <!-- 01 hoja viva -->
+    <div class="panel" role="tabpanel" id="p-hoja" aria-labelledby="tab-hoja">
+      <div class="panel-grid">
+        <div class="panel-copy">
+          <h3><span data-l="es">Un inventario que avisa solo</span><span data-l="en">An inventory that warns you</span></h3>
+          <p><span data-l="es">Cambia una existencia o un precio. Las fórmulas recalculan el valor, el total y las alertas de reorden. Toca cualquier celda para ver su fórmula y las celdas que usa, como en Excel.</span><span data-l="en">Change a stock count or a price. The formulas recalculate value, totals and reorder alerts. Tap any cell to see its formula and the cells it uses, like in Excel.</span></p>
+          <ul class="ticks">
+            <li><span data-l="es">Prueba: baja la existencia de la taza a 6.</span><span data-l="en">Try it: lower the mug's stock to 6.</span></li>
+            <li><span data-l="es">Las celdas azules se pueden editar.</span><span data-l="en">Blue cells are editable.</span></li>
+            <li><span data-l="es">Mismas fórmulas que la plantilla descargable.</span><span data-l="en">Same formulas as the downloadable template.</span></li>
+          </ul>
+          <button class="btn btn-ghost btn-sm" type="button" id="xl-reset"><span data-l="es">Restaurar valores</span><span data-l="en">Reset values</span></button>
+        </div>
+        <div class="win xl">
+          <div class="win-fx mono"><span class="nb" id="xl-nb">F2</span><span class="fx-sign"><i>f</i>x</span><span id="xl-fx">=C2*E2</span></div>
+          <div class="grid-scroll">
+            <table class="sheet" id="xl">
+              <thead><tr><th class="rn"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead>
+              <tbody id="xl-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 limpiador -->
+    <div class="panel" role="tabpanel" id="p-limpiador" aria-labelledby="tab-limpiador" hidden>
+      <div class="cleaner">
+        <div class="cl-in">
+          <div class="cl-head"><label for="cl-text" class="mono">ventas_sucias.csv</label>
+            <span class="cl-actions"><button class="btn btn-ghost btn-xs" type="button" id="cl-sample"><span data-l="es">Ejemplo</span><span data-l="en">Sample</span></button><button class="btn btn-accent btn-xs" type="button" id="cl-run"><span data-l="es">Limpiar</span><span data-l="en">Clean</span></button></span></div>
+          <textarea id="cl-text" spellcheck="false" rows="12"></textarea>
+          <p class="hint"><span data-l="es">Pega tu propio CSV con columnas fecha, cliente, producto, cantidad e importe. No sale de tu navegador.</span><span data-l="en">Paste your own CSV with date, customer, product, quantity and amount columns. It never leaves your browser.</span></p>
+        </div>
+        <div class="cl-out">
+          <div class="cl-stats" id="cl-stats"></div>
+          <div class="grid-scroll cl-table"><table class="sheet tight" id="cl-table"></table></div>
+          <details class="problems" id="cl-problems"><summary></summary><ul></ul></details>
+          <details class="code"><summary><span data-l="es">Ver el código en Python que hace esto</span><span data-l="en">See the Python code that does this</span></summary><pre class="mono"><code>def parsear_monto(valor) -&gt; float | None:
+    &quot;&quot;&quot;Convierte &#x27;$1,234.50&#x27;, &#x27;1.234,50&#x27;, &#x27;(250)&#x27;, &#x27;1200 MXN&#x27; a número. None si no se puede.&quot;&quot;&quot;
+    if valor is None or (isinstance(valor, float) and pd.isna(valor)):
+        return None
+    if isinstance(valor, (int, float)):
+        return float(valor)
+    texto = str(valor).strip()
+    negativo = (texto.startswith(&quot;(&quot;) and texto.endswith(&quot;)&quot;)) or texto.startswith(&quot;-&quot;)
+    texto = re.sub(r&quot;[^\d.,]&quot;, &quot;&quot;, texto)
+    if not texto or not re.search(r&quot;\d&quot;, texto):
+        return None
+    if &quot;,&quot; in texto and &quot;.&quot; in texto:
+        # el último separador es el decimal
+        if texto.rfind(&quot;,&quot;) &gt; texto.rfind(&quot;.&quot;):
+            texto = texto.replace(&quot;.&quot;, &quot;&quot;).replace(&quot;,&quot;, &quot;.&quot;)
+        else:
+            texto = texto.replace(&quot;,&quot;, &quot;&quot;)
+    elif &quot;,&quot; in texto:
+        # 1,234 o 1,234,567 -&gt; miles; 12,5 -&gt; decimal
+        texto = texto.replace(&quot;,&quot;, &quot;&quot;) if re.fullmatch(r&quot;\d{1,3}(,\d{3})+&quot;, texto) else texto.replace(&quot;,&quot;, &quot;.&quot;)
+    elif texto.count(&quot;.&quot;) &gt; 1:
+        texto = texto.replace(&quot;.&quot;, &quot;&quot;)
+    try:
+        numero = float(texto)
+    except ValueError:
+        return None
+    return -numero if negativo else numero
+</code></pre></details>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 dashboard -->
+    <div class="panel" role="tabpanel" id="p-dashboard" aria-labelledby="tab-dashboard" hidden>
+      <div class="dash">
+        <div class="dash-top">
+          <div><h3><span data-l="es">Ventas de una cafetería, enero a septiembre de 2026</span><span data-l="en">Coffee shop sales, January to September 2026</span></h3>
+            <p class="hint"><span data-l="es">Datos de ejemplo de un negocio ficticio: los mismos de la plantilla de Excel del portafolio. Cifras en pesos mexicanos.</span><span data-l="en">Sample data from a fictional business, the same as the portfolio's Excel template. Amounts in Mexican pesos.</span></p></div>
+          <div class="seg dash-cats" id="dash-cats" role="group" aria-label="Filtrar por categoría" data-al-es="Filtrar por categoría" data-al-en="Filter by category"></div>
+        </div>
+        <div class="kpis" id="kpis"></div>
+        <div class="dash-grid">
+          <div class="chart-card"><p class="chart-t"><span data-l="es">Ingresos por mes</span><span data-l="en">Revenue by month</span></p><div id="chart-month" class="chart"></div></div>
+          <div class="chart-card"><p class="chart-t"><span data-l="es">Productos más vendidos</span><span data-l="en">Top products</span></p><div id="chart-prod" class="hbars"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 landing -->
+    <div class="panel" role="tabpanel" id="p-landing" aria-labelledby="tab-landing" hidden>
+      <div class="panel-grid landing-grid">
+        <div class="panel-copy">
+          <h3>Taller Cadena</h3>
+          <p><span data-l="es">Una landing para un taller de bicis ficticio en Guadalajara. Úsala como la usaría un cliente: arma una orden, elige horario y mira cómo se escribe sola el mensaje de WhatsApp.</span><span data-l="en">A landing page for a fictional bike shop in Guadalajara. Use it like a customer would: build an order, pick a time and watch the WhatsApp message write itself.</span></p>
+          <ul class="ticks">
+            <li><span data-l="es">Orden con total en vivo y mensaje de WhatsApp</span><span data-l="en">Live order total and WhatsApp message</span></li>
+            <li><span data-l="es">Agenda con días y horas reales del taller</span><span data-l="en">Booking with the shop's real days and hours</span></li>
+            <li><span data-l="es">“Abierto ahora” con la hora de Guadalajara</span><span data-l="en">“Open now” using Guadalajara time</span></li>
+            <li><span data-l="es">Seguimiento de orden y comparador antes/después</span><span data-l="en">Order tracking and a before/after slider</span></li>
+            <li><span data-l="es">Español e inglés, sin frameworks</span><span data-l="en">Spanish and English, no frameworks</span></li>
+          </ul>
+          <div class="cta-row">
+            <div class="seg" role="group" aria-label="Tamaño de pantalla" data-al-es="Tamaño de pantalla" data-al-en="Screen size">
+              <button type="button" data-device="desk" aria-pressed="true"><span data-l="es">Escritorio</span><span data-l="en">Desktop</span></button>
+              <button type="button" data-device="phone" aria-pressed="false"><span data-l="es">Celular</span><span data-l="en">Phone</span></button>
+            </div>
+            <a class="btn btn-ghost btn-sm" href="demos/taller-cadena/index.html" target="_blank" rel="noopener"><span data-l="es">Abrir completa ↗</span><span data-l="en">Open full page ↗</span></a>
+          </div>
+        </div>
+        <div class="device desk" id="device">
+          <div class="device-bar" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url mono">tallercadena.demo</span></div>
+          <div class="device-screen" id="device-screen">
+            <iframe id="landing-frame" title="Taller Cadena" loading="lazy" data-src="demos/taller-cadena/index.html"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROYECTOS ============ -->
+<section id="proyectos" data-sec="3">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow mono"><span data-l="es">Datos y negocios ficticios, código real</span><span data-l="en">Fictional data and businesses, real code</span></p>
+      <h2><span data-l="es">Proyectos de muestra</span><span data-l="en">Sample projects</span></h2>
+      <p class="sec-lede"><span data-l="es">Cada uno se probó antes de publicarse. Abajo de cada proyecto está cómo se verificó.</span><span data-l="en">Each one was tested before publishing. Under each project you'll find how it was checked.</span></p>
+    </header>
+    <div class="proj-grid">
+      <article class="proj">
+        <div class="proj-img"><img data-l="es" src="img/proyecto-excel-es.webp" alt="Resumen de la plantilla de ventas e inventario con indicadores y gráfica mensual" loading="lazy" width="1600" height="1000"><img data-l="en" src="img/proyecto-excel-en.webp" alt="Sales and inventory template summary with KPIs and a monthly chart" loading="lazy" width="1600" height="1000"></div>
+        <div class="proj-body">
+          <p class="fmt mono">Excel · Google Sheets · ES / EN</p>
+          <h3><span data-l="es">Control de ventas e inventario</span><span data-l="en">Sales and inventory tracker</span></h3>
+          <p><span data-l="es">Registras cada venta y lo demás se calcula: existencias, alertas de reorden, margen y un resumen mensual con gráficas. Sin macros, funciona en Excel, Google Sheets y LibreOffice.</span><span data-l="en">You log each sale and the rest calculates itself: stock, reorder alerts, margin and a monthly summary with charts. No macros; works in Excel, Google Sheets and LibreOffice.</span></p>
+          <p class="verify"><span class="mono">✓</span> <span data-l="es">8,280 fórmulas recalculadas en LibreOffice sin errores y con resultados idénticos a un cálculo independiente en pandas.</span><span data-l="en">8,280 formulas recalculated in LibreOffice with no errors and results identical to an independent pandas calculation.</span></p>
+          <div class="proj-links"><a class="btn btn-ghost btn-sm" href="#demos" data-open-demo="hoja"><span data-l="es">Probar la demo</span><span data-l="en">Try the demo</span></a><a class="btn btn-link btn-sm" href="proyectos/excel/Control_Ventas_Inventario_ES.xlsx" download><span data-l="es">Descargar en español</span><span data-l="en">Download (Spanish)</span></a><a class="btn btn-link btn-sm" href="proyectos/excel/Sales_Inventory_Tracker_EN.xlsx" download><span data-l="es">Descargar en inglés</span><span data-l="en">Download (English)</span></a>
+          </div>
+        </div>
+      </article>
+      <article class="proj">
+        <div class="proj-img"><img data-l="es" src="img/proyecto-python-es.webp" alt="Terminal con 23 pruebas aprobadas junto al reporte limpio en Excel" loading="lazy" width="1600" height="1000"><img data-l="en" src="img/proyecto-python-en.webp" alt="Terminal with 23 passing tests next to the clean Excel report" loading="lazy" width="1600" height="1000"></div>
+        <div class="proj-body">
+          <p class="fmt mono">Python · pandas · openpyxl · pytest</p>
+          <h3><span data-l="es">Limpiador de reportes de ventas</span><span data-l="en">Sales report cleaner</span></h3>
+          <p><span data-l="es">Convierte una exportación con fechas en cinco formatos, montos escritos como texto y clientes escritos de varias formas en un Excel limpio con resúmenes y una hoja de problemas.</span><span data-l="en">Turns an export with dates in five formats, amounts stored as text and customers spelled several ways into a clean Excel file with summaries and a problems sheet.</span></p>
+          <p class="verify"><span class="mono">✓</span> <span data-l="es">23 pruebas automáticas. Detecta los 8 problemas sembrados en los datos de ejemplo y los 164 montos limpios cuadran con precio × cantidad.</span><span data-l="en">23 automated tests. Catches all 8 problems planted in the sample data, and the 164 clean amounts match price × quantity.</span></p>
+          <div class="proj-links"><a class="btn btn-ghost btn-sm" href="#demos" data-open-demo="limpiador"><span data-l="es">Probar la demo</span><span data-l="en">Try the demo</span></a><a class="btn btn-link btn-sm" href="proyectos/python/limpiar_reporte.py" download><span data-l="es">Ver el script</span><span data-l="en">View the script</span></a><a class="btn btn-link btn-sm" href="proyectos/python/ventas_sucias.csv" download><span data-l="es">Datos de ejemplo</span><span data-l="en">Sample data</span></a><a class="btn btn-link btn-sm" href="proyectos/python/reporte_limpio.xlsx" download><span data-l="es">Reporte generado</span><span data-l="en">Generated report</span></a>
+          </div>
+        </div>
+      </article>
+      <article class="proj">
+        <div class="proj-img"><img data-l="es" src="img/proyecto-landing-es.webp" alt="Landing page del taller de bicis Taller Cadena" loading="lazy" width="1600" height="1000"><img data-l="en" src="img/proyecto-landing-en.webp" alt="Taller Cadena bike shop landing page" loading="lazy" width="1600" height="1000"></div>
+        <div class="proj-body">
+          <p class="fmt mono">HTML · CSS · JavaScript</p>
+          <h3><span data-l="es">Landing de un taller de bicis</span><span data-l="en">Bike shop landing page</span></h3>
+          <p><span data-l="es">Orden de servicio con total en vivo, agenda con los horarios del taller, recolección por colonia, seguimiento de orden y versión en inglés. Un solo archivo, sin frameworks.</span><span data-l="en">Service order with a live total, booking against the shop's hours, pickup by neighborhood, order tracking and an English version. One file, no frameworks.</span></p>
+          <p class="verify"><span class="mono">✓</span> <span data-l="es">Revisada a 390 px y 1440 px de ancho, en español e inglés, sin desbordes ni errores de consola.</span><span data-l="en">Checked at 390 px and 1440 px wide, in Spanish and English, with no overflow or console errors.</span></p>
+          <div class="proj-links"><a class="btn btn-ghost btn-sm" href="#demos" data-open-demo="landing"><span data-l="es">Probar la demo</span><span data-l="en">Try the demo</span></a><a class="btn btn-link btn-sm" href="demos/taller-cadena/index.html" target="_blank" rel="noopener"><span data-l="es">Abrir la página ↗</span><span data-l="en">Open the page ↗</span></a>
+          </div>
+        </div>
+      </article>
+      <article class="proj">
+        <div class="proj-img"><img data-l="es" src="img/proyecto-sitio-es.webp" alt="Este portafolio en modo oscuro" loading="lazy" width="1600" height="1000"><img data-l="en" src="img/proyecto-sitio-en.webp" alt="This portfolio in dark mode" loading="lazy" width="1600" height="1000"></div>
+        <div class="proj-body">
+          <p class="fmt mono">HTML · CSS · JS · ES / EN</p>
+          <h3><span data-l="es">Este portafolio</span><span data-l="en">This portfolio</span></h3>
+          <p><span data-l="es">Bilingüe, con tema claro y oscuro, búsqueda con Ctrl K, cuatro demos que corren en el navegador y navegación con pestañas de hoja de cálculo.</span><span data-l="en">Bilingual, with light and dark themes, Ctrl K search, four demos that run in the browser and spreadsheet-tab navigation.</span></p>
+          <p class="verify"><span class="mono">✓</span> <span data-l="es">Sin librerías: solo las fuentes vienen de fuera. Probado en celular y escritorio, en ambos temas.</span><span data-l="en">No libraries: only the fonts load from outside. Tested on phone and desktop, in both themes.</span></p>
+          <div class="proj-links">
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESO ============ -->
+<section id="proceso" data-sec="4" class="band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow mono"><span data-l="es">De tu mensaje a la entrega</span><span data-l="en">From your message to delivery</span></p>
+      <h2><span data-l="es">Cómo trabajo</span><span data-l="en">How I work</span></h2>
+    </header>
+    <ol class="steps">
+      <li><span class="step-n mono">01</span><h3><span data-l="es">Me cuentas qué necesitas</span><span data-l="en">You tell me what you need</span></h3><p><span data-l="es">Con tu archivo de ejemplo (puede tener datos falsos) o la idea de tu página.</span><span data-l="en">With a sample file (fake data is fine) or the idea for your page.</span></p><span class="step-t mono"><span data-l="es">Día 0</span><span data-l="en">Day 0</span></span></li>
+      <li><span class="step-n mono">02</span><h3><span data-l="es">Confirmo alcance, precio y fecha</span><span data-l="en">I confirm scope, price and date</span></h3><p><span data-l="es">Antes de empezar sabes exactamente qué recibes y cuándo. Sin sorpresas al final.</span><span data-l="en">Before I start you know exactly what you'll get and when. No surprises at the end.</span></p><span class="step-t mono"><span data-l="es">En 24 h</span><span data-l="en">Within 24 h</span></span></li>
+      <li><span class="step-n mono">03</span><h3><span data-l="es">Construyo y pruebo</span><span data-l="en">I build and test</span></h3><p><span data-l="es">Fórmulas comparadas contra un segundo cálculo, scripts con pruebas automáticas, páginas revisadas en celular y escritorio.</span><span data-l="en">Formulas checked against a second calculation, scripts with automated tests, pages checked on phone and desktop.</span></p><span class="step-t mono"><span data-l="es">2–7 días</span><span data-l="en">2–7 days</span></span></li>
+      <li><span class="step-n mono">04</span><h3><span data-l="es">Entrego con instrucciones</span><span data-l="en">I deliver with instructions</span></h3><p><span data-l="es">Recibes los archivos, una guía corta para usarlos y las revisiones de tu paquete.</span><span data-l="en">You get the files, a short guide to use them and the revisions in your package.</span></p><span class="step-t mono"><span data-l="es">Entrega</span><span data-l="en">Delivery</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ PRECIOS ============ -->
+<section id="precios" data-sec="5">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow mono"><span data-l="es">Precios en dólares</span><span data-l="en">Prices in US dollars</span></p>
+      <h2><span data-l="es">Paquetes</span><span data-l="en">Packages</span></h2>
+      <p class="sec-lede"><span data-l="es">Los mismos paquetes que en Fiverr. Si tu proyecto no cabe en uno, te cotizo en 24 horas.</span><span data-l="en">The same packages as on Fiverr. If your project doesn't fit one, I'll quote it within 24 hours.</span></p>
+    </header>
+    <div class="seg pk-tabs" role="group" aria-label="Elegir servicio" data-al-es="Elegir servicio" data-al-en="Choose a service">
+      <button type="button" data-pk="excel" aria-pressed="true"><span data-l="es">Excel / Sheets</span><span data-l="en">Excel / Sheets</span></button>
+      <button type="button" data-pk="python" aria-pressed="false"><span data-l="es">Python</span><span data-l="en">Python</span></button>
+      <button type="button" data-pk="landing" aria-pressed="false"><span data-l="es">Landing page</span><span data-l="en">Landing page</span></button>
+    </div>
+    <div class="pk" data-pk-panel="excel">
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Básico</span><span data-l="en">Basic</span></p>
+        <h3><span data-l="es">Fórmula o arreglo</span><span data-l="en">Fix or formula</span></h3>
+        <p class="tier-p"><span class="cur">$</span>20<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Hasta 3 fórmulas o un problema puntual en una hoja</span><span data-l="en">Up to 3 formulas or one issue in one sheet</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>2 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>1</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="excel"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier pop">
+        <p class="tier-k mono"><span data-l="es">Estándar</span><span data-l="en">Standard</span></p>
+        <h3><span data-l="es">Limpieza + fórmulas</span><span data-l="en">Clean-up + formulas</span></h3>
+        <p class="tier-p"><span class="cur">$</span>55<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Limpio una base (~2,000 filas) y armo fórmulas en hasta 3 hojas</span><span data-l="en">Clean one dataset (~2,000 rows) and build formulas across up to 3 sheets</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>3 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>2</dd></div></dl>
+        <a class="btn btn-accent btn-sm" href="#brief" data-brief-pick="excel"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Premium</span><span data-l="en">Premium</span></p>
+        <h3><span data-l="es">Dashboard o tracker</span><span data-l="en">Dashboard or tracker</span></h3>
+        <p class="tier-p"><span class="cur">$</span>120<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Tracker o dashboard a la medida con KPIs, gráficas, validación e instrucciones</span><span data-l="en">Custom tracker or dashboard with KPIs, charts, validation and instructions</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>5 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>3</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="excel"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+    </div>
+    <div class="pk" data-pk-panel="python" hidden>
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Básico</span><span data-l="en">Basic</span></p>
+        <h3><span data-l="es">Una limpieza</span><span data-l="en">One clean-up</span></h3>
+        <p class="tier-p"><span class="cur">$</span>30<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Script que limpia un tipo de archivo y guarda CSV o Excel limpio</span><span data-l="en">Script that cleans one file type and saves a clean CSV or Excel</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>2 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>1</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="python"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier pop">
+        <p class="tier-k mono"><span data-l="es">Estándar</span><span data-l="en">Standard</span></p>
+        <h3><span data-l="es">Limpieza + reporte</span><span data-l="en">Clean-up + report</span></h3>
+        <p class="tier-p"><span class="cur">$</span>80<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Limpieza más un Excel con resúmenes y una gráfica</span><span data-l="en">Clean-up plus an Excel report with summaries and a chart</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>4 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>2</dd></div></dl>
+        <a class="btn btn-accent btn-sm" href="#brief" data-brief-pick="python"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Premium</span><span data-l="en">Premium</span></p>
+        <h3><span data-l="es">Automatización completa</span><span data-l="en">Full automation</span></h3>
+        <p class="tier-p"><span class="cur">$</span>180<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Varios archivos de entrada, reporte con varias hojas y gráficas, bitácora de problemas y pruebas</span><span data-l="en">Several input files, multi-sheet report with charts, problem log and tests</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>6 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>3</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="python"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+    </div>
+    <div class="pk" data-pk-panel="landing" hidden>
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Básico</span><span data-l="en">Basic</span></p>
+        <h3><span data-l="es">Una sección</span><span data-l="en">One section</span></h3>
+        <p class="tier-p"><span class="cur">$</span>80<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Una sección responsive o página simple con tus textos e imágenes</span><span data-l="en">One responsive section or simple page from your text and images</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>3 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>1</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="landing"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier pop">
+        <p class="tier-k mono"><span data-l="es">Estándar</span><span data-l="en">Standard</span></p>
+        <h3><span data-l="es">Landing completa</span><span data-l="en">Full landing</span></h3>
+        <p class="tier-p"><span class="cur">$</span>140<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Hasta 6 secciones, botón de WhatsApp o contacto y SEO básico</span><span data-l="en">Up to 6 sections, WhatsApp or contact button and basic SEO</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>5 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>2</dd></div></dl>
+        <a class="btn btn-accent btn-sm" href="#brief" data-brief-pick="landing"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+      <article class="tier">
+        <p class="tier-k mono"><span data-l="es">Premium</span><span data-l="en">Premium</span></p>
+        <h3><span data-l="es">Landing + textos + publicación</span><span data-l="en">Landing + copy + publishing</span></h3>
+        <p class="tier-p"><span class="cur">$</span>230<small>USD</small></p>
+        <p class="tier-w"><span data-l="es">Todo lo anterior, textos en ES/EN y ayuda para publicarla en tu cuenta</span><span data-l="en">Everything above, ES/EN copywriting and help publishing on your account</span></p>
+        <dl class="tier-d"><div><dt><span data-l="es">Entrega</span><span data-l="en">Delivery</span></dt><dd>7 <span data-l="es">días</span><span data-l="en">days</span></dd></div><div><dt><span data-l="es">Revisiones</span><span data-l="en">Revisions</span></dt><dd>3</dd></div></dl>
+        <a class="btn btn-ghost btn-sm" href="#brief" data-brief-pick="landing"><span data-l="es">Empezar con este</span><span data-l="en">Start with this one</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BRIEF ============ -->
+<section id="brief" data-sec="6" class="band">
+  <div class="wrap brief-grid">
+    <div>
+      <header class="sec-head">
+        <p class="eyebrow mono"><span data-l="es">1 minuto</span><span data-l="en">1 minute</span></p>
+        <h2><span data-l="es">Arma tu brief</span><span data-l="en">Write your brief</span></h2>
+        <p class="sec-lede"><span data-l="es">Contesta cuatro cosas y se escribe un mensaje claro que puedes copiar y mandarme por la plataforma que prefieras.</span><span data-l="en">Answer four things and a clear message writes itself, ready to copy and send me on the platform you prefer.</span></p>
+      </header>
+      <form id="brief-form" class="brief-form" autocomplete="off">
+        <fieldset><legend><span data-l="es">¿Qué necesitas?</span><span data-l="en">What do you need?</span></legend>
+          <div class="pick">
+            <label><input type="checkbox" name="need" value="sheets" checked><span><span data-l="es">Hojas de cálculo</span><span data-l="en">Spreadsheets</span></span></label>
+            <label><input type="checkbox" name="need" value="python"><span><span data-l="es">Python y datos</span><span data-l="en">Python and data</span></span></label>
+            <label><input type="checkbox" name="need" value="web"><span><span data-l="es">Web</span><span data-l="en">Web</span></span></label>
+            <label><input type="checkbox" name="need" value="other"><span><span data-l="es">Otra cosa</span><span data-l="en">Something else</span></span></label>
+          </div>
+        </fieldset>
+        <div class="field"><label for="b-what"><span data-l="es">Cuéntame en 2 o 3 líneas</span><span data-l="en">Tell me in 2 or 3 lines</span></label>
+          <textarea id="b-what" rows="3" data-val-es="Cada lunes copio las ventas de 3 sucursales a un Excel y armo el resumen a mano. Quiero que se haga solo." data-val-en="Every Monday I copy sales from 3 branches into Excel and build the summary by hand. I want it to happen on its own.">Cada lunes copio las ventas de 3 sucursales a un Excel y armo el resumen a mano. Quiero que se haga solo.</textarea></div>
+        <div class="row2">
+          <div class="field"><label for="b-when"><span data-l="es">¿Para cuándo?</span><span data-l="en">When do you need it?</span></label>
+            <select id="b-when"><option value="0" data-es="Esta semana" data-en="This week">Esta semana</option><option value="1" selected data-es="En 2 semanas" data-en="Within 2 weeks">En 2 semanas</option><option value="2" data-es="Sin prisa" data-en="No rush">Sin prisa</option></select></div>
+          <div class="field"><label for="b-budget"><span data-l="es">Presupuesto aproximado</span><span data-l="en">Approximate budget</span></label>
+            <select id="b-budget"><option value="0" data-es="Menos de $50 USD" data-en="Under $50 USD">Menos de $50 USD</option><option value="1" selected>$50–150 USD</option><option value="2">$150–300 USD</option><option value="3" data-es="Más de $300 USD" data-en="Over $300 USD">Más de $300 USD</option><option value="4" data-es="Aún no sé" data-en="Not sure yet">Aún no sé</option></select></div>
+        </div>
+        <label class="check"><input type="checkbox" id="b-file" checked><span><span data-l="es">Tengo un archivo de ejemplo para compartir</span><span data-l="en">I have a sample file to share</span></span></label>
+      </form>
+    </div>
+    <div class="brief-out">
+      <div class="win memo">
+        <div class="win-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="win-title mono">brief.txt</span><span class="ex mono"><span data-l="es">ejemplo</span><span data-l="en">example</span></span></div>
+        <pre class="memo-txt" id="brief-txt" aria-live="polite"></pre>
+        <div class="memo-meta" id="brief-match"></div>
+      </div>
+      <div class="send">
+        <button class="btn btn-accent" type="button" id="brief-copy"><span data-l="es">Copiar brief</span><span data-l="en">Copy brief</span></button>
+        <div class="send-links" id="send-links"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" data-sec="7">
+  <div class="wrap faq-grid">
+    <header class="sec-head">
+      <p class="eyebrow mono">FAQ</p>
+      <h2><span data-l="es">Preguntas frecuentes</span><span data-l="en">Questions</span></h2>
+      <p class="sec-lede"><span data-l="es">Si la tuya no está, escríbela en el brief.</span><span data-l="en">If yours isn't here, add it to your brief.</span></p>
+    </header>
+    <div class="faq">
+      <details open><summary><span data-l="es">¿Usas inteligencia artificial?</span><span data-l="en">Do you use AI?</span></summary><p><span data-l="es">Sí. Uso herramientas con IA para trabajar más rápido, y reviso, pruebo y respondo por todo lo que entrego. Si prefieres que tu proyecto se haga sin IA, dímelo antes de empezar y lo respeto.</span><span data-l="en">Yes. I use AI-assisted tools to work faster, and I review, test and stand behind everything I deliver. If you'd rather your project be done without AI, tell me before we start and I'll respect it.</span></p></details>
+      <details><summary><span data-l="es">¿Puedo mandarte datos confidenciales?</span><span data-l="en">Can I send you confidential data?</span></summary><p><span data-l="es">Te recomiendo mandar una copia sin las columnas sensibles o con datos de prueba. Si necesitas que trabaje con datos reales, lo acordamos antes.</span><span data-l="en">I recommend sending a copy without sensitive columns, or with test data. If I need to work with real data, we agree on how first.</span></p></details>
+      <details><summary><span data-l="es">¿Cómo se paga?</span><span data-l="en">How do I pay?</span></summary><p><span data-l="es">A través de la plataforma donde me contrates (Fiverr, Workana o Upwork), que protege a los dos. Si eres un negocio en México y prefieres pesos, pídeme la cotización en MXN.</span><span data-l="en">Through the platform you hire me on (Fiverr, Workana or Upwork), which protects us both. Businesses in Mexico can ask for a quote in pesos.</span></p></details>
+      <details><summary><span data-l="es">¿Cuánto tarda?</span><span data-l="en">How long does it take?</span></summary><p><span data-l="es">Entre 2 y 7 días según el paquete. Antes de empezar te confirmo el alcance y una fecha de entrega.</span><span data-l="en">Between 2 and 7 days depending on the package. Before starting I confirm the scope and a delivery date.</span></p></details>
+      <details><summary><span data-l="es">¿Y si algo no queda como esperaba?</span><span data-l="en">What if it isn't what I expected?</span></summary><p><span data-l="es">Cada paquete incluye revisiones. Si algo de lo entregado no funciona como acordamos, lo corrijo.</span><span data-l="en">Every package includes revisions. If anything I delivered doesn't work as agreed, I fix it.</span></p></details>
+      <details><summary><span data-l="es">¿Tengo que instalar algo?</span><span data-l="en">Do I need to install anything?</span></summary><p><span data-l="es">Para Excel y Google Sheets, no. Para los scripts de Python te dejo instrucciones paso a paso para Windows o Mac, y en los paquetes Estándar y Premium un lanzador de doble clic. Las páginas web se abren en cualquier navegador.</span><span data-l="en">Not for Excel or Google Sheets. For Python scripts you get step-by-step instructions for Windows or Mac, and a double-click launcher in Standard and Premium. Web pages open in any browser.</span></p></details>
+      <details><summary><span data-l="es">¿Qué no haces?</span><span data-l="en">What don't you do?</span></summary><p><span data-l="es">Tiendas en línea con pagos, sistemas con usuarios y contraseñas, WordPress, apps móviles, macros que no pediste, y scraping de sitios que lo prohíben o cualquier cosa que rompa las reglas de una plataforma.</span><span data-l="en">Online stores with payments, systems with logins, WordPress, mobile apps, macros you didn't ask for, and scraping sites that forbid it or anything that breaks a platform's rules.</span></p></details>
+      <details><summary><span data-l="es">¿Trabajas en inglés?</span><span data-l="en">Do you work in English?</span></summary><p><span data-l="es">Sí. Mi idioma nativo es el español y trabajo en inglés (nivel B2): entregables, instrucciones y mensajes en el idioma que prefieras.</span><span data-l="en">Yes. Spanish is my native language and I work in English (B2 level): deliverables, instructions and messages in the language you prefer.</span></p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOBRE MÍ ============ -->
+<section id="sobre-mi" data-sec="8" class="band">
+  <div class="wrap about">
+    <div class="about-card">
+      <div class="avatar mono" aria-hidden="true">EP<span>A1</span></div>
+      <div>
+        <h2>Evert Pascual</h2>
+        <p class="about-role"><span data-l="es">Ingeniería en Ciencia de Datos y Matemáticas · Tec de Monterrey</span><span data-l="en">Data Science and Mathematics Engineering · Tecnológico de Monterrey</span></p>
+      </div>
+    </div>
+    <div class="about-copy">
+      <p><span data-l="es">Estudio ciencia de datos y matemáticas, y me gusta la parte práctica: tomar el archivo que alguien llena a mano cada semana y convertirlo en algo que se actualiza solo. Trabajo con pequeños negocios y equipos que no necesitan un sistema caro, sino una hoja bien hecha, un script confiable o una página clara.</span><span data-l="en">I study data science and mathematics, and I like the practical side: taking the file someone fills in by hand every week and turning it into something that updates itself. I work with small businesses and teams that don't need an expensive system, just a well-built sheet, a reliable script or a clear page.</span></p>
+      <ul class="principles">
+        <li><b><span data-l="es">Alcance claro</span><span data-l="en">Clear scope</span></b><span data-l="es">Sabes qué recibes antes de pagar.</span><span data-l="en">You know what you'll get before you pay.</span></li>
+        <li><b><span data-l="es">Todo probado</span><span data-l="en">Everything tested</span></b><span data-l="es">Nada se entrega sin verificarse.</span><span data-l="en">Nothing ships unchecked.</span></li>
+        <li><b><span data-l="es">Explicado</span><span data-l="en">Explained</span></b><span data-l="es">Te dejo cómo usarlo y cómo cambiarlo.</span><span data-l="en">You learn how to use it and change it.</span></li>
+      </ul>
+      <ul class="stack mono" aria-label="Herramientas" data-al-es="Herramientas" data-al-en="Tools"><li>Excel</li><li>Google Sheets</li><li>Apps Script</li><li>Python</li><li>pandas</li><li>openpyxl</li><li>matplotlib</li><li>pytest</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Git</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div>
+      <a class="brand" href="#inicio"><span class="brand-cell" aria-hidden="true">EP</span><span class="brand-name">Evert Pascual</span></a>
+      <p class="foot-note"><span data-l="es">Hecho a mano en HTML, CSS y JavaScript. Las demos usan datos y negocios ficticios.</span><span data-l="en">Hand-made in HTML, CSS and JavaScript. Demos use fictional data and businesses.</span></p>
+    </div>
+    <div class="foot-links" id="foot-links"></div>
+    <p class="foot-legal mono">© 2026 Evert Pascual · <span data-l="es">Actualizado en octubre de 2026</span><span data-l="en">Updated October 2026</span></p>
+  </div>
+</footer>
+
+<nav class="tabs" id="tabs" aria-label="Secciones" data-al-es="Secciones" data-al-en="Sections">
+  <div class="tabs-in">
+    <span class="tabs-nav mono" aria-hidden="true">◂ ▸</span>
+    <a href="#inicio" data-tab="0" aria-current="true"><span data-l="es">Inicio</span><span data-l="en">Home</span></a>
+    <a href="#servicios" data-tab="1"><span data-l="es">Servicios</span><span data-l="en">Services</span></a>
+    <a href="#demos" data-tab="2"><span data-l="es">Demos</span><span data-l="en">Demos</span></a>
+    <a href="#proyectos" data-tab="3"><span data-l="es">Proyectos</span><span data-l="en">Projects</span></a>
+    <a href="#proceso" data-tab="4"><span data-l="es">Proceso</span><span data-l="en">Process</span></a>
+    <a href="#precios" data-tab="5"><span data-l="es">Precios</span><span data-l="en">Pricing</span></a>
+    <a href="#brief" data-tab="6"><span data-l="es">Brief</span><span data-l="en">Brief</span></a>
+    <a href="#faq" data-tab="7"><span data-l="es">Preguntas</span><span data-l="en">FAQ</span></a>
+    <a href="#sobre-mi" data-tab="8"><span data-l="es">Sobre mí</span><span data-l="en">About</span></a>
+  </div>
+</nav>
+
+<div class="palette" id="palette" hidden>
+  <div class="pal-box" role="dialog" aria-modal="true" aria-label="Buscar" data-al-es="Buscar" data-al-en="Search">
+    <div class="pal-in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="pal-q" type="text" role="combobox" aria-label="Buscar" data-al-es="Buscar" data-al-en="Search" aria-expanded="true" aria-controls="pal-list" data-ph-es="Busca un servicio, una demo o una sección…" data-ph-en="Search a service, demo or section…" placeholder="Busca un servicio, una demo o una sección…"><span class="kbd">Esc</span></div>
+    <ul id="pal-list" role="listbox"></ul>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="site-data">{"sections": [["inicio", ["Inicio", "Home"], "=TRABAJA.POR.TI(\"Excel\", \"Python\", \"Web\")", "=WORKS.FOR.YOU(\"Excel\", \"Python\", \"Web\")"], ["servicios", ["Servicios", "Services"], "=FILTRAR(Servicios, Categoría=\"Todo\")", "=FILTER(Services, Category=\"All\")"], ["demos", ["Demos", "Demos"], "=PROBAR(Demo=\"Hoja viva\")", "=TRY(Demo=\"Live sheet\")"], ["proyectos", ["Proyectos", "Projects"], "=CONTARA(Proyectos)", "=COUNTA(Projects)"], ["proceso", ["Proceso", "Process"], "=SECUENCIA(4)", "=SEQUENCE(4)"], ["precios", ["Precios", "Pricing"], "=BUSCARV(\"Excel\", Paquetes, 2, FALSO)", "=VLOOKUP(\"Excel\", Packages, 2, FALSE)"], ["brief", ["Brief", "Brief"], "=CONCAT(Servicio, Plazo, Presupuesto)", "=CONCAT(Service, Deadline, Budget)"], ["faq", ["Preguntas", "FAQ"], "=SI.ERROR(Duda, Respuesta)", "=IFERROR(Question, Answer)"], ["sobre-mi", ["Sobre_mí", "About"], "=BUSCARX(\"Evert\", Personas, Perfil)", "=XLOOKUP(\"Evert\", People, Profile)"]], "cats": [["all", ["Todo", "All"]], ["sheets", ["Hojas de cálculo", "Spreadsheets"]], ["python", ["Python y datos", "Python and data"]], ["web", ["Web", "Web"]], ["extras", ["Extras", "Extras"]]], "packages": {"excel": {"label": ["Excel / Sheets", "Excel / Sheets"]}, "python": {"label": ["Python", "Python"]}, "landing": {"label": ["Landing page", "Landing page"]}}, "services": [{"id": "formulas", "cat": "sheets", "fmt": ".xlsx · Sheets", "title": ["Fórmulas que no se rompen", "Formulas that don't break"], "desc": ["Arreglo o creo las fórmulas de tu archivo: BUSCARX, SUMAR.SI.CONJUNTO, ÍNDICE/COINCIDIR y manejo de errores.", "I fix or build the formulas in your file: XLOOKUP, SUMIFS, INDEX/MATCH and error handling."]}, {"id": "dashboards", "cat": "sheets", "fmt": ".xlsx · Sheets", "title": ["Dashboards y reportes", "Dashboards and reports"], "desc": ["Un resumen que se actualiza solo: indicadores, gráficas, comparativo mensual y filtros.", "A summary that updates itself: KPIs, charts, month-over-month comparison and filters."]}, {"id": "trackers", "cat": "sheets", "fmt": ".xlsx · Sheets", "title": ["Trackers y plantillas a la medida", "Custom trackers and templates"], "desc": ["Inventario, ventas, presupuesto, pedidos o asistencia, con listas desplegables, validación y alertas de color.", "Inventory, sales, budget, orders or attendance, with drop-downs, validation and color alerts."]}, {"id": "cleanup", "cat": "sheets", "fmt": ".xlsx · Sheets", "title": ["Orden y limpieza de tu base", "Spreadsheet clean-up"], "desc": ["Quito duplicados, unifico fechas y nombres, convierto números guardados como texto y dejo la base lista para analizar.", "I remove duplicates, unify dates and names, convert numbers stored as text and leave the data ready to analyze."]}, {"id": "appsscript", "cat": "sheets", "fmt": ".gs · Sheets", "title": ["Automatización de Google Sheets", "Google Sheets automation"], "desc": ["Apps Script para que tu hoja trabaje sola: formularios que llenan la hoja, correos o recordatorios automáticos y reportes programados.", "Apps Script so your sheet works on its own: forms that fill the sheet, automatic emails or reminders, and scheduled reports."]}, {"id": "exports", "cat": "python", "fmt": ".py · .csv · .xlsx", "title": ["Limpieza de exportaciones", "Messy export clean-up"], "desc": ["Un script que convierte la exportación desordenada de tu sistema en datos limpios, en segundos y cada vez que lo necesites.", "A script that turns your system's messy export into clean data, in seconds, every time you need it."]}, {"id": "reports", "cat": "python", "fmt": ".py · .xlsx · .pdf", "title": ["Reportes automáticos", "Automated reports"], "desc": ["De tus archivos a un Excel o PDF con resúmenes y gráficas, listo para mandar.", "From your files to an Excel or PDF report with summaries and charts, ready to send."]}, {"id": "merge", "cat": "python", "fmt": ".py · .xlsx", "title": ["Unir y conciliar archivos", "Merge and reconcile files"], "desc": ["Junto varios Excel o CSV en uno, los cruzo contra otra fuente (por ejemplo, un estado de cuenta) y marco las diferencias.", "I combine several Excel or CSV files, match them against another source (a bank statement, say) and flag the differences."]}, {"id": "pdf", "cat": "python", "fmt": ".pdf → .xlsx", "title": ["De PDF a Excel", "PDF to spreadsheet"], "desc": ["Saco las tablas de facturas, estados de cuenta o reportes en PDF y las dejo en Excel. Funciona con PDF de texto; los escaneos los reviso antes de aceptar.", "I extract tables from invoices, statements or PDF reports into Excel. Works with text PDFs; I review scans before accepting."]}, {"id": "analysis", "cat": "python", "fmt": ".ipynb · .pdf", "title": ["Análisis de datos con gráficas", "Data analysis with charts"], "desc": ["Respondo preguntas concretas con tus datos: qué se vende, cuándo, a quién y qué cambió. Entrego un reporte claro con gráficas.", "I answer specific questions with your data: what sells, when, to whom and what changed. You get a clear report with charts."]}, {"id": "forecast", "cat": "python", "fmt": ".xlsx · .ipynb", "title": ["Pronósticos sencillos", "Simple forecasts"], "desc": ["Estimo ventas o demanda de los próximos meses con un método explicado (tendencia y estacionalidad) y te digo qué tan confiable es.", "I estimate sales or demand for the coming months with an explained method (trend and seasonality) and tell you how reliable it is."]}, {"id": "landing", "cat": "web", "fmt": ".html", "title": ["Landing pages", "Landing pages"], "desc": ["Una página rápida que explica qué vendes, cuánto cuesta y cómo contactarte, y que se ve bien en el celular.", "A fast page that explains what you sell, what it costs and how to reach you, and looks right on phones."]}, {"id": "webtools", "cat": "web", "fmt": ".html · .js", "title": ["Herramientas web pequeñas", "Small web tools"], "desc": ["Cotizadores, calculadoras, catálogos o formularios que arman el pedido y lo mandan por WhatsApp. Sin mensualidades.", "Quote builders, calculators, catalogs or forms that put the order together and send it on WhatsApp. No monthly fees."]}, {"id": "webdash", "cat": "web", "fmt": ".html", "title": ["Dashboards web interactivos", "Interactive web dashboards"], "desc": ["Tus datos en una página con filtros y gráficas que se abre en cualquier navegador, sin pagar licencias.", "Your data on a page with filters and charts that opens in any browser, with no licenses to pay."]}, {"id": "bilingual", "cat": "extras", "fmt": "ES ⇄ EN", "title": ["Versiones en español e inglés", "Spanish and English versions"], "desc": ["Traduzco y adapto hojas, sitios e instrucciones para que tu equipo o tus clientes los usen en su idioma.", "I translate and adapt sheets, sites and instructions so your team or customers can use them in their language."]}, {"id": "templates", "cat": "extras", "fmt": ".xlsx", "title": ["Plantillas listas para usar", "Ready-made templates"], "desc": ["Plantillas probadas de ventas e inventario para Excel y Google Sheets, en español e inglés, para empezar hoy.", "Tested sales and inventory templates for Excel and Google Sheets, in Spanish and English, to start today."]}], "config": {"fiverr": "https://www.fiverr.com/everthhhh", "workana": "", "upwork": "", "github": "", "email": "", "whatsapp": ""}, "inventory": [{"name": ["Café molido 500 g", "Ground coffee 500 g"], "cat": "cafe", "stock": 37, "min": 15, "price": 289}, {"name": ["Café en grano 250 g", "Whole-bean coffee 250 g"], "cat": "cafe", "stock": 87, "min": 20, "price": 165}, {"name": ["Té chai 50 g", "Chai tea 50 g"], "cat": "te", "stock": 9, "min": 10, "price": 110}, {"name": ["Taza de cerámica", "Ceramic mug"], "cat": "acc", "stock": 37, "min": 8, "price": 180}, {"name": ["Prensa francesa 600 ml", "French press 600 ml"], "cat": "acc", "stock": 4, "min": 5, "price": 459}, {"name": ["Granola 300 g", "Granola 300 g"], "cat": "snk", "stock": 28, "min": 10, "price": 120}], "invCats": {"cafe": ["Café", "Coffee"], "te": ["Té", "Tea"], "acc": ["Accesorios", "Accessories"], "snk": ["Snacks", "Snacks"]}, "sampleCSV": "Fecha de Venta,Cliente,Artículo,Cant,Importe\n\"Feb 12, 2026\",Papelería Sol,Caja de plumas (12),1,\"85,00\"\n27-1-26,Comercial del Bajío,Carpeta lefort,5,320.00\n2026-06-26,papeleria sol,Resma papel carta,3,$294.00\n30/05/2026,Papelería Sol,Carpeta lefort,3,192 MXN\n19 feb 2026,Distribuidora Norte,Caja de plumas (12),1,85.00\n22/05/2026,comercial  del bajío,Engrapadora,5,1050.00\n22/05/2026,comercial  del bajío,Engrapadora,5,1050.00\n\"Mar 18, 2026\",María Fernández,Resma papel carta,1,98 MXN\n28 jun 2026,ana lópez,Calculadora científica,2,\"778,00\"\n29-5-26,papeleria sol,  engrapadora,2,420 MXN\n2026-01-16,ANA LOPEZ ,Caja de plumas (12),5,$425.00\n13 abr 2026,,  tóner negro,3,4350.00\n31/02/2026,Distribuidora Norte,Engrapadora,1,210.00\n2026-06-26,Comercial del Bajío,Calculadora científica,5,\"1.945,00\"\n2026-03-04,María Fernández,Carpeta lefort,0,0\n2026-04-11,Distribuidora Norte,Resma papel carta,2,ochenta", "dash": {"months": [1, 2, 3, 4, 5, 6, 7, 8, 9], "cats": ["Café", "Té", "Accesorios", "Snacks"], "rows": [{"m": 1, "c": "Accesorios", "rev": 479.1, "mar": 289.1, "u": 5, "n": 3}, {"m": 1, "c": "Café", "rev": 1083.1, "mar": 543.1, "u": 4, "n": 3}, {"m": 1, "c": "Snacks", "rev": 130.0, "mar": 82.0, "u": 2, "n": 2}, {"m": 2, "c": "Accesorios", "rev": 142.2, "mar": 82.2, "u": 2, "n": 1}, {"m": 2, "c": "Café", "rev": 2935.15, "mar": 1475.15, "u": 11, "n": 7}, {"m": 2, "c": "Snacks", "rev": 405.75, "mar": 245.75, "u": 7, "n": 5}, {"m": 2, "c": "Té", "rev": 275.5, "mar": 161.5, "u": 3, "n": 2}, {"m": 3, "c": "Accesorios", "rev": 619.0, "mar": 379.0, "u": 4, "n": 3}, {"m": 3, "c": "Café", "rev": 3856.15, "mar": 1966.15, "u": 16, "n": 10}, {"m": 3, "c": "Snacks", "rev": 477.0, "mar": 291.0, "u": 8, "n": 5}, {"m": 3, "c": "Té", "rev": 361.0, "mar": 209.0, "u": 4, "n": 2}, {"m": 4, "c": "Accesorios", "rev": 841.2, "mar": 451.2, "u": 5, "n": 4}, {"m": 4, "c": "Café", "rev": 2507.0, "mar": 1263.0, "u": 13, "n": 10}, {"m": 4, "c": "Snacks", "rev": 381.0, "mar": 215.0, "u": 5, "n": 3}, {"m": 4, "c": "Té", "rev": 315.0, "mar": 187.0, "u": 3, "n": 2}, {"m": 5, "c": "Accesorios", "rev": 1377.0, "mar": 687.0, "u": 3, "n": 1}, {"m": 5, "c": "Café", "rev": 2972.0, "mar": 1540.0, "u": 12, "n": 5}, {"m": 5, "c": "Snacks", "rev": 649.0, "mar": 381.0, "u": 8, "n": 4}, {"m": 5, "c": "Té", "rev": 110.0, "mar": 65.0, "u": 1, "n": 1}, {"m": 6, "c": "Accesorios", "rev": 2843.1, "mar": 1503.1, "u": 10, "n": 5}, {"m": 6, "c": "Café", "rev": 2598.0, "mar": 1342.0, "u": 10, "n": 5}, {"m": 6, "c": "Snacks", "rev": 55.0, "mar": 33.0, "u": 1, "n": 1}, {"m": 6, "c": "Té", "rev": 939.5, "mar": 548.5, "u": 9, "n": 5}, {"m": 7, "c": "Accesorios", "rev": 563.15, "mar": 343.15, "u": 6, "n": 4}, {"m": 7, "c": "Café", "rev": 3490.65, "mar": 1774.65, "u": 14, "n": 6}, {"m": 7, "c": "Snacks", "rev": 185.25, "mar": 113.25, "u": 3, "n": 1}, {"m": 7, "c": "Té", "rev": 919.75, "mar": 535.75, "u": 9, "n": 4}, {"m": 8, "c": "Accesorios", "rev": 1835.3, "mar": 1045.3, "u": 12, "n": 5}, {"m": 8, "c": "Café", "rev": 3306.05, "mar": 1710.05, "u": 17, "n": 9}, {"m": 8, "c": "Snacks", "rev": 1094.75, "mar": 654.75, "u": 13, "n": 8}, {"m": 9, "c": "Accesorios", "rev": 1322.1, "mar": 762.1, "u": 10, "n": 5}, {"m": 9, "c": "Café", "rev": 3539.85, "mar": 1799.85, "u": 13, "n": 8}, {"m": 9, "c": "Snacks", "rev": 542.0, "mar": 324.0, "u": 7, "n": 5}, {"m": 9, "c": "Té", "rev": 533.5, "mar": 308.5, "u": 5, "n": 2}], "byProduct": [{"name": "Barra de chocolate 70%", "c": "Snacks", "rev": 764.5, "u": 14}, {"name": "Café de especialidad 250 g", "c": "Café", "rev": 5794.25, "u": 24}, {"name": "Café en grano 250 g", "c": "Café", "rev": 5379.0, "u": 33}, {"name": "Café molido 500 g", "c": "Café", "rev": 15114.7, "u": 53}, {"name": "Filtros de papel (100 pz)", "c": "Accesorios", "rev": 2370.0, "u": 31}, {"name": "Galletas de avena (6 pz)", "c": "Snacks", "rev": 1745.25, "u": 28}, {"name": "Granola 300 g", "c": "Snacks", "rev": 1410.0, "u": 12}, {"name": "Prensa francesa 600 ml", "c": "Accesorios", "rev": 3603.15, "u": 8}, {"name": "Taza de cerámica", "c": "Accesorios", "rev": 2304.0, "u": 13}, {"name": "Termo de acero 500 ml", "c": "Accesorios", "rev": 1745.0, "u": 5}, {"name": "Té chai 50 g", "c": "Té", "rev": 2271.5, "u": 21}, {"name": "Té verde 50 g", "c": "Té", "rev": 1182.75, "u": 13}]}, "dashCatNames": {"Café": ["Café", "Coffee"], "Té": ["Té", "Tea"], "Accesorios": ["Accesorios", "Accessories"], "Snacks": ["Snacks", "Snacks"]}, "prodNames": {"Café en grano 250 g": ["Café en grano 250 g", "Whole-bean coffee 250 g"], "Café molido 500 g": ["Café molido 500 g", "Ground coffee 500 g"], "Café de especialidad 250 g": ["Café de especialidad 250 g", "Specialty coffee 250 g"], "Té verde 50 g": ["Té verde 50 g", "Green tea 50 g"], "Té chai 50 g": ["Té chai 50 g", "Chai tea 50 g"], "Taza de cerámica": ["Taza de cerámica", "Ceramic mug"], "Termo de acero 500 ml": ["Termo de acero 500 ml", "Steel tumbler 500 ml"], "Filtros de papel (100 pz)": ["Filtros de papel (100 pz)", "Paper filters (100)"], "Prensa francesa 600 ml": ["Prensa francesa 600 ml", "French press 600 ml"], "Galletas de avena (6 pz)": ["Galletas de avena (6 pz)", "Oat cookies (6)"], "Barra de chocolate 70%": ["Barra de chocolate 70%", "70% chocolate bar"], "Granola 300 g": ["Granola 300 g", "Granola 300 g"]}, "liveStatus": ["7 filas · 14 celdas con problemas · 1 duplicado", "7 rows · 14 problem cells · 1 duplicate"], "liveDone": ["6 filas limpias · 12 celdas corregidas · 1 duplicado quitado", "6 clean rows · 12 cells fixed · 1 duplicate removed"], "titles": ["Evert Pascual · Excel, Python y web", "Evert Pascual · Excel, Python and web"]}</script>
+<script>(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('site-data').textContent);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const root = document.documentElement;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const money = (n, d = 0) => '$' + fmt(n, d);
+let lang = 'es';
+const L = (es, en) => lang === 'en' ? en : es;
+const P = p => Array.isArray(p) ? (lang === 'en' ? p[1] : p[0]) : p;
+
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1800);
+}
+async function copyText(txt, ok) {
+  try { await navigator.clipboard.writeText(txt); toast(ok); }
+  catch {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.append(ta); ta.select();
+    let done = false; try { done = document.execCommand('copy'); } catch {}
+    ta.remove(); toast(done ? ok : L('Selecciona el texto y cópialo con Ctrl+C', 'Select the text and copy it with Ctrl+C'));
+  }
+}
+
+/* ============ fórmula del encabezado ============ */
+const hl = s => esc(s).replace(/(&quot;.*?&quot;)/g, '<span class="str">$1</span>').replace(/([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ.]+)(?=\()/g, '<span class="fn">$1</span>');
+const state = { sec: 0, filter: 'all', demo: 'hoja', pk: 'excel', hover: null };
+function sectionFormula(i) {
+  const [id, name, fes, fen] = D.sections[i];
+  const cat = D.cats.find(c => c[0] === state.filter)[1];
+  const demoNames = { hoja: ['Hoja viva', 'Live sheet'], limpiador: ['Limpiador', 'Data cleaner'], dashboard: ['Dashboard', 'Dashboard'], landing: ['Landing', 'Landing'] };
+  const pk = D.packages[state.pk].label;
+  if (id === 'servicios') return L(`=FILTRAR(Servicios, Categoría="${cat[0]}")`, `=FILTER(Services, Category="${cat[1]}")`);
+  if (id === 'demos') return L(`=PROBAR(Demo="${demoNames[state.demo][0]}")`, `=TRY(Demo="${demoNames[state.demo][1]}")`);
+  if (id === 'precios') return L(`=BUSCARV("${pk[0]}", Paquetes, 2, FALSO)`, `=VLOOKUP("${pk[1]}", Packages, 2, FALSE)`);
+  return L(fes, fen);
+}
+let lastFormula = '';
+function paintBar() {
+  const [, name] = D.sections[state.sec];
+  $('#namebox').textContent = state.hover || P(name);
+  const f = sectionFormula(state.sec);
+  if (f !== lastFormula) {
+    const el = $('#formula'); el.innerHTML = hl(f); lastFormula = f;
+    if (!reduce) { el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+  }
+  $$('#tabs a').forEach((a, i) => { if (i === state.sec) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+}
+function setSection(i) {
+  if (i === state.sec) return;
+  state.sec = i; paintBar();
+  const a = $(`#tabs a[data-tab="${i}"]`), bar = $('.tabs-in');
+  if (a && bar) { const l = a.offsetLeft - bar.clientWidth / 2 + a.offsetWidth / 2; bar.scrollTo({ left: l, behavior: reduce ? 'auto' : 'smooth' }); }
+}
+const secs = $$('[data-sec]');
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) setSection(+e.target.dataset.sec); });
+}, { rootMargin: '-38% 0px -55% 0px' });
+secs.forEach(s => io.observe(s));
+
+/* celda bajo el cursor en el hero */
+(function heroCells() {
+  const hero = $('.hero'), hi = $('#cellhi'), cols = $$('.cols span');
+  if (!fine || !hero) return;
+  const C = 48, top = 28;
+  const letters = n => { let s = ''; n++; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
+  let last = -1;
+  hero.addEventListener('pointermove', e => {
+    const r = hero.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top - top;
+    if (y < 0) return;
+    const c = Math.floor(x / C), rw = Math.floor(y / C);
+    hi.style.opacity = '1'; hi.style.transform = `translate(${c * C - 1}px, ${top + rw * C - 1}px)`;
+    state.hover = letters(c) + (rw + 1);
+    if (c !== last) { cols.forEach((s, i) => s.classList.toggle('on', i === c)); last = c; }
+    $('#namebox').textContent = state.hover;
+  });
+  hero.addEventListener('pointerleave', () => { hi.style.opacity = '0'; state.hover = null; cols.forEach(s => s.classList.remove('on')); last = -1; paintBar(); });
+})();
+
+/* ============ hoja que se limpia sola (hero) ============ */
+const live = (() => {
+  const sheet = $('#live-sheet'); if (!sheet) return {};
+  const cells = $$('td[data-clean]', sheet);
+  cells.forEach(td => { td.dataset.raw = td.textContent; });
+  const dup = $('tr[data-dup]', sheet);
+  let cleaned = false, running = false, timers = [];
+  const wait = ms => new Promise(r => timers.push(setTimeout(r, ms)));
+  const setFx = (ref, f) => { $('#live-nb').textContent = ref; $('#live-fx').textContent = f; };
+  const renumber = () => { let n = 2; $$('tbody tr[data-row]', sheet).forEach(tr => { if (tr.style.display !== 'none') tr.querySelector('.rn').textContent = n++; }); $('tr.total .rn', sheet).textContent = n; return n - 1; };
+  const totals = () => {
+    const by = {}; let total = 0;
+    $$('tbody tr[data-row]', sheet).forEach(tr => {
+      if (tr.style.display === 'none') return;
+      const tds = tr.querySelectorAll('td'); const v = parseFloat((tds[4].dataset.clean ?? tds[4].textContent).replace(/,/g, ''));
+      const who = tds[1].dataset.clean ?? tds[1].textContent; by[who] = (by[who] || 0) + v; total += v;
+    });
+    return { by, total };
+  };
+  function finalState() {
+    cells.forEach(td => { td.textContent = td.dataset.clean; td.classList.remove('bad', 'fixing'); td.classList.add('fixed', 'settle'); });
+    if (dup) dup.style.display = 'none';
+    const last = renumber(); const { by, total } = totals();
+    $('#live-total').textContent = fmt(total, 2);
+    paintChart(by);
+    const f = L(`=SUMA(E2:E${last})`, `=SUM(E2:E${last})`); setFx('E' + (last + 1), f);
+    $$('tr.total .dim [data-l]', sheet).forEach(s => s.textContent = s.dataset.l === 'es' ? `=SUMA(E2:E${last})` : `=SUM(E2:E${last})`);
+    done();
+  }
+  function paintChart(by) {
+    const rows = $$('#live-chart .bar-row'), max = Math.max(...Object.values(by));
+    rows.forEach(r => { const k = r.querySelector('span').textContent, v = by[k] || 0; r.querySelector('i').style.setProperty('--v', (v / max * 100).toFixed(1)); r.querySelector('b').textContent = '$' + fmt(v); });
+  }
+  function done() {
+    cleaned = true; running = false;
+    $('#live-file').textContent = 'ventas_marzo_limpio.xlsx';
+    const st = $('#live-status'); st.classList.add('ok');
+    st.innerHTML = `<span data-l="es">${D.liveDone[0]}</span><span data-l="en">${D.liveDone[1]}</span>`;
+    const b = $('#live-run'); b.classList.add('redo');
+    $('#live-run-txt').innerHTML = '<span data-l="es">Volver a ensuciar</span><span data-l="en">Mess it up again</span>';
+  }
+  async function run() {
+    if (running) return; running = true;
+    if (reduce) return finalState();
+    for (const td of cells) {
+      td.classList.add('fixing'); setFx(td.dataset.ref, lang === 'en' ? td.dataset.fxEn : td.dataset.fx);
+      await wait(230);
+      td.textContent = td.dataset.clean; td.classList.remove('bad'); td.classList.add('fixed');
+      await wait(120); td.classList.remove('fixing');
+      setTimeout(() => td.classList.add('settle'), 700);
+    }
+    if (dup) {
+      dup.classList.add('dupline'); setFx(`A${dup.dataset.row}:E${dup.dataset.row}`, L('=UNICOS(A2:E8)', '=UNIQUE(A2:E8)'));
+      await wait(700); dup.style.display = 'none';
+    }
+    const last = renumber();
+    $$('tr.total .dim [data-l]', sheet).forEach(s => s.textContent = s.dataset.l === 'es' ? `=SUMA(E2:E${last})` : `=SUM(E2:E${last})`);
+    setFx('E' + (last + 1), L(`=SUMA(E2:E${last})`, `=SUM(E2:E${last})`));
+    const { by, total } = totals(), t0 = performance.now(), el = $('#live-total');
+    await new Promise(res => { const step = now => { const k = Math.min(1, (now - t0) / 700); el.textContent = fmt(total * (1 - Math.pow(1 - k, 3)), 2); k < 1 ? requestAnimationFrame(step) : res(); }; requestAnimationFrame(step); });
+    paintChart(by);
+    await wait(400); done();
+  }
+  function reset() {
+    timers.forEach(clearTimeout); timers = []; running = false; cleaned = false;
+    cells.forEach(td => { td.textContent = td.dataset.raw; td.classList.remove('fixed', 'settle', 'fixing'); td.classList.add('bad'); });
+    if (dup) { dup.style.display = ''; dup.classList.remove('dupline'); }
+    renumber();
+    $$('tr.total .dim [data-l]', sheet).forEach(s => s.textContent = s.dataset.l === 'es' ? '=SUMA(E2:E8)' : '=SUM(E2:E8)');
+    $('#live-total').textContent = '—';
+    $$('#live-chart .bar-row').forEach(r => { r.querySelector('i').style.setProperty('--v', 0); r.querySelector('b').textContent = '—'; });
+    $('#live-file').textContent = 'ventas_marzo.csv';
+    const st = $('#live-status'); st.classList.remove('ok'); st.innerHTML = `<span data-l="es">${D.liveStatus[0]}</span><span data-l="en">${D.liveStatus[1]}</span>`;
+    $('#live-run').classList.remove('redo');
+    $('#live-run-txt').innerHTML = '<span data-l="es">Limpiar datos</span><span data-l="en">Clean data</span>';
+    setFx('A1', L('Fecha de Venta', 'Fecha de Venta'));
+  }
+  $('#live-run').addEventListener('click', () => cleaned ? reset() : run());
+  // corre sola una vez cuando el hero está a la vista
+  if (!reduce) {
+    const o = new IntersectionObserver(es => { if (es[0].isIntersecting) { o.disconnect(); setTimeout(() => { if (!cleaned && !running) run(); }, 1300); } }, { threshold: .5 });
+    o.observe($('#live'));
+  }
+  // celdas: clic muestra su fórmula
+  sheet.addEventListener('click', e => {
+    const td = e.target.closest('td[data-ref]'); if (!td) return;
+    setFx(td.dataset.ref, td.classList.contains('fixed') ? (lang === 'en' ? td.dataset.fxEn : td.dataset.fx) : td.textContent);
+  });
+  return { cleaned: () => cleaned };
+})();
+
+/* ============ contadores ============ */
+(function counters() {
+  const nums = $$('[data-count]'); if (reduce) return;
+  const o = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; o.unobserve(e.target);
+    const el = e.target, to = +el.dataset.count, t0 = performance.now();
+    if (!to) return;
+    const step = now => { const k = Math.min(1, (now - t0) / 1100); el.textContent = fmt(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }), { threshold: .6 });
+  nums.forEach(n => o.observe(n));
+})();
+
+/* ============ filtros de servicios ============ */
+$$('[data-filter]').forEach(b => b.addEventListener('click', () => {
+  state.filter = b.dataset.filter;
+  $$('[data-filter]').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', String(on)); });
+  $$('.svc').forEach(c => c.classList.toggle('hide', state.filter !== 'all' && c.dataset.cat !== state.filter));
+  paintBar();
+}));
+
+/* ============ pestañas de demos ============ */
+const tabs = $$('[role=tab]');
+let frameLoaded = false;
+function openDemo(name, focus) {
+  state.demo = name;
+  tabs.forEach(t => { const on = t.dataset.demo === name; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; $('#' + t.getAttribute('aria-controls')).hidden = !on; if (on && focus) t.focus(); });
+  if (name === 'landing' && !frameLoaded) { const f = $('#landing-frame'); f.src = f.dataset.src; frameLoaded = true; fitFrame(); }
+  if (name === 'dashboard') drawDash();
+  paintBar();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => openDemo(t.dataset.demo));
+  t.addEventListener('keydown', e => {
+    const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return;
+    e.preventDefault(); openDemo(tabs[(i + k + tabs.length) % tabs.length].dataset.demo, true);
+  });
+});
+document.addEventListener('click', e => { const a = e.target.closest('[data-open-demo]'); if (a) openDemo(a.dataset.openDemo); });
+
+/* ============ 01 hoja viva ============ */
+const XL = (() => {
+  const base = D.inventory.map(r => ({ ...r }));
+  let rows = D.inventory.map(r => ({ ...r }));
+  let sel = 'F2';
+  const body = $('#xl-body');
+  const cat = c => P(D.invCats[c]);
+  const val = r => r.stock * r.price;
+  const status = r => r.stock <= r.min;
+  function calc() {
+    const total = rows.reduce((a, r) => a + val(r), 0);
+    const reorder = rows.filter(status).length;
+    const coffee = rows.filter(r => r.cat === 'cafe').reduce((a, r) => a + val(r), 0);
+    return { total, reorder, coffee };
+  }
+  function formulaOf(ref) {
+    const col = ref[0], row = +ref.slice(1), r = rows[row - 2];
+    if (col === 'F' && r) return { f: `=C${row}*E${row}`, refs: [[`C${row}`, 1], [`E${row}`, 2]] };
+    if (col === 'G' && r) return { f: L(`=SI(C${row}<=D${row}, "Reordenar", "OK")`, `=IF(C${row}<=D${row}, "Reorder", "OK")`), refs: [[`C${row}`, 1], [`D${row}`, 2]] };
+    if (ref === 'F9') return { f: L('=SUMA(F2:F7)', '=SUM(F2:F7)'), refs: [['F2:F7', 1]] };
+    if (ref === 'F10') return { f: L('=CONTAR.SI(G2:G7, "Reordenar")', '=COUNTIF(G2:G7, "Reorder")'), refs: [['G2:G7', 1]] };
+    if (ref === 'F11') return { f: L(`=SUMAR.SI(B2:B7, "${cat('cafe')}", F2:F7)`, `=SUMIF(B2:B7, "${cat('cafe')}", F2:F7)`), refs: [['B2:B7', 1], ['F2:F7', 2]] };
+    const td = body.querySelector(`[data-ref="${ref}"]`);
+    return { f: td ? (td.querySelector('input')?.value ?? td.textContent) : '', refs: [] };
+  }
+  const expand = rng => {
+    if (!rng.includes(':')) return [rng];
+    const [a, b] = rng.split(':'), c = a[0], r1 = +a.slice(1), r2 = +b.slice(1), out = [];
+    for (let r = r1; r <= r2; r++) out.push(c + r); return out;
+  };
+  function paintSel() {
+    $$('td', body).forEach(td => td.classList.remove('sel-cell', 'ref1', 'ref2', 'ref3', 'ref4'));
+    const { f, refs } = formulaOf(sel);
+    body.querySelector(`[data-ref="${sel}"]`)?.classList.add('sel-cell');
+    refs.forEach(([rng, k]) => expand(rng).forEach(ref => body.querySelector(`[data-ref="${ref}"]`)?.classList.add('ref' + k)));
+    $('#xl-nb').textContent = sel;
+    let h = hl(String(f));
+    refs.forEach(([rng, k]) => { h = h.split(rng).join(`<span class="r${k}">${rng}</span>`); });
+    $('#xl-fx').innerHTML = h; $('#xl-fx').classList.add('fx-c');
+  }
+  function render() {
+    const H = [L('Producto', 'Product'), L('Categoría', 'Category'), L('Existencia', 'Stock'), L('Mínimo', 'Minimum'), L('Precio', 'Price'), L('Valor', 'Value'), L('Estado', 'Status')];
+    const c = calc();
+    let h = `<tr class="hdr"><th class="rn">1</th>${H.map((x, i) => `<td data-ref="${'ABCDEFG'[i]}1" class="${i > 1 ? 'n' : ''}">${x}</td>`).join('')}</tr>`;
+    rows.forEach((r, i) => {
+      const n = i + 2;
+      h += `<tr><th class="rn">${n}</th><td data-ref="A${n}">${esc(P(r.name))}</td><td data-ref="B${n}">${cat(r.cat)}</td>
+        <td data-ref="C${n}" class="ed"><input inputmode="numeric" aria-label="${L('Existencia', 'Stock')} ${esc(P(r.name))}" data-i="${i}" data-k="stock" value="${r.stock}"></td>
+        <td data-ref="D${n}" class="n">${r.min}</td>
+        <td data-ref="E${n}" class="ed"><input inputmode="decimal" aria-label="${L('Precio', 'Price')} ${esc(P(r.name))}" data-i="${i}" data-k="price" value="${r.price}"></td>
+        <td data-ref="F${n}" class="n">${money(val(r))}</td>
+        <td data-ref="G${n}"><span class="st ${status(r) ? 're' : 'ok'}">${status(r) ? L('Reordenar', 'Reorder') : 'OK'}</span></td></tr>`;
+    });
+    h += `<tr class="gap"><th class="rn">8</th><td colspan="7"></td></tr>`;
+    [[9, L('Valor del inventario', 'Inventory value'), money(c.total)], [10, L('Productos a reordenar', 'Products to reorder'), c.reorder], [11, L(`Valor en ${cat('cafe')}`, `${cat('cafe')} value`), money(c.coffee)]].forEach(([n, lab, v]) => {
+      h += `<tr class="sum"><th class="rn">${n}</th><td data-ref="A${n}" colspan="5">${lab}</td><td data-ref="F${n}" class="n">${v}</td><td data-ref="G${n}"></td></tr>`;
+    });
+    body.innerHTML = h; paintSel();
+  }
+  function update(i, k, v, input) {
+    const n = parseFloat(String(v).replace(/[^\d.]/g, ''));
+    if (isNaN(n)) return;
+    rows[i][k] = n;
+    const r = rows[i], row = i + 2, c = calc();
+    const set = (ref, html) => { const td = body.querySelector(`[data-ref="${ref}"]`); if (td.innerHTML !== html) { td.innerHTML = html; if (!reduce) { td.classList.remove('pop'); void td.offsetWidth; td.classList.add('pop'); } } };
+    set('F' + row, money(val(r)));
+    set('G' + row, `<span class="st ${status(r) ? 're' : 'ok'}">${status(r) ? L('Reordenar', 'Reorder') : 'OK'}</span>`);
+    set('F9', money(c.total)); set('F10', String(c.reorder)); set('F11', money(c.coffee));
+  }
+  body.addEventListener('input', e => { const t = e.target; if (t.dataset.k) update(+t.dataset.i, t.dataset.k, t.value, t); });
+  body.addEventListener('focusin', e => { const td = e.target.closest('td[data-ref]'); if (td) { sel = td.dataset.ref; paintSel(); } });
+  body.addEventListener('click', e => { const td = e.target.closest('td[data-ref]'); if (td) { sel = td.dataset.ref; paintSel(); } });
+  $('#xl-reset').addEventListener('click', () => { rows = base.map(r => ({ ...r })); sel = 'F2'; render(); });
+  render();
+  return { render };
+})();
+
+/* ============ 02 limpiador (port de limpiar_reporte.py) ============ */
+const CL = (() => {
+  const SIN = { fecha: ['fecha', 'date', 'fecha venta', 'fecha de venta', 'dia'], cliente: ['cliente', 'customer', 'nombre cliente', 'client'],
+    producto: ['producto', 'product', 'articulo', 'item', 'descripcion'], cantidad: ['cantidad', 'qty', 'quantity', 'unidades', 'cant'],
+    monto: ['monto', 'importe', 'total', 'amount', 'venta', 'precio total'] };
+  const MESES = { ene: 1, jan: 1, feb: 2, mar: 3, abr: 4, apr: 4, may: 5, jun: 6, jul: 7, ago: 8, aug: 8, sep: 9, set: 9, oct: 10, nov: 11, dic: 12, dec: 12 };
+  const PART = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e']);
+  const sinAc = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '');
+  const iso = (a, m, d) => { const dt = new Date(Date.UTC(a, m - 1, d)); return dt.getUTCFullYear() === a && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d ? `${a}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}` : null; };
+  function fecha(v) {
+    const t = sinAc(String(v ?? '')).trim().toLowerCase().replace(/\./g, ''); if (!t) return null; let m;
+    if ((m = t.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/))) return iso(+m[1], +m[2], +m[3]);
+    if ((m = t.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})$/))) { let a = +m[3]; if (a < 100) a += 2000; return iso(a, +m[2], +m[1]); }
+    if ((m = t.match(/^(\d{1,2})\s+(?:de\s+)?([a-z]+)\s+(?:de\s+)?(\d{4})$/)) && MESES[m[2].slice(0, 3)]) return iso(+m[3], MESES[m[2].slice(0, 3)], +m[1]);
+    if ((m = t.match(/^([a-z]+)\s+(\d{1,2}),?\s+(\d{4})$/)) && MESES[m[1].slice(0, 3)]) return iso(+m[3], MESES[m[1].slice(0, 3)], +m[2]);
+    return null;
+  }
+  function monto(v) {
+    let t = String(v ?? '').trim(); if (!t) return null;
+    const neg = (t.startsWith('(') && t.endsWith(')')) || t.startsWith('-');
+    t = t.replace(/[^\d.,]/g, ''); if (!/\d/.test(t)) return null;
+    if (t.includes(',') && t.includes('.')) t = t.lastIndexOf(',') > t.lastIndexOf('.') ? t.replace(/\./g, '').replace(',', '.') : t.replace(/,/g, '');
+    else if (t.includes(',')) t = /^\d{1,3}(,\d{3})+$/.test(t) ? t.replace(/,/g, '') : t.replace(',', '.');
+    else if ((t.match(/\./g) || []).length > 1) t = t.replace(/\./g, '');
+    const n = Number(t); if (isNaN(n)) return null; return neg ? -n : n;
+  }
+  function texto(v, titulo) {
+    const t = String(v ?? '').replace(/\s+/g, ' ').trim(); if (!t) return null;
+    if (!titulo) return t[0].toUpperCase() + t.slice(1).toLowerCase();
+    return t.toLowerCase().split(' ').map((p, i) => i && PART.has(p) ? p : p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+  }
+  function unificar(vals) {
+    const groups = {};
+    vals.forEach(v => { if (v == null) return; const k = sinAc(v).toLowerCase(); (groups[k] ||= {})[v] = (groups[k][v] || 0) + 1; });
+    const canon = {};
+    Object.entries(groups).forEach(([k, g]) => {
+      const best = Object.entries(g).sort((a, b) => ((/[^\x00-\x7F]/.test(b[0])) - (/[^\x00-\x7F]/.test(a[0]))) || b[1] - a[1])[0][0];
+      canon[k] = best;
+    });
+    let changed = 0;
+    const out = vals.map(v => { if (v == null) return v; const c = canon[sinAc(v).toLowerCase()]; if (c !== v) changed++; return c; });
+    return [out, changed];
+  }
+  function parseCSV(txt) {
+    const rows = []; let row = [], cur = '', q = false;
+    for (let i = 0; i < txt.length; i++) {
+      const c = txt[i];
+      if (q) { if (c === '"') { if (txt[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+      else if (c === '"') q = true;
+      else if (c === ',') { row.push(cur); cur = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && txt[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; }
+      else cur += c;
+    }
+    if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+    return rows.filter(r => r.some(x => x.trim() !== ''));
+  }
+  function limpiar(txt) {
+    const rows = parseCSV(txt); if (rows.length < 2) return { error: L('Pega al menos un encabezado y una fila.', 'Paste at least a header and one row.') };
+    const head = rows[0].map(h => sinAc(h).trim().toLowerCase().replace(/_/g, ' ').replace(/\s+/g, ' '));
+    const idx = {}; Object.entries(SIN).forEach(([k, syn]) => { const i = head.findIndex(h => syn.includes(h)); if (i >= 0) idx[k] = i; });
+    const miss = ['fecha', 'cliente', 'producto', 'monto'].filter(k => idx[k] == null);
+    if (miss.length) return { error: L(`Faltan columnas: ${miss.join(', ')}.`, `Missing columns: ${miss.join(', ')}.`) };
+    const recs = rows.slice(1).map((r, i) => {
+      const g = k => idx[k] == null ? '' : (r[idx[k]] ?? '');
+      const rawF = g('fecha'), rawM = g('monto'), rawC = g('cliente'), rawP = g('producto'), rawQ = g('cantidad');
+      const f = fecha(rawF), m = monto(rawM), q = rawQ.trim() === '' ? 1 : monto(rawQ);
+      return { fila: i + 2, f, m, q, c: texto(rawC, true), p: texto(rawP, false), raw: { f: rawF, m: rawM, c: rawC, p: rawP },
+        chgF: f && f !== rawF.trim(), chgM: m != null && String(m) !== rawM.trim() && Number(rawM) !== m };
+    });
+    const [cs, nc] = unificar(recs.map(r => r.c)); recs.forEach((r, i) => { r.chgC = cs[i] !== r.raw.c; r.c = cs[i]; });
+    const [ps, np] = unificar(recs.map(r => r.p)); recs.forEach((r, i) => { r.chgP = ps[i] !== r.raw.p; r.p = ps[i]; });
+    const prob = [], ok = [], seen = new Map();
+    recs.forEach(r => {
+      const why = [];
+      if (!r.f) why.push(L(`fecha inválida (“${r.raw.f}”)`, `invalid date (“${r.raw.f}”)`));
+      if (!r.c) why.push(L('cliente vacío', 'empty customer'));
+      if (r.m == null) why.push(L(`monto ilegible (“${r.raw.m}”)`, `unreadable amount (“${r.raw.m}”)`));
+      if (r.q === 0) why.push(L('cantidad en 0', 'quantity is 0'));
+      if (why.length) { prob.push([r.fila, why.join(', ')]); return; }
+      const key = [r.f, sinAc(r.c).toLowerCase(), sinAc(r.p).toLowerCase(), r.q, r.m].join('|');
+      if (seen.has(key)) { prob.push([r.fila, L(`duplicado de la fila ${seen.get(key)}`, `duplicate of row ${seen.get(key)}`)]); return; }
+      seen.set(key, r.fila); ok.push(r);
+    });
+    ok.sort((a, b) => a.f.localeCompare(b.f));
+    return { ok, prob, read: recs.length, dates: recs.filter(r => r.chgF).length, amounts: recs.filter(r => r.chgM).length, names: nc + np,
+      total: ok.reduce((a, r) => a + r.m, 0) };
+  }
+  function show() {
+    const res = limpiar($('#cl-text').value), st = $('#cl-stats'), tb = $('#cl-table'), pr = $('#cl-problems');
+    if (res.error) { st.innerHTML = `<span class="stat r">${esc(res.error)}</span>`; tb.innerHTML = ''; pr.hidden = true; return; }
+    st.innerHTML = [
+      [res.read, L('filas leídas', 'rows read')], [res.ok.length, L('filas limpias', 'clean rows'), 'g'], [res.dates, L('fechas convertidas', 'dates converted')],
+      [res.amounts, L('montos convertidos', 'amounts converted')], [res.names, L('nombres unificados', 'names unified')], [res.prob.length, L('a revisar', 'to review'), res.prob.length ? 'r' : 'g'],
+    ].map(([n, t, c]) => `<span class="stat ${c || ''}"><b>${n}</b>${t}</span>`).join('');
+    tb.innerHTML = `<thead><tr><th>${L('Fila', 'Row')}</th><th>${L('Fecha', 'Date')}</th><th>${L('Cliente', 'Customer')}</th><th>${L('Producto', 'Product')}</th><th style="text-align:right">${L('Cant.', 'Qty')}</th><th style="text-align:right">${L('Monto', 'Amount')}</th></tr></thead><tbody>` +
+      res.ok.map(r => `<tr><td class="dim">${r.fila}</td><td class="${r.chgF ? 'chg' : ''}">${r.f}</td><td class="${r.chgC ? 'chg' : ''}">${esc(r.c)}</td><td class="${r.chgP ? 'chg' : ''}">${esc(r.p)}</td><td class="n">${r.q}</td><td class="n ${r.chgM ? 'chg' : ''}">${fmt(r.m, 2)}</td></tr>`).join('') +
+      `<tr class="total"><td colspan="5">${L('Total', 'Total')}</td><td class="n">${fmt(res.total, 2)}</td></tr></tbody>`;
+    pr.hidden = !res.prob.length;
+    pr.querySelector('summary').textContent = L(`${res.prob.length} filas separadas para revisar (no se borran)`, `${res.prob.length} rows set aside for review (not deleted)`);
+    pr.querySelector('ul').innerHTML = res.prob.map(([f, w]) => `<li>${L('Fila', 'Row')} ${f}: ${esc(w)}</li>`).join('');
+  }
+  $('#cl-run').addEventListener('click', show);
+  $('#cl-sample').addEventListener('click', () => { $('#cl-text').value = D.sampleCSV; show(); });
+  $('#cl-text').value = D.sampleCSV; show();
+  return { show };
+})();
+
+/* ============ 03 dashboard ============ */
+let dashCat = 'all';
+function drawDash() {
+  const DD = D.dash, rows = DD.rows.filter(r => dashCat === 'all' || r.c === dashCat);
+  const cats = [['all', ['Todas', 'All']], ...DD.cats.map(c => [c, D.dashCatNames[c]])];
+  $('#dash-cats').innerHTML = cats.map(([k, n]) => `<button type="button" data-cat="${esc(k)}" aria-pressed="${k === dashCat}">${P(n)}</button>`).join('');
+  const sum = k => rows.reduce((a, r) => a + r[k], 0);
+  const rev = sum('rev'), mar = sum('mar'), u = sum('u'), n = sum('n');
+  $('#kpis').innerHTML = [
+    [L('Ingresos', 'Revenue'), money(rev), L('ene–sep', 'Jan–Sep')], [L('Margen bruto', 'Gross margin'), money(mar), fmt(mar / rev * 100, 1) + '%'],
+    [L('Unidades', 'Units'), fmt(u), L(`${n} ventas`, `${n} sales`)], [L('Ticket promedio', 'Average ticket'), money(rev / n), L('por venta', 'per sale')],
+  ].map(([t, v, s]) => `<div class="kpi"><p>${t}</p><b>${v}</b><small>${s}</small></div>`).join('');
+  // barras por mes
+  const months = DD.months, byM = months.map(m => rows.filter(r => r.m === m).reduce((a, r) => a + r.rev, 0));
+  const W = 560, H = 230, pl = 46, pb = 26, pt = 18, max = Math.max(...byM);
+  const step = [500, 1000, 2000, 2500, 5000, 10000].find(s => max / s <= 5) || 10000, top = Math.ceil(max / step) * step || step;
+  const y = v => pt + (H - pt - pb) * (1 - v / top), bw = (W - pl - 10) / months.length;
+  const best = byM.indexOf(max);
+  const mn = lang === 'en' ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'] : ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep'];
+  let g = '';
+  for (let v = 0; v <= top; v += step) g += `<line class="gridl" x1="${pl}" x2="${W - 4}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${pl - 8}" y="${y(v) + 3}" text-anchor="end">${v >= 1000 ? v / 1000 + 'k' : v}</text>`;
+  const old = $('#chart-month svg');
+  if (!old) {
+    $('#chart-month').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img"><g class="g">${g}</g>${months.map((m, i) => `<rect class="bar" x="${pl + i * bw + bw * .18}" width="${bw * .64}" rx="3" y="${y(0)}" height="0"/><text class="val" text-anchor="middle" x="${pl + i * bw + bw / 2}"></text><text class="axis" text-anchor="middle" x="${pl + i * bw + bw / 2}" y="${H - 8}">${mn[i]}</text>`).join('')}</svg>`;
+  }
+  const svg = $('#chart-month svg');
+  svg.setAttribute('aria-label', L(`Ingresos por mes. Mes más alto: ${mn[best]}, ${money(max)}`, `Revenue by month. Highest month: ${mn[best]}, ${money(max)}`));
+  svg.querySelector('.g').innerHTML = g;
+  const bars = $$('.bar', svg), vals = $$('.val', svg), axes = $$('text.axis[y]', svg).filter(t => t.getAttribute('y') == H - 8);
+  requestAnimationFrame(() => byM.forEach((v, i) => {
+    const b = bars[i]; b.setAttribute('y', y(v)); b.setAttribute('height', Math.max(0, y(0) - y(v))); b.style.y = y(v) + 'px'; b.style.height = Math.max(0, y(0) - y(v)) + 'px';
+    b.classList.toggle('hl', i === best);
+    vals[i].setAttribute('y', y(v) - 6); vals[i].textContent = v >= 1000 ? (v / 1000).toFixed(1) + 'k' : Math.round(v);
+    if (axes[i]) axes[i].textContent = mn[i];
+  }));
+  // productos
+  const prods = DD.byProduct.filter(p => dashCat === 'all' || p.c === dashCat).sort((a, b) => b.rev - a.rev).slice(0, 6), pm = prods[0]?.rev || 1;
+  $('#chart-prod').innerHTML = prods.map(p => `<div class="hb"><span>${esc(P(D.prodNames[p.name] || [p.name, p.name]))}</span><b>${money(p.rev)}</b><i style="--v:${(p.rev / pm * 100).toFixed(1)}"></i></div>`).join('');
+}
+$('#dash-cats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; dashCat = b.dataset.cat; drawDash(); });
+
+/* ============ 04 landing en marco ============ */
+function fitFrame() {
+  const dev = $('#device'), scr = $('#device-screen'), f = $('#landing-frame');
+  const phone = dev.classList.contains('phone'), w = phone ? 390 : 1280, h = phone ? 780 : 800, s = scr.clientWidth / w;
+  f.style.width = w + 'px'; f.style.height = (phone ? h : scr.clientHeight / s) + 'px'; f.style.transform = `scale(${s})`;
+}
+$$('[data-device]').forEach(b => b.addEventListener('click', () => {
+  $$('[data-device]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  const dev = $('#device'); dev.classList.toggle('phone', b.dataset.device === 'phone'); dev.classList.toggle('desk', b.dataset.device !== 'phone');
+  requestAnimationFrame(fitFrame); setTimeout(fitFrame, 420);
+}));
+if ('ResizeObserver' in window) new ResizeObserver(() => frameLoaded && fitFrame()).observe($('#device-screen'));
+
+/* ============ precios ============ */
+$$('[data-pk]').forEach(b => b.addEventListener('click', () => {
+  state.pk = b.dataset.pk;
+  $$('[data-pk]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $$('[data-pk-panel]').forEach(p => p.hidden = p.dataset.pkPanel !== state.pk);
+  paintBar();
+}));
+
+/* ============ brief ============ */
+const pickMap = { excel: 'sheets', python: 'python', landing: 'web' };
+$$('[data-brief-pick]').forEach(a => a.addEventListener('click', () => {
+  const k = pickMap[a.dataset.briefPick];
+  $$('input[name=need]').forEach(i => i.checked = i.value === k);
+  const tier = $$('.tier', a.closest('.pk')).indexOf(a.closest('.tier'));
+  $('#b-budget').value = ['0', '1', '2'][tier] ?? '4';
+  brief();
+}));
+let whatTouched = false;
+$('#b-what').addEventListener('input', () => { whatTouched = true; });
+function briefText() {
+  const needs = $$('input[name=need]:checked').map(i => i.value);
+  const names = { sheets: ['Hojas de cálculo (Excel o Google Sheets)', 'Spreadsheets (Excel or Google Sheets)'], python: ['Python y datos', 'Python and data'], web: ['Página web', 'Website'], other: ['Otra cosa', 'Something else'] };
+  const when = $('#b-when').selectedOptions[0], budget = $('#b-budget').selectedOptions[0];
+  const what = $('#b-what').value.trim() || L('(describe aquí lo que necesitas)', '(describe what you need here)');
+  const file = $('#b-file').checked;
+  return [
+    L('Hola, Evert:', 'Hi Evert,'), '',
+    L('Necesito ayuda con: ', 'I need help with: ') + (needs.length ? needs.map(n => P(names[n])).join(', ') : L('(elige al menos una opción)', '(pick at least one option)')) + '.', '',
+    what, '',
+    L('Para cuándo: ', 'Deadline: ') + (lang === 'en' ? when.dataset.en : when.dataset.es),
+    L('Presupuesto aproximado: ', 'Approximate budget: ') + (lang === 'en' ? budget.dataset.en || budget.textContent : budget.dataset.es || budget.textContent),
+    L('Archivo de ejemplo: ', 'Sample file: ') + (file ? L('sí, te lo comparto.', 'yes, I can share it.') : L('todavía no.', 'not yet.')), '',
+    L('¿Me confirmas alcance, precio y fecha de entrega?', 'Could you confirm scope, price and delivery date?'),
+  ].join('\n');
+}
+function brief() {
+  $('#brief-txt').textContent = briefText();
+  const needs = $$('input[name=need]:checked').map(i => i.value);
+  const sug = { sheets: ['trackers', 'dashboards'], python: ['exports', 'reports'], web: ['landing', 'webtools'] };
+  const ids = needs.flatMap(n => sug[n] || []).slice(0, 3);
+  const svc = ids.map(id => D.services.find(s => s.id === id)).filter(Boolean);
+  const b = +$('#b-budget').value, tier = [L('Básico', 'Basic'), L('Estándar', 'Standard'), L('Premium', 'Premium'), L('Premium o proyecto a la medida', 'Premium or a custom project'), L('lo vemos con tu archivo', "we'll see once I look at your file")][b];
+  $('#brief-match').innerHTML = svc.length
+    ? `${L('Encaja con', 'Matches')}: ${svc.map(s => `<a href="#svc-${s.id}" data-lite="${s.id}">${esc(P(s.title))}</a>`).join(', ')} · ${L('Paquete sugerido', 'Suggested package')}: <b>${tier}</b>`
+    : L('Cuéntame qué necesitas y te digo qué paquete encaja.', "Tell me what you need and I'll suggest a package.");
+}
+$('#brief-form').addEventListener('input', brief);
+$('#brief-form').addEventListener('change', brief);
+$('#brief-copy').addEventListener('click', () => copyText(briefText(), L('Brief copiado', 'Brief copied')));
+document.addEventListener('click', e => { const a = e.target.closest('[data-lite]'); if (a) lite(a.dataset.lite); });
+
+/* enlaces de contacto (CONFIG) */
+function links() {
+  const C = D.config, out = [];
+  if (C.fiverr) out.push([C.fiverr, 'Fiverr']);
+  if (C.workana) out.push([C.workana, 'Workana']);
+  if (C.upwork) out.push([C.upwork, 'Upwork']);
+  const send = [...out];
+  if (C.whatsapp) send.push([`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(briefText())}`, 'WhatsApp']);
+  $('#send-links').innerHTML = send.map(([h, n]) => `<a class="btn btn-ghost btn-sm" href="${esc(h)}" target="_blank" rel="noopener">${L('Enviar por', 'Send via')} ${n} ↗</a>`).join('') +
+    (C.email ? `<span class="btn btn-ghost btn-sm mono" style="user-select:all">${esc(C.email)}</span>` : '');
+  const foot = [...out]; if (C.github) foot.push([C.github, 'GitHub']);
+  $('#foot-links').innerHTML = foot.map(([h, n]) => `<a class="btn btn-ghost btn-sm" href="${esc(h)}" target="_blank" rel="noopener">${n} ↗</a>`).join('') +
+    `<a class="btn btn-accent btn-sm" href="#brief">${L('Cotiza tu proyecto', 'Get a quote')}</a>`;
+}
+
+/* ============ resaltar un servicio ============ */
+function lite(id) {
+  const card = $('#svc-' + id); if (!card) return;
+  if (card.classList.contains('hide')) $('[data-filter="all"]').click();
+  card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  card.classList.add('lit'); setTimeout(() => card.classList.remove('lit'), 2200);
+}
+
+/* ============ paleta Ctrl K ============ */
+const pal = $('#palette'), q = $('#pal-q'), list = $('#pal-list');
+let items = [], cur = 0, lastFocus = null;
+function palItems() {
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const all = [
+    ...D.sections.map(([id, name]) => ({ t: P(name).replace('_', ' '), k: L('sección', 'section'), go: () => { location.hash = id; } })),
+    ...D.services.map(s => ({ t: P(s.title), k: L('servicio', 'service'), go: () => lite(s.id), s: [...s.title, ...s.desc, s.fmt, ...(D.cats.find(c => c[0] === s.cat)?.[1] || [])].join(' ') })),
+    ...[['hoja', ['Demo: hoja viva', 'Demo: live sheet']], ['limpiador', ['Demo: limpiador de datos', 'Demo: data cleaner']], ['dashboard', ['Demo: dashboard', 'Demo: dashboard']], ['landing', ['Demo: landing page', 'Demo: landing page']]]
+      .map(([d, n]) => ({ t: P(n), k: 'demo', go: () => { openDemo(d); $('#demos').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); } })),
+    { t: L('Cambiar a inglés', 'Switch to Spanish'), k: L('idioma', 'language'), go: () => setLang(lang === 'en' ? 'es' : 'en') },
+    { t: L('Cambiar tema claro/oscuro', 'Toggle light/dark theme'), k: L('tema', 'theme'), go: toggleTheme },
+    { t: L('Copiar mi brief', 'Copy my brief'), k: 'brief', go: () => copyText(briefText(), L('Brief copiado', 'Brief copied')) },
+  ];
+  const v = norm(q.value.trim());
+  return v ? all.filter(i => norm(i.t + ' ' + (i.s || '') + ' ' + i.k).includes(v)) : all;
+}
+function palRender() {
+  items = palItems(); cur = Math.min(cur, Math.max(0, items.length - 1));
+  list.innerHTML = items.length ? items.map((it, i) => `<li role="option" id="pal-${i}" data-i="${i}" aria-selected="${i === cur}"><span>${esc(it.t)}</span><small>${esc(it.k)}</small></li>`).join('')
+    : `<li class="empty">${L('Sin resultados', 'No results')}</li>`;
+  q.setAttribute('aria-activedescendant', items.length ? 'pal-' + cur : '');
+  $('#pal-' + cur)?.scrollIntoView({ block: 'nearest' });
+}
+function palOpen() { lastFocus = document.activeElement; pal.hidden = false; q.value = ''; cur = 0; palRender(); q.focus(); }
+function palClose() { pal.hidden = true; lastFocus?.focus?.(); }
+function palGo(i) { const it = items[i]; if (!it) return; palClose(); it.go(); }
+$('#open-palette').addEventListener('click', palOpen);
+q.addEventListener('input', () => { cur = 0; palRender(); });
+q.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); cur = Math.min(items.length - 1, cur + 1); palRender(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); cur = Math.max(0, cur - 1); palRender(); }
+  else if (e.key === 'Enter') { e.preventDefault(); palGo(cur); }
+  else if (e.key === 'Escape') palClose();
+  else if (e.key === 'Tab') e.preventDefault();
+});
+list.addEventListener('click', e => { const li = e.target.closest('[data-i]'); if (li) palGo(+li.dataset.i); });
+pal.addEventListener('click', e => { if (e.target === pal) palClose(); });
+document.addEventListener('keydown', e => {
+  const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
+  if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); pal.hidden ? palOpen() : palClose(); }
+  else if (e.key === '/' && !typing && pal.hidden) { e.preventDefault(); palOpen(); }
+});
+if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $('#kbd-hint').textContent = '⌘K';
+
+/* ============ tema ============ */
+function effectiveDark() { const t = root.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+function toggleTheme() { const next = effectiveDark() ? 'light' : 'dark'; root.dataset.theme = next; store.set('ep-theme', next); }
+$('#theme').addEventListener('click', toggleTheme);
+const savedTheme = store.get('ep-theme'); if (savedTheme === 'dark' || savedTheme === 'light') root.dataset.theme = savedTheme;
+
+/* ============ idioma ============ */
+function setLang(l) {
+  lang = l === 'en' ? 'en' : 'es';
+  root.dataset.lang = lang; root.lang = lang === 'en' ? 'en' : 'es-MX';
+  if (D.titles) document.title = P(D.titles);
+  $$('[data-set-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)));
+  $$('[data-ph-es]').forEach(el => el.placeholder = lang === 'en' ? el.dataset.phEn : el.dataset.phEs);
+  $$('[data-al-es]').forEach(el => el.setAttribute(el.hasAttribute('data-alt') ? 'alt' : 'aria-label', lang === 'en' ? el.dataset.alEn : el.dataset.alEs));
+  $$('option[data-es]').forEach(o => o.textContent = lang === 'en' ? o.dataset.en : o.dataset.es);
+  const w = $('#b-what'); if (!whatTouched) w.value = lang === 'en' ? w.dataset.valEn : w.dataset.valEs;
+  store.set('ep-lang', lang);
+  lastFormula = ''; paintBar(); XL.render(); CL.show(); brief(); links();
+  if (!$('#p-dashboard').hidden) drawDash();
+  if (!pal.hidden) palRender();
+}
+$$('[data-set-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.setLang)));
+const h = location.hash.replace('#', '');
+setLang(h === 'en' || h === 'es' ? h : store.get('ep-lang') || ((navigator.language || 'es').toLowerCase().startsWith('es') ? 'es' : 'en'));
+paintBar();
+})();
+</script>
+</body>
+</html>
