@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="es-MX" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taller Cadena · Servicio para tu bici en Guadalajara</title>
+<meta name="description" content="Afinación, frenos y reparaciones para tu bici en la Colonia Americana. Arma tu orden, elige horario y envíala por WhatsApp.">
+<meta name="theme-color" content="#0E4A38">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%230E4A38' stroke-width='4'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23FFB21A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,50..150,100..900;1,50..150,100..900&family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+/* Taller Cadena: banda verde de carreras arriba, papel claro abajo, la orden como ticket de taller. */
+:root{
+  --racing:#0E4A38; --racing-deep:#0A3629; --racing-ink:#E6F0EB;
+  --amber:#FFB21A; --amber-deep:#E39A00;
+  --tire:#131512; --steel:#59615C; --spoke:#D5DAD4; --paper:#F4F5F1; --white:#FFFFFF;
+  --ok:#14804A; --ok-bg:#E4F4EA;
+  --display:"Anybody","Archivo",system-ui,sans-serif;
+  --body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--paper);color:var(--tire);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
+:root:not([data-lang="en"]) [data-l="en"],:root[data-lang="en"] [data-l="es"]{display:none!important}
+a{color:inherit}
+img,svg{max-width:100%}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.02;text-wrap:balance}
+h1{font-size:clamp(2.5rem,5.8vw,4.7rem);font-weight:850;font-style:italic;font-stretch:118%;letter-spacing:-.02em}
+h2{font-size:clamp(2rem,4vw,3.1rem);font-weight:820;font-style:italic;font-stretch:112%;letter-spacing:-.015em}
+h3{font-size:1.2rem;font-weight:760;font-stretch:105%}
+p{margin:0}
+.eyebrow{font-family:var(--body);font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;font:inherit;font-weight:700;
+     text-decoration:none;border-radius:999px;padding:14px 24px;line-height:1.1;transition:transform .15s ease,background .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:var(--tire);box-shadow:0 6px 0 -1px var(--amber-deep)}
+.btn-amber:hover{box-shadow:0 8px 0 -1px var(--amber-deep)}
+.btn-ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 2px currentColor}
+.btn-dark{background:var(--tire);color:var(--white)}
+.btn-sm{padding:10px 16px;font-size:.95rem}
+
+/* ---------- encabezado ---------- */
+.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--racing) 94%,transparent);backdrop-filter:blur(10px);color:var(--white);
+     padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid rgba(255,255,255,.08)}
+.bar{display:flex;align-items:center;gap:20px;min-height:68px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-style:italic;font-weight:850;font-stretch:120%;font-size:1.3rem;letter-spacing:-.01em;white-space:nowrap}
+.mark svg{flex:none}
+.nav{display:flex;gap:26px;margin-left:auto;list-style:none;padding:0;margin-block:0}
+.nav a{text-decoration:none;font-weight:600;opacity:.88}
+.nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px;text-decoration-color:var(--amber)}
+.lang{display:flex;border-radius:999px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);padding:3px}
+.lang button{all:unset;cursor:pointer;font-weight:700;font-size:.82rem;letter-spacing:.06em;padding:6px 10px;border-radius:999px}
+.lang button[aria-pressed="true"]{background:var(--white);color:var(--racing)}
+.lang button:focus-visible{outline:2px solid var(--amber)}
+@media (max-width:980px){.nav{display:none}.lang{margin-left:auto}}
+@media (max-width:520px){.top .btn{display:none}.mark{font-size:1.12rem}}
+
+/* ---------- hero ---------- */
+.hero{background:var(--racing);color:var(--white);position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;
+  background:repeating-linear-gradient(-62deg,transparent 0 46px,rgba(255,255,255,.035) 46px 48px)}
+.hero-grid{display:grid;grid-template-columns:1.02fr 1fr;gap:40px;align-items:center;padding-block:64px 88px}
+.status{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:999px;padding:7px 14px 7px 12px;font-weight:600;font-size:.92rem}
+.dot{width:9px;height:9px;border-radius:50%;background:#7CE0A6;box-shadow:0 0 0 4px rgba(124,224,166,.22)}
+.dot.closed{background:#FF9C8A;box-shadow:0 0 0 4px rgba(255,156,138,.2)}
+.hero h1{margin-top:22px}
+.hero h1 em{font-style:italic;color:var(--amber)}
+.lede{font-size:1.2rem;color:var(--racing-ink);max-width:36ch;margin-top:22px}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 26px;margin:34px 0 0;padding:0;list-style:none;font-weight:600;color:var(--racing-ink)}
+.facts li{display:flex;gap:9px;align-items:center}
+.bike{position:relative;width:100%;max-width:640px;justify-self:end}
+.bike svg{display:block;width:100%;height:auto;overflow:visible}
+.bike .frame path,.bike .frame line{stroke-dasharray:1;stroke-dashoffset:0}
+.bike.draw .frame path,.bike.draw .frame line{animation:draw 1.6s cubic-bezier(.6,.1,.2,1) both}
+.bike.draw .frame :nth-child(2){animation-delay:.08s}.bike.draw .frame :nth-child(3){animation-delay:.16s}
+.bike.draw .frame :nth-child(4){animation-delay:.24s}.bike.draw .frame :nth-child(5){animation-delay:.32s}
+.bike.draw .frame :nth-child(6){animation-delay:.4s}.bike.draw .frame :nth-child(7){animation-delay:.48s}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.tag{position:absolute;background:var(--white);color:var(--tire);border-radius:12px;padding:10px 14px;font-size:.88rem;font-weight:600;
+     box-shadow:0 18px 40px -18px rgba(0,0,0,.55);display:flex;gap:10px;align-items:center;white-space:nowrap}
+.tag b{font-family:var(--display);font-stretch:110%;font-size:1.05rem}
+.tag .ico{width:30px;height:30px;border-radius:8px;background:var(--amber);display:grid;place-items:center;flex:none}
+.tag-1{left:2%;top:4%}.tag-2{right:0;bottom:6%}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr;padding-block:44px 64px}.bike{justify-self:center}}
+@media (max-width:520px){.tag{font-size:.78rem;padding:8px 10px}.tag .ico{width:24px;height:24px}.tag-1{top:-6%}}
+
+/* ---------- franjas ---------- */
+section{padding-block:96px}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px 40px;margin-bottom:44px}
+.head p{color:var(--steel);max-width:52ch;font-size:1.08rem}
+.head .eyebrow{color:var(--racing);display:block;margin-bottom:12px}
+
+/* servicios */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.svc{background:var(--white);border:1px solid var(--spoke);border-radius:var(--r);padding:26px;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;
+     transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.svc:hover{transform:translateY(-4px);box-shadow:0 24px 40px -28px rgba(14,74,56,.6);border-color:var(--racing)}
+.svc .ico{width:48px;height:48px;border-radius:12px;background:var(--racing);color:var(--amber);display:grid;place-items:center}
+.svc p{color:var(--steel)}
+.svc .meta{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--spoke);padding-top:14px;font-variant-numeric:tabular-nums}
+.svc .meta b{font-family:var(--display);font-stretch:110%;font-size:1.45rem}
+.svc .meta span{color:var(--steel);font-size:.92rem}
+@media (max-width:900px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.svc-grid{grid-template-columns:1fr}}
+
+/* ---------- orden ---------- */
+.order{background:var(--white);border-block:1px solid var(--spoke)}
+.order-grid{display:grid;grid-template-columns:1.25fr .85fr;gap:36px;align-items:start}
+.step{border:1px solid var(--spoke);border-radius:var(--r);padding:24px;background:var(--paper)}
+.step + .step{margin-top:16px}
+.step-h{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.step-h .n{width:34px;height:34px;border-radius:50%;background:var(--racing);color:var(--white);display:grid;place-items:center;font-family:var(--display);font-weight:800;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.chip > span{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:var(--white);box-shadow:inset 0 0 0 1.5px var(--spoke);font-weight:600;transition:all .15s}
+.chip input:checked + span{background:var(--racing);color:var(--white);box-shadow:inset 0 0 0 1.5px var(--racing)}
+.chip input:focus-visible + span{outline:3px solid var(--amber);outline-offset:2px}
+.lines{display:grid;gap:10px}
+.line{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;background:var(--white);border:1.5px solid var(--spoke);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .15s,background .15s}
+.line:has(input:checked){border-color:var(--racing);background:#F3F9F6}
+.line input[type=checkbox]{appearance:none;-webkit-appearance:none;width:24px;height:24px;margin:0;border:2px solid var(--tire);border-radius:6px;display:grid;place-content:center;background:var(--white);cursor:pointer}
+.line input[type=checkbox]::after{content:"";width:13px;height:13px;transform:scale(0);transition:transform .12s;background:var(--racing);clip-path:polygon(14% 44%,0 60%,40% 100%,100% 22%,86% 8%,38% 70%)}
+.line input[type=checkbox]:checked{border-color:var(--racing)}
+.line input[type=checkbox]:checked::after{transform:scale(1)}
+.line strong{display:block;font-weight:700}
+.line small{display:block;color:var(--steel);font-size:.9rem;line-height:1.35}
+.line .p{font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qty{display:flex;align-items:center;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--spoke);visibility:hidden}
+.line:has(input:checked) .qty{visibility:visible}
+.qty button{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;font-weight:800;border-radius:50%}
+.qty button:hover{background:var(--paper)}
+.qty button:focus-visible{outline:2px solid var(--amber)}
+.qty output{min-width:18px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.qty-spacer{width:0}
+.days{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.day{position:relative}
+.day input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.day > span{display:grid;gap:2px;text-align:center;padding:10px 4px;border-radius:12px;background:var(--white);box-shadow:inset 0 0 0 1.5px var(--spoke);line-height:1.15}
+.day > span small{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--steel);font-weight:700}
+.day > span b{font-family:var(--display);font-size:1.35rem;font-stretch:110%}
+.day input:checked + span{background:var(--tire);color:var(--white);box-shadow:none}
+.day input:checked + span small{color:var(--amber)}
+.day input:focus-visible + span{outline:3px solid var(--amber)}
+.field{display:grid;gap:6px;margin-top:14px}
+.field label{font-weight:650;font-size:.95rem}
+select,input[type=text]{font:inherit;padding:12px 14px;border-radius:10px;border:1.5px solid var(--spoke);background:var(--white);color:var(--tire);width:100%}
+select:focus,input[type=text]:focus{outline:none;border-color:var(--racing);box-shadow:0 0 0 3px rgba(14,74,56,.18)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.days{grid-template-columns:repeat(3,1fr)}.row2{grid-template-columns:1fr}.line{grid-template-columns:auto 1fr auto}.line .qty-spacer{display:none}.line .p{grid-column:3;grid-row:1}.line .qty{grid-column:2;grid-row:2;justify-self:start}.line:not(:has(input:checked)) .qty{display:none}}
+
+.ticket{position:sticky;top:96px;background:var(--tire);color:var(--white);border-radius:18px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(10,54,41,.8)}
+.ticket::before,.ticket::after{content:"";position:absolute;left:-12px;width:24px;height:24px;border-radius:50%;background:var(--white);top:118px}
+.ticket::after{left:auto;right:-12px}
+.t-head{padding:24px 26px;border-bottom:2px dashed rgba(255,255,255,.18);display:flex;justify-content:space-between;align-items:start;gap:12px;min-height:130px}
+.t-head h3{font-size:1.5rem;font-style:italic}
+.t-head .num{font-family:var(--display);font-stretch:85%;font-weight:700;color:var(--amber);font-size:.95rem;letter-spacing:.06em}
+.t-body{padding:18px 26px;display:grid;gap:10px;min-height:120px}
+.t-row{display:flex;justify-content:space-between;gap:16px;font-variant-numeric:tabular-nums}
+.t-row span:first-child{color:#C9D0CB}
+.t-empty{color:#9AA39D;font-style:italic}
+.t-meta{padding:0 26px 18px;display:grid;gap:6px;color:#C9D0CB;font-size:.93rem}
+.t-meta b{color:var(--white)}
+.t-total{padding:18px 26px;background:rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:baseline}
+.t-total b{font-family:var(--display);font-size:2.3rem;font-stretch:110%;font-variant-numeric:tabular-nums;color:var(--amber)}
+.t-total b.bump{animation:bump .4s ease-out}
+@keyframes bump{0%{transform:translateY(-4px);color:var(--white)}100%{transform:none}}
+.t-actions{padding:20px 26px 24px;display:grid;gap:10px}
+.t-actions .btn{width:100%}
+.t-note{font-size:.84rem;color:#9AA39D;line-height:1.45}
+@media (max-width:980px){.order-grid{grid-template-columns:1fr}.ticket{position:relative;top:0}}
+
+/* ---------- antes y después ---------- */
+.ba-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.ba-list{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:14px}
+.ba-list li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.ba-list .k{font-family:var(--display);font-weight:800;color:var(--racing);font-size:1.05rem;min-width:56px}
+.compare{position:relative;aspect-ratio:1/1;max-width:540px;width:100%;justify-self:center;border-radius:24px;overflow:hidden;background:#1C211E;--pos:50%;user-select:none;touch-action:pan-y}
+.compare svg{position:absolute;inset:0;width:100%;height:100%}
+.compare .before{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--pos);width:3px;margin-left:-1.5px;background:var(--white);pointer-events:none}
+.compare .handle::after{content:"";position:absolute;top:50%;left:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--white);
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 46'%3E%3Cpath d='M18 16l-7 7 7 7M28 16l7 7-7 7' fill='none' stroke='%23131512' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.compare input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.compare input:focus-visible ~ .handle::after{outline:3px solid var(--amber);outline-offset:3px}
+.compare .lbl{position:absolute;top:16px;background:rgba(0,0,0,.55);color:var(--white);padding:6px 12px;border-radius:999px;font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
+.compare .lbl.l{left:16px}.compare .lbl.r{right:16px}
+@media (max-width:900px){.ba-grid{grid-template-columns:1fr;gap:36px}}
+
+/* ---------- planes ---------- */
+.plans{background:var(--racing);color:var(--white)}
+.plans .head p{color:var(--racing-ink)}.plans .head .eyebrow{color:var(--amber)}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.plan{border-radius:20px;padding:30px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);display:flex;flex-direction:column;gap:18px}
+.plan.hot{background:var(--white);color:var(--tire);box-shadow:none;transform:translateY(-10px)}
+.plan .badge{align-self:start;background:var(--amber);color:var(--tire);font-weight:800;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.plan .price{font-family:var(--display);font-stretch:112%;font-weight:850;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.plan .price small{font-family:var(--body);font-size:1rem;font-weight:600;opacity:.75}
+.plan ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;flex:1;align-content:start}
+.plan li{display:grid;grid-template-columns:20px 1fr;gap:10px}
+.plan li::before{content:"";width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--amber) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.5l2.6 2.5L13 6.5' fill='none' stroke='%23131512' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")}
+.plan .btn{width:100%}
+@media (max-width:900px){.plan-grid{grid-template-columns:1fr}.plan.hot{transform:none}}
+
+/* ---------- seguimiento ---------- */
+.track-card{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;background:var(--white);border:1px solid var(--spoke);border-radius:24px;padding:36px}
+.track-form{display:flex;gap:10px;margin-top:20px}
+.track-form input{text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.samples{margin-top:12px;color:var(--steel);font-size:.92rem}
+.samples button{all:unset;cursor:pointer;font-weight:700;color:var(--racing);text-decoration:underline;text-underline-offset:3px;margin-right:10px}
+.samples button:focus-visible{outline:2px solid var(--amber)}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.timeline li{display:grid;grid-template-columns:28px 1fr auto;gap:16px;padding-bottom:22px;position:relative}
+.timeline li::before{content:"";position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--spoke)}
+.timeline li:last-child::before{display:none}
+.timeline .b{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--spoke);background:var(--white);display:grid;place-items:center;z-index:1}
+.timeline li.done .b{background:var(--racing);box-shadow:none}
+.timeline li.done::before{background:var(--racing)}
+.timeline li.done .b::after{content:"";width:11px;height:11px;background:var(--white);clip-path:polygon(14% 44%,0 60%,40% 100%,100% 22%,86% 8%,38% 70%)}
+.timeline li.now .b{background:var(--amber);box-shadow:0 0 0 6px rgba(255,178,26,.25)}
+.timeline strong{display:block}
+.timeline small{color:var(--steel)}
+.timeline time{color:var(--steel);font-size:.9rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.track-msg{margin-bottom:18px;font-weight:650}
+@media (max-width:860px){.track-card{grid-template-columns:1fr;padding:24px}}
+
+/* ---------- recolección y horario ---------- */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel{background:var(--white);border:1px solid var(--spoke);border-radius:24px;padding:32px}
+.colonias{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding:0;list-style:none}
+.colonias li{padding:7px 13px;border-radius:999px;background:var(--paper);font-weight:600;font-size:.94rem}
+.check{margin-top:20px;padding:16px;border-radius:12px;background:var(--paper);display:grid;gap:10px}
+.check-out{font-weight:650;min-height:1.5em}
+.check-out.ok{color:var(--ok)}
+.hours{width:100%;border-collapse:collapse;margin-top:16px;font-variant-numeric:tabular-nums}
+.hours td{padding:11px 0;border-bottom:1px solid var(--spoke)}
+.hours td:last-child{text-align:right}
+.hours tr.today td{font-weight:800;color:var(--racing)}
+.hours tr.today td:first-child::after{content:" ●";color:var(--amber)}
+.map-link{display:inline-flex;margin-top:20px}
+@media (max-width:860px){.info-grid{grid-template-columns:1fr}.panel{padding:24px}}
+
+/* ---------- preguntas ---------- */
+.faq{max-width:860px}
+details{border-bottom:1px solid var(--spoke)}
+details:first-of-type{border-top:1px solid var(--spoke)}
+summary{cursor:pointer;font-weight:700;font-size:1.12rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:28px;height:28px;flex:none;border-radius:50%;background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M9 14h10M14 9v10' stroke='%230E4A38' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 22px;color:var(--steel);max-width:68ch}
+
+/* ---------- pie ---------- */
+footer{background:var(--tire);color:#C8CEC9;padding-block:64px 40px;font-size:.96rem}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+footer h3{color:var(--white);font-size:1.05rem;margin-bottom:12px}
+footer a{color:var(--amber)}
+.foot .mark{color:var(--white)}
+.demo{margin-top:44px;padding-top:20px;border-top:1px solid #2C312D;color:#8F9891;font-size:.88rem;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+@media (max-width:760px){.foot{grid-template-columns:1fr}}
+
+.fab{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:50;width:60px;height:60px;border-radius:50%;
+     background:#25D366;display:grid;place-items:center;box-shadow:0 14px 30px -10px rgba(0,0,0,.45);transition:transform .2s}
+.fab:hover{transform:scale(1.06)}
+.ribbon{background:var(--amber);color:var(--tire);text-align:center;font-weight:700;font-size:.84rem;padding:7px 16px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="ribbon"><span data-l="es">Sitio de demostración · Taller Cadena es un negocio ficticio</span><span data-l="en">Demo site · Taller Cadena is a fictional business</span></div>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="mark" href="#inicio">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="#FFB21A" stroke-width="3.2" stroke-dasharray="3.2 2.4"/><circle cx="17" cy="17" r="8.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="17" cy="17" r="2.6" fill="#fff"/></svg>
+      Taller Cadena
+    </a>
+    <ul class="nav">
+      <li><a href="#servicios"><span data-l="es">Servicios</span><span data-l="en">Services</span></a></li>
+      <li><a href="#orden"><span data-l="es">Arma tu orden</span><span data-l="en">Build your order</span></a></li>
+      <li><a href="#planes"><span data-l="es">Planes</span><span data-l="en">Plans</span></a></li>
+      <li><a href="#seguimiento"><span data-l="es">Sigue tu bici</span><span data-l="en">Track your bike</span></a></li>
+      <li><a href="#visitanos"><span data-l="es">Visítanos</span><span data-l="en">Visit us</span></a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-set-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="btn btn-amber btn-sm" href="#orden"><span data-l="es">Armar mi orden</span><span data-l="en">Build my order</span></a>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="status" id="status"><span class="dot" id="status-dot"></span><span id="status-text"><span data-l="es">Abierto hoy de 9 a 19 h</span><span data-l="en">Open today 9 am to 7 pm</span></span></span>
+        <h1><span data-l="es">Tu bici, lista para rodar <em>el lunes.</em></span><span data-l="en">Your bike, ready to ride <em>by Monday.</em></span></h1>
+        <p class="lede"><span data-l="es">Afinación, frenos y reparaciones en la Colonia Americana. Sabes el precio antes de dejarla y te avisamos por WhatsApp cuando está lista.</span><span data-l="en">Tune-ups, brakes and repairs in Colonia Americana, Guadalajara. You see the price before you drop it off, and we message you on WhatsApp when it's ready.</span></p>
+        <div class="cta-row">
+          <a class="btn btn-amber" href="#orden"><span data-l="es">Armar mi orden</span><span data-l="en">Build my order</span>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost" href="#servicios"><span data-l="es">Ver precios</span><span data-l="en">See prices</span></a>
+        </div>
+        <ul class="facts">
+          <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#FFB21A" stroke-width="2"/><path d="M10 5v5l3 2" stroke="#FFB21A" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span data-l="es">Entrega en 24 a 48 h</span><span data-l="en">Ready in 24–48 h</span></li>
+          <li><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.5l4 4 10-10" stroke="#FFB21A" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><span data-l="es">Garantía de 30 días</span><span data-l="en">30-day guarantee</span></li>
+          <li><svg width="22" height="20" viewBox="0 0 22 20" aria-hidden="true"><path d="M2 14h11V6H2zM13 9h3l3 3v2h-6" stroke="#FFB21A" stroke-width="2" fill="none" stroke-linejoin="round"/><circle cx="6" cy="15.5" r="1.9" fill="#FFB21A"/><circle cx="16" cy="15.5" r="1.9" fill="#FFB21A"/></svg><span data-l="es">Recogemos tu bici</span><span data-l="en">Pickup & delivery</span></li>
+        </ul>
+      </div>
+      <div class="bike draw" id="bike">
+        <svg viewBox="0 0 640 400" role="img" aria-label="Ilustración de una bicicleta" data-al-es="Ilustración de una bicicleta" data-al-en="Bicycle illustration">
+          <g id="wheel-r" style="transform-origin:160px 280px">
+            <circle cx="160" cy="280" r="106" fill="none" stroke="#0A3629" stroke-width="14"/>
+            <circle cx="160" cy="280" r="106" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="5"/>
+            <circle cx="160" cy="280" r="96" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+            <g class="spokes" stroke="rgba(255,255,255,.45)" stroke-width="1.4"></g>
+            <circle cx="160" cy="280" r="9" fill="#FFB21A"/>
+          </g>
+          <g id="wheel-f" style="transform-origin:490px 280px">
+            <circle cx="490" cy="280" r="106" fill="none" stroke="#0A3629" stroke-width="14"/>
+            <circle cx="490" cy="280" r="106" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="5"/>
+            <circle cx="490" cy="280" r="96" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+            <g class="spokes" stroke="rgba(255,255,255,.45)" stroke-width="1.4"></g>
+            <circle cx="490" cy="280" r="9" fill="#FFB21A"/>
+          </g>
+          <g class="frame" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+            <path pathLength="1" d="M262 140 L452 128"/>
+            <path pathLength="1" d="M290 285 L462 172"/>
+            <path pathLength="1" d="M290 285 L254 102"/>
+            <path pathLength="1" d="M290 285 L160 280"/>
+            <path pathLength="1" d="M262 140 L160 280"/>
+            <path pathLength="1" d="M452 128 L462 172 L481 250 Q487 270 490 280"/>
+            <path pathLength="1" d="M452 128 L448 110 L486 104 q26 -2 28 20 q2 24 -18 28"/>
+          </g>
+          <path d="M214 103 q16 -12 44 -9 l38 3 q8 4 -2 8 l-34 2 q-30 3 -46 -4z" fill="#FFB21A"/>
+          <g id="crank" style="transform-origin:290px 285px">
+            <circle cx="290" cy="285" r="27" fill="none" stroke="#FFB21A" stroke-width="5" stroke-dasharray="4 3"/>
+            <path d="M290 285 L314 322 M290 285 L266 248" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+            <rect x="304" y="318" width="22" height="7" rx="3" fill="#FFB21A"/>
+          </g>
+          <path d="M290 258 L160 268 M290 312 L160 292" stroke="rgba(255,255,255,.5)" stroke-width="2.4" stroke-dasharray="4 3" fill="none"/>
+          <circle cx="290" cy="285" r="7" fill="#fff"/>
+        </svg>
+        <div class="tag tag-1"><span class="ico"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="#131512" stroke-width="2.2" stroke-linecap="round"/></svg></span><span><span data-l="es">Afinación general</span><span data-l="en">Full tune-up</span> <b>$450</b></span></div>
+        <div class="tag tag-2"><span class="ico"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="#131512" stroke-width="2"/><path d="M8 4.5V8l2.5 1.5" fill="none" stroke="#131512" stroke-width="2" stroke-linecap="round"/></svg></span><span><span data-l="es">Lista en</span><span data-l="en">Ready in</span> <b>24 h</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="servicios">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow"><span data-l="es">Precios de mano de obra, IVA incluido</span><span data-l="en">Labor prices, VAT included</span></span><h2><span data-l="es">Lo que le hacemos a tu bici</span><span data-l="en">What we do for your bike</span></h2></div>
+        <p><span data-l="es">Las refacciones se cotizan aparte y siempre te las enseñamos antes de instalarlas. Ruta, montaña, urbana y la parte mecánica de las eléctricas.</span><span data-l="en">Parts are quoted separately and we always show them to you before installing. Road, mountain, city bikes and the mechanical side of e-bikes.</span></p>
+      </div>
+      <div class="svc-grid">
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.5-.5-.5-2.5z"/></svg></div>
+          <h3><span data-l="es">Afinación general</span><span data-l="en">Full tune-up</span></h3><p><span data-l="es">Ajuste de cambios y frenos, centrado ligero, lubricación y apriete completo.</span><span data-l="en">Gear and brake adjustment, light wheel truing, lubrication and a full bolt check.</span></p>
+          <div class="meta"><span><span data-l="es">24 h</span><span data-l="en">24 h</span></span><b>$450</b></div></article>
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></div>
+          <h3><span data-l="es">Servicio completo</span><span data-l="en">Full overhaul</span></h3><p><span data-l="es">Desarmado, limpieza profunda de transmisión, rodamientos y afinación al final.</span><span data-l="en">Strip-down, deep drivetrain clean, bearings, and a tune-up to finish.</span></p>
+          <div class="meta"><span>48 h</span><b>$1,100</b></div></article>
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="6" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="18" r="1" fill="currentColor"/><circle cx="6" cy="12" r="1" fill="currentColor"/></svg></div>
+          <h3><span data-l="es">Frenos de disco</span><span data-l="en">Disc brakes</span></h3><p><span data-l="es">Purga hidráulica o ajuste mecánico. Precio por rueda.</span><span data-l="en">Hydraulic bleed or mechanical adjustment. Price per wheel.</span></p>
+          <div class="meta"><span><span data-l="es">Mismo día</span><span data-l="en">Same day</span></span><b>$220</b></div></article>
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></div>
+          <h3><span data-l="es">Centrado de rueda</span><span data-l="en">Wheel truing</span></h3><p><span data-l="es">Tensión de rayos y corrección de golpe lateral o radial.</span><span data-l="en">Spoke tension and lateral or radial correction.</span></p>
+          <div class="meta"><span>24 h</span><b>$160</b></div></article>
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2.5" y="8" width="10" height="8" rx="4"/><rect x="11.5" y="8" width="10" height="8" rx="4"/></svg></div>
+          <h3><span data-l="es">Cambio de cadena</span><span data-l="en">Chain replacement</span></h3><p><span data-l="es">Medimos el desgaste, instalamos y ajustamos cambios. La cadena va aparte.</span><span data-l="en">We measure wear, install and adjust shifting. Chain sold separately.</span></p>
+          <div class="meta"><span><span data-l="es">Mismo día</span><span data-l="en">Same day</span></span><b>$180</b></div></article>
+        <article class="svc"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg></div>
+          <h3><span data-l="es">Ponchadura</span><span data-l="en">Flat repair</span></h3><p><span data-l="es">Parche o cámara nueva, mientras esperas. Precio por rueda.</span><span data-l="en">Patch or new tube while you wait. Price per wheel.</span></p>
+          <div class="meta"><span><span data-l="es">Al momento</span><span data-l="en">While you wait</span></span><b>$90</b></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="order" id="orden">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow"><span data-l="es">En 4 pasos, menos de un minuto</span><span data-l="en">4 steps, under a minute</span></span><h2><span data-l="es">Arma tu orden de servicio</span><span data-l="en">Build your service order</span></h2></div>
+        <p><span data-l="es">Elige lo que necesitas y el horario. La orden se arma sola y la mandas por WhatsApp; te confirmamos el mismo día.</span><span data-l="en">Pick what you need and a time. The order writes itself and you send it on WhatsApp; we confirm the same day.</span></p>
+      </div>
+      <div class="order-grid">
+        <form id="order-form" autocomplete="off">
+          <fieldset class="step" style="margin:0">
+            <legend class="sr"><span data-l="es">Tipo de bici</span><span data-l="en">Bike type</span></legend>
+            <div class="step-h"><span class="n">1</span><h3><span data-l="es">¿Qué bici traes?</span><span data-l="en">What kind of bike?</span></h3></div>
+            <div class="chips" id="bike-type">
+              <label class="chip"><input type="radio" name="bike" value="ruta" checked><span><span data-l="es">Ruta</span><span data-l="en">Road</span></span></label>
+              <label class="chip"><input type="radio" name="bike" value="montana"><span><span data-l="es">Montaña</span><span data-l="en">Mountain</span></span></label>
+              <label class="chip"><input type="radio" name="bike" value="urbana"><span><span data-l="es">Urbana</span><span data-l="en">City</span></span></label>
+              <label class="chip"><input type="radio" name="bike" value="electrica"><span><span data-l="es">Eléctrica (+$80)</span><span data-l="en">E-bike (+$80)</span></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="step">
+            <legend class="sr"><span data-l="es">Servicios</span><span data-l="en">Services</span></legend>
+            <div class="step-h"><span class="n">2</span><h3><span data-l="es">Marca los servicios</span><span data-l="en">Choose services</span></h3></div>
+            <div class="lines" id="lines"></div>
+          </fieldset>
+          <fieldset class="step">
+            <legend class="sr"><span data-l="es">Entrega</span><span data-l="en">Drop-off</span></legend>
+            <div class="step-h"><span class="n">3</span><h3><span data-l="es">¿La traes o vamos por ella?</span><span data-l="en">Drop it off or we pick it up?</span></h3></div>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="delivery" value="taller" checked><span><span data-l="es">La llevo al taller</span><span data-l="en">I'll bring it in</span></span></label>
+              <label class="chip"><input type="radio" name="delivery" value="recoleccion"><span><span data-l="es">Recolección a domicilio (+$120)</span><span data-l="en">Pickup at home (+$120)</span></span></label>
+            </div>
+            <div class="field" id="colonia-field" hidden>
+              <label for="colonia"><span data-l="es">Tu colonia</span><span data-l="en">Your neighborhood</span></label>
+              <select id="colonia"></select>
+            </div>
+          </fieldset>
+          <fieldset class="step">
+            <legend class="sr"><span data-l="es">Día y hora</span><span data-l="en">Day and time</span></legend>
+            <div class="step-h"><span class="n">4</span><h3><span data-l="es">Elige día y hora</span><span data-l="en">Pick a day and time</span></h3></div>
+            <div class="days" id="days"></div>
+            <div class="row2">
+              <div class="field"><label for="slot"><span data-l="es">Hora</span><span data-l="en">Time</span></label><select id="slot"></select></div>
+              <div class="field"><label for="name"><span data-l="es">Tu nombre</span><span data-l="en">Your name</span></label><input type="text" id="name" maxlength="40" data-ph-es="Ej. Mariana" data-ph-en="e.g. Mariana" placeholder="Ej. Mariana"></div>
+            </div>
+          </fieldset>
+        </form>
+
+        <aside class="ticket" aria-live="polite">
+          <div class="t-head">
+            <div><span class="num" id="t-num">TC-1044</span><h3><span data-l="es">Orden de servicio</span><span data-l="en">Service order</span></h3></div>
+            <svg width="44" height="44" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="#FFB21A" stroke-width="3.2" stroke-dasharray="3.2 2.4"/><circle cx="17" cy="17" r="8.5" fill="none" stroke="#fff" stroke-width="3"/></svg>
+          </div>
+          <div class="t-body" id="t-lines"></div>
+          <div class="t-meta" id="t-meta"></div>
+          <div class="t-total"><span><span data-l="es">Total estimado</span><span data-l="en">Estimated total</span></span><b id="t-total">$450</b></div>
+          <div class="t-actions">
+            <a class="btn btn-amber" id="wa" href="https://wa.me/" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+              <span data-l="es">Enviar orden por WhatsApp</span><span data-l="en">Send order on WhatsApp</span></a>
+            <button class="btn btn-ghost" type="button" id="copy" style="color:#fff"><span data-l="es">Copiar orden</span><span data-l="en">Copy order</span></button>
+            <p class="t-note"><span data-l="es">Precio de mano de obra. Si al revisarla encontramos algo más, te mandamos foto y precio antes de tocarla. En esta demo el mensaje se abre sin destinatario.</span><span data-l="en">Labor price. If we find anything else, we send you a photo and a price before touching it. In this demo the message opens without a recipient.</span></p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="antes-despues">
+    <div class="wrap ba-grid">
+      <div>
+        <span class="eyebrow" style="color:var(--racing)"><span data-l="es">Servicio completo</span><span data-l="en">Full overhaul</span></span>
+        <h2 style="margin-top:12px"><span data-l="es">Así sale tu transmisión</span><span data-l="en">What your drivetrain looks like after</span></h2>
+        <p style="color:var(--steel);margin-top:18px;font-size:1.08rem;max-width:46ch"><span data-l="es">Arrastra la barra. La grasa vieja se come los dientes del piñón y la cadena; por eso la quitamos completa, no solo la tapamos con aceite nuevo.</span><span data-l="en">Drag the handle. Old grime wears down cog teeth and the chain, so we strip it all off instead of covering it with fresh oil.</span></p>
+        <ul class="ba-list">
+          <li><span class="k">01</span><span><span data-l="es">Desarmamos casete, cadena y desviadores.</span><span data-l="en">We remove the cassette, chain and derailleurs.</span></span></li>
+          <li><span class="k">02</span><span><span data-l="es">Desengrasante biodegradable y cepillo pieza por pieza.</span><span data-l="en">Biodegradable degreaser and a brush, part by part.</span></span></li>
+          <li><span class="k">03</span><span><span data-l="es">Medimos desgaste y te decimos qué sí y qué no hace falta cambiar.</span><span data-l="en">We measure wear and tell you what does and doesn't need replacing.</span></span></li>
+          <li><span class="k">04</span><span><span data-l="es">Armado, lubricación y prueba en la calle.</span><span data-l="en">Reassembly, lube and a street test.</span></span></li>
+        </ul>
+      </div>
+      <div class="compare" id="compare">
+        <svg class="after" viewBox="0 0 400 400" aria-hidden="true"></svg>
+        <svg class="before" viewBox="0 0 400 400" aria-hidden="true"></svg>
+        <span class="lbl l"><span data-l="es">Antes</span><span data-l="en">Before</span></span><span class="lbl r"><span data-l="es">Después</span><span data-l="en">After</span></span>
+        <input type="range" min="0" max="100" value="50" id="compare-range" aria-label="Comparar antes y después" data-al-es="Comparar antes y después" data-al-en="Compare before and after">
+        <div class="handle"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plans" id="planes">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="eyebrow"><span data-l="es">Pago anual, se usa cuando quieras</span><span data-l="en">Paid yearly, use it whenever</span></span><h2><span data-l="es">Planes para los que ruedan diario</span><span data-l="en">Plans for people who ride every day</span></h2></div>
+        <p><span data-l="es">Si usas la bici para ir al trabajo, un plan sale más barato que pagar cada visita.</span><span data-l="en">If you commute by bike, a plan costs less than paying per visit.</span></p>
+      </div>
+      <div class="plan-grid">
+        <article class="plan">
+          <h3><span data-l="es">Urbano</span><span data-l="en">Commuter</span></h3>
+          <div class="price">$790 <small><span data-l="es">/año</span><span data-l="en">/year</span></small></div>
+          <ul><li><span data-l="es">2 afinaciones generales</span><span data-l="en">2 full tune-ups</span></li><li><span data-l="es">2 ponchaduras</span><span data-l="en">2 flat repairs</span></li><li><span data-l="es">10% en refacciones</span><span data-l="en">10% off parts</span></li></ul>
+          <a class="btn btn-ghost" href="#orden" data-plan="urbano"><span data-l="es">Elegir Urbano</span><span data-l="en">Choose Commuter</span></a>
+        </article>
+        <article class="plan hot">
+          <span class="badge"><span data-l="es">El más pedido</span><span data-l="en">Most popular</span></span>
+          <h3><span data-l="es">Kilómetros</span><span data-l="en">Mileage</span></h3>
+          <div class="price">$1,490 <small><span data-l="es">/año</span><span data-l="en">/year</span></small></div>
+          <ul><li><span data-l="es">4 afinaciones generales</span><span data-l="en">4 full tune-ups</span></li><li><span data-l="es">Ponchaduras sin costo</span><span data-l="en">Free flat repairs</span></li><li><span data-l="es">1 recolección a domicilio</span><span data-l="en">1 home pickup</span></li><li><span data-l="es">15% en refacciones</span><span data-l="en">15% off parts</span></li></ul>
+          <a class="btn btn-dark" href="#orden" data-plan="kilometros"><span data-l="es">Elegir Kilómetros</span><span data-l="en">Choose Mileage</span></a>
+        </article>
+        <article class="plan">
+          <h3><span data-l="es">Ruta</span><span data-l="en">Road</span></h3>
+          <div class="price">$2,200 <small><span data-l="es">/año</span><span data-l="en">/year</span></small></div>
+          <ul><li><span data-l="es">2 servicios completos</span><span data-l="en">2 full overhauls</span></li><li><span data-l="es">2 afinaciones generales</span><span data-l="en">2 full tune-ups</span></li><li><span data-l="es">Turno prioritario</span><span data-l="en">Priority slot</span></li></ul>
+          <a class="btn btn-ghost" href="#orden" data-plan="ruta"><span data-l="es">Elegir Ruta</span><span data-l="en">Choose Road</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="seguimiento">
+    <div class="wrap">
+      <div class="track-card">
+        <div>
+          <span class="eyebrow" style="color:var(--racing)"><span data-l="es">Sin llamar al taller</span><span data-l="en">No need to call</span></span>
+          <h2 style="margin-top:12px"><span data-l="es">Sigue tu bici</span><span data-l="en">Track your bike</span></h2>
+          <p style="color:var(--steel);margin-top:14px"><span data-l="es">Escribe el número de tu orden y ve en qué paso va.</span><span data-l="en">Enter your order number to see where it is.</span></p>
+          <form class="track-form" id="track-form">
+            <label class="sr" for="track-id"><span data-l="es">Número de orden</span><span data-l="en">Order number</span></label>
+            <input type="text" id="track-id" value="TC-1042" maxlength="8">
+            <button class="btn btn-dark" type="submit"><span data-l="es">Buscar</span><span data-l="en">Track</span></button>
+          </form>
+          <p class="samples"><span data-l="es">Órdenes de ejemplo:</span><span data-l="en">Sample orders:</span> <button type="button" data-track="TC-1042">TC-1042</button><button type="button" data-track="TC-1043">TC-1043</button><button type="button" data-track="TC-1040">TC-1040</button></p>
+        </div>
+        <div>
+          <p class="track-msg" id="track-msg"></p>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="visitanos" style="padding-top:0">
+    <div class="wrap info-grid">
+      <div class="panel">
+        <span class="eyebrow" style="color:var(--racing)"><span data-l="es">Lunes a sábado, 9 a 13 h</span><span data-l="en">Mon–Sat, 9 am–1 pm</span></span>
+        <h2 style="margin-top:10px;font-size:clamp(1.7rem,3vw,2.3rem)"><span data-l="es">Recolección a domicilio</span><span data-l="en">Home pickup</span></h2>
+        <p style="color:var(--steel);margin-top:12px"><span data-l="es">Pasamos por tu bici en estas colonias de Guadalajara:</span><span data-l="en">We pick up bikes in these Guadalajara neighborhoods:</span></p>
+        <ul class="colonias" id="colonias"></ul>
+        <div class="check">
+          <label for="col-check" style="font-weight:650"><span data-l="es">¿Vas a estar en otra colonia?</span><span data-l="en">Somewhere else?</span></label>
+          <input type="text" id="col-check" data-ph-es="Escribe tu colonia" data-ph-en="Type your neighborhood" placeholder="Escribe tu colonia">
+          <p class="check-out" id="col-out" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="eyebrow" style="color:var(--racing)"><span data-l="es">Colonia Americana, Guadalajara</span><span data-l="en">Colonia Americana, Guadalajara</span></span>
+        <h2 style="margin-top:10px;font-size:clamp(1.7rem,3vw,2.3rem)"><span data-l="es">Horario del taller</span><span data-l="en">Shop hours</span></h2>
+        <table class="hours" id="hours"><tbody></tbody></table>
+        <a class="btn btn-dark map-link" href="https://www.google.com/maps/search/?api=1&amp;query=Colonia+Americana+Guadalajara" target="_blank" rel="noopener"><span data-l="es">Cómo llegar</span><span data-l="en">Get directions</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="preguntas" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><div><span class="eyebrow">FAQ</span><h2><span data-l="es">Preguntas frecuentes</span><span data-l="en">Questions</span></h2></div></div>
+      <div class="faq">
+        <details open><summary><span data-l="es">¿Necesito cita?</span><span data-l="en">Do I need an appointment?</span></summary><p><span data-l="es">No para ponchaduras. Para afinación y servicio completo sí, porque así te podemos prometer la fecha de entrega.</span><span data-l="en">Not for flats. For tune-ups and overhauls, yes, so we can promise a ready date.</span></p></details>
+        <details><summary><span data-l="es">¿Qué pasa si encuentran otro problema?</span><span data-l="en">What if you find another problem?</span></summary><p><span data-l="es">Paramos y te mandamos foto con el precio. No hacemos ningún trabajo extra sin tu visto bueno por WhatsApp.</span><span data-l="en">We stop and send you a photo with the price. No extra work without your OK on WhatsApp.</span></p></details>
+        <details><summary><span data-l="es">¿Qué cubre la garantía de 30 días?</span><span data-l="en">What does the 30-day guarantee cover?</span></summary><p><span data-l="es">Si algo de lo que ajustamos se desajusta en los 30 días siguientes, lo corregimos sin costo. No cubre golpes ni refacciones nuevas.</span><span data-l="en">If anything we adjusted goes out of adjustment within 30 days, we fix it free. It doesn't cover crashes or new parts.</span></p></details>
+        <details><summary><span data-l="es">¿Trabajan con bicis eléctricas?</span><span data-l="en">Do you work on e-bikes?</span></summary><p><span data-l="es">Sí, en la parte mecánica: frenos, transmisión y llantas. El motor y la batería los revisa el distribuidor de tu marca.</span><span data-l="en">Yes, the mechanical side: brakes, drivetrain and tires. Motor and battery go to your brand's dealer.</span></p></details>
+        <details><summary><span data-l="es">¿Cómo pago?</span><span data-l="en">How do I pay?</span></summary><p><span data-l="es">Al recoger tu bici: efectivo, tarjeta o transferencia. Los planes se pagan al contratarlos.</span><span data-l="en">When you pick up your bike: cash, card or bank transfer. Plans are paid upfront.</span></p></details>
+        <details><summary><span data-l="es">¿Venden refacciones?</span><span data-l="en">Do you sell parts?</span></summary><p><span data-l="es">Sí, las de uso diario: cámaras, cadenas, balatas, cables y llantas. Si no tenemos la tuya, la pedimos y te avisamos cuándo llega.</span><span data-l="en">Yes, everyday parts: tubes, chains, brake pads, cables and tires. If we don't stock yours, we order it and tell you when it arrives.</span></p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="mark" href="#inicio"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="14" fill="none" stroke="#FFB21A" stroke-width="3.2" stroke-dasharray="3.2 2.4"/><circle cx="17" cy="17" r="8.5" fill="none" stroke="#fff" stroke-width="3"/></svg>Taller Cadena</a>
+        <p style="margin-top:14px;max-width:34ch"><span data-l="es">Taller de bicicletas en la Colonia Americana, Guadalajara, Jalisco.</span><span data-l="en">Bike shop in Colonia Americana, Guadalajara, Jalisco.</span></p>
+      </div>
+      <div><h3><span data-l="es">Horario</span><span data-l="en">Hours</span></h3><p><span data-l="es">Lunes a viernes, 9 a 19 h</span><span data-l="en">Mon–Fri, 9 am–7 pm</span><br><span data-l="es">Sábado, 9 a 15 h</span><span data-l="en">Saturday, 9 am–3 pm</span><br><span data-l="es">Domingo cerrado</span><span data-l="en">Closed Sunday</span></p></div>
+      <div><h3><span data-l="es">Atajos</span><span data-l="en">Shortcuts</span></h3><p><a href="#orden"><span data-l="es">Armar una orden</span><span data-l="en">Build an order</span></a><br><a href="#seguimiento"><span data-l="es">Seguir mi bici</span><span data-l="en">Track my bike</span></a><br><a href="#planes"><span data-l="es">Ver planes</span><span data-l="en">See plans</span></a></p></div>
+    </div>
+    <div class="demo"><span><span data-l="es">Sitio de muestra para un portafolio. Taller Cadena es un negocio ficticio; precios, horarios, órdenes y zonas son ilustrativos.</span><span data-l="en">Portfolio sample site. Taller Cadena is a fictional business; prices, hours, orders and areas are illustrative.</span></span><span><span data-l="es">Diseño y código: Evert Pascual</span><span data-l="en">Design and code: Evert Pascual</span></span></div>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="https://wa.me/" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+</a>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const root = document.documentElement;
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+                  set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const money = n => '$' + n.toLocaleString('en-US');
+
+  /* ---------- idioma ---------- */
+  const TXT = {
+    es: { title: 'Taller Cadena · Servicio para tu bici en Guadalajara', open: (c) => `Abierto ahora · cierra a las ${c}`, closed: (o) => `Cerrado ahora · abrimos ${o}`,
+          today: 'hoy', tomorrow: 'mañana', at: 'a las', empty: 'Marca al menos un servicio', ebike: 'Cargo bici eléctrica', pickup: 'Recolección a domicilio',
+          bike: 'Bici', drop: 'Entrega', ready: 'Lista estimada', shop: 'En el taller', hello: 'Hola, Taller Cadena. Quiero agendar esta orden:',
+          days: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], daysLong: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+          months: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+          copied: '¡Copiada!', copy: 'Copiar orden', name: 'Nombre', total: 'Total estimado', plan: 'Plan', bikeT: { ruta: 'Ruta', montana: 'Montaña', urbana: 'Urbana', electrica: 'Eléctrica' },
+          closedDay: 'Cerrado', notFound: 'No encontramos esa orden. Prueba con TC-1042, TC-1043 o TC-1040.',
+          stages: [['Recibida', 'Registramos tu bici y sus accesorios'], ['Diagnóstico', 'Revisión y foto de lo que encontramos'], ['En reparación', 'Trabajando en tu orden'], ['Lista para recoger', 'Te avisamos por WhatsApp'], ['Entregada', '¡A rodar!']],
+          col: { yes: (c) => `Sí pasamos por ${c}. Elige “Recolección” en el paso 3.`, maybe: 'Esa no está en la lista, pero si está a menos de 5 km casi siempre podemos ir. Mándanos tu orden y lo confirmamos.' },
+          perWheel: 'por rueda', wheels: (n) => n === 1 ? '1 rueda' : `${n} ruedas` },
+    en: { title: 'Taller Cadena · Bike service in Guadalajara', open: (c) => `Open now · closes at ${c}`, closed: (o) => `Closed now · opens ${o}`,
+          today: 'today', tomorrow: 'tomorrow', at: 'at', empty: 'Choose at least one service', ebike: 'E-bike surcharge', pickup: 'Home pickup',
+          bike: 'Bike', drop: 'Drop-off', ready: 'Estimated ready', shop: 'At the shop', hello: 'Hi Taller Cadena, I would like to book this order:',
+          days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], daysLong: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          copied: 'Copied!', copy: 'Copy order', name: 'Name', total: 'Estimated total', plan: 'Plan', bikeT: { ruta: 'Road', montana: 'Mountain', urbana: 'City', electrica: 'E-bike' },
+          closedDay: 'Closed', notFound: "We couldn't find that order. Try TC-1042, TC-1043 or TC-1040.",
+          stages: [['Received', 'Bike and accessories checked in'], ['Diagnosis', 'Inspection and a photo of what we found'], ['In repair', 'Working on your order'], ['Ready for pickup', 'We message you on WhatsApp'], ['Delivered', 'Enjoy the ride!']],
+          col: { yes: (c) => `Yes, we pick up in ${c}. Choose “Home pickup” in step 3.`, maybe: "It's not on the list, but if it's within 5 km we can usually go. Send your order and we'll confirm." },
+          perWheel: 'per wheel', wheels: (n) => n === 1 ? '1 wheel' : `${n} wheels` }
+  };
+  let lang = 'es';
+  const t = () => TXT[lang];
+
+  function setLang(l) {
+    lang = l === 'en' ? 'en' : 'es';
+    root.dataset.lang = lang; root.lang = lang === 'en' ? 'en' : 'es-MX';
+    document.title = t().title;
+    $$('[data-set-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)));
+    $$('[data-ph-es]').forEach(el => el.placeholder = el.dataset['ph' + (lang === 'en' ? 'En' : 'Es')]);
+    $$('[data-al-es]').forEach(el => el.setAttribute('aria-label', el.dataset['al' + (lang === 'en' ? 'En' : 'Es')]));
+    store.set('tc-lang', lang);
+    renderAll();
+  }
+  $$('[data-set-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.setLang)));
+
+  /* ---------- hora de Guadalajara ---------- */
+  const HOURS = { 1: [9, 19], 2: [9, 19], 3: [9, 19], 4: [9, 19], 5: [9, 19], 6: [9, 15], 0: null };
+  function gdlNow() {
+    const p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Mexico_City', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false,
+      year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date());
+    const g = k => p.find(x => x.type === k).value;
+    const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(g('weekday'));
+    return { wd, h: +g('hour') % 24, m: +g('minute'), date: new Date(+g('year'), +g('month') - 1, +g('day')) };
+  }
+  const hhmm = h => lang === 'en' ? (h > 12 ? `${h - 12} pm` : h === 12 ? '12 pm' : `${h} am`) : `${h}:00`;
+  function renderStatus() {
+    const n = gdlNow(), today = HOURS[n.wd], mins = n.h * 60 + n.m;
+    const open = today && mins >= today[0] * 60 && mins < today[1] * 60;
+    $('#status-dot').classList.toggle('closed', !open);
+    if (open) { $('#status-text').textContent = t().open(hhmm(today[1])); return; }
+    let d = n.wd, label;
+    if (today && mins < today[0] * 60) label = `${t().today} ${t().at} ${hhmm(today[0])}`;
+    else {
+      for (let i = 1; i <= 7; i++) { d = (n.wd + i) % 7; if (HOURS[d]) { label = (i === 1 ? t().tomorrow : t().daysLong[d]) + ` ${t().at} ${hhmm(HOURS[d][0])}`; break; } }
+    }
+    $('#status-text').textContent = t().closed(label);
+  }
+  function renderHours() {
+    const n = gdlNow(), order = [1, 2, 3, 4, 5, 6, 0];
+    $('#hours tbody').innerHTML = order.map(d => `<tr class="${d === n.wd ? 'today' : ''}"><td>${t().daysLong[d][0].toUpperCase() + t().daysLong[d].slice(1)}</td><td>${HOURS[d] ? `${hhmm(HOURS[d][0])} – ${hhmm(HOURS[d][1])}` : t().closedDay}</td></tr>`).join('');
+  }
+
+  /* ---------- orden ---------- */
+  const SERVICES = [
+    { id: 'afinacion', es: ['Afinación general', 'Cambios, frenos, rayos y apriete completo'], en: ['Full tune-up', 'Gears, brakes, spokes and bolt check'], price: 450, hours: 24, checked: true },
+    { id: 'completo', es: ['Servicio completo', 'Incluye la afinación general'], en: ['Full overhaul', 'Includes the full tune-up'], price: 1100, hours: 48 },
+    { id: 'frenos', es: ['Frenos de disco', 'Purga o ajuste'], en: ['Disc brakes', 'Bleed or adjustment'], price: 220, hours: 6, wheel: true },
+    { id: 'centrado', es: ['Centrado de rueda', 'Tensión de rayos'], en: ['Wheel truing', 'Spoke tension'], price: 160, hours: 24, wheel: true },
+    { id: 'cadena', es: ['Cambio de cadena', 'Mano de obra, la cadena va aparte'], en: ['Chain replacement', 'Labor only, chain sold separately'], price: 180, hours: 6 },
+    { id: 'ponchadura', es: ['Ponchadura', 'Parche o cámara nueva'], en: ['Flat repair', 'Patch or new tube'], price: 90, hours: 1, wheel: true },
+    { id: 'lavado', es: ['Lavado y lubricación', 'Cuadro, ruedas y cadena'], en: ['Wash and lube', 'Frame, wheels and chain'], price: 150, hours: 4 }
+  ];
+  const COLONIAS = ['Americana', 'Lafayette', 'Chapultepec', 'Moderna', 'Arcos Vallarta', 'Providencia', 'Ladrón de Guevara', 'Centro', 'Santa Teresita', 'Mezquitán'];
+  const state = { sel: { afinacion: 1 }, plan: null };
+
+  function renderLines() {
+    $('#lines').innerHTML = SERVICES.map(s => {
+      const [name, note] = s[lang], q = state.sel[s.id] || 0;
+      return `<label class="line"><input type="checkbox" data-id="${s.id}" ${q ? 'checked' : ''}>
+        <span><strong>${name}</strong><small>${note}${s.wheel ? ' · ' + t().perWheel : ''}</small></span>
+        ${s.wheel ? `<span class="qty" role="group" aria-label="${name}"><button type="button" data-q="-1" data-id="${s.id}" aria-label="−">−</button><output>${Math.max(q, 1)}</output><button type="button" data-q="1" data-id="${s.id}" aria-label="+">+</button></span>` : '<span class="qty-spacer"></span>'}
+        <span class="p">${money(s.price)}</span></label>`;
+    }).join('');
+  }
+  $('#lines').addEventListener('change', e => {
+    const id = e.target.dataset.id; if (!id) return;
+    if (e.target.checked) { state.sel[id] = 1; if (id === 'completo') delete state.sel.afinacion; if (id === 'afinacion') delete state.sel.completo; }
+    else delete state.sel[id];
+    renderLines(); renderTicket(true);
+  });
+  $('#lines').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (!b) return;
+    e.preventDefault();
+    const id = b.dataset.id; state.sel[id] = Math.min(2, Math.max(1, (state.sel[id] || 1) + +b.dataset.q));
+    renderLines(); renderTicket(true);
+  });
+
+  function workDays() {
+    const n = gdlNow(), out = [];
+    for (let i = 0; out.length < 6 && i < 10; i++) {
+      const d = new Date(n.date); d.setDate(d.getDate() + i);
+      const wd = d.getDay(); if (!HOURS[wd]) continue;
+      if (i === 0 && n.h >= HOURS[wd][1] - 1) continue;
+      out.push(d);
+    }
+    return out;
+  }
+  let days = [];
+  function renderDays() {
+    const prev = $('input[name=day]:checked')?.value;
+    days = workDays();
+    $('#days').innerHTML = days.map((d, i) => `<label class="day"><input type="radio" name="day" value="${i}" ${String(i) === (prev ?? '0') ? 'checked' : ''}>
+      <span><small>${t().days[d.getDay()]}</small><b>${d.getDate()}</b><small>${t().months[d.getMonth()]}</small></span></label>`).join('');
+    renderSlots();
+  }
+  function renderSlots() {
+    const idx = +($('input[name=day]:checked')?.value || 0), d = days[idx], h = HOURS[d.getDay()], n = gdlNow();
+    const prev = $('#slot').value, opts = [];
+    for (let x = h[0]; x < h[1] - 1; x++) {
+      if (idx === 0 && d.toDateString() === n.date.toDateString() && x <= n.h) continue;
+      opts.push(x);
+    }
+    $('#slot').innerHTML = opts.map(x => `<option value="${x}" ${String(x) === prev ? 'selected' : ''}>${hhmm(x)}</option>`).join('');
+  }
+  $('#days').addEventListener('change', () => { renderSlots(); renderTicket(); });
+
+  function renderColonias() {
+    const prev = $('#colonia').value;
+    $('#colonia').innerHTML = COLONIAS.map(c => `<option ${c === prev ? 'selected' : ''}>${c}</option>`).join('');
+    $('#colonias').innerHTML = COLONIAS.map(c => `<li>${c}</li>`).join('');
+  }
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  $('#col-check').addEventListener('input', e => {
+    const v = norm(e.target.value), out = $('#col-out');
+    if (v.length < 3) { out.textContent = ''; out.className = 'check-out'; return; }
+    const hit = COLONIAS.find(c => norm(c).includes(v) || v.includes(norm(c)));
+    out.textContent = hit ? t().col.yes(hit) : t().col.maybe;
+    out.className = 'check-out' + (hit ? ' ok' : '');
+  });
+
+  function orderData() {
+    const bike = $('input[name=bike]:checked').value, delivery = $('input[name=delivery]:checked').value;
+    const lines = SERVICES.filter(s => state.sel[s.id]).map(s => ({ name: s[lang][0], qty: s.wheel ? state.sel[s.id] : 1, wheel: s.wheel, amount: s.price * (s.wheel ? state.sel[s.id] : 1), hours: s.hours }));
+    if (bike === 'electrica' && lines.length) lines.push({ name: t().ebike, qty: 1, amount: 80, hours: 0 });
+    if (delivery === 'recoleccion') lines.push({ name: `${t().pickup} (${$('#colonia').value})`, qty: 1, amount: 120, hours: 0 });
+    const total = lines.reduce((a, l) => a + l.amount, 0);
+    const idx = +($('input[name=day]:checked')?.value || 0), d = days[idx], slot = +$('#slot').value;
+    const maxH = Math.max(0, ...lines.map(l => l.hours));
+    let ready = null;
+    if (d && maxH) {
+      ready = new Date(d); ready.setHours(slot || 9);
+      let left = maxH;
+      while (left > 0) {
+        const h = HOURS[ready.getDay()];
+        if (!h || ready.getHours() >= h[1]) { ready.setDate(ready.getDate() + 1); ready.setHours(HOURS[ready.getDay()]?.[0] ?? 9); continue; }
+        const step = Math.min(left, h[1] - ready.getHours()); left -= step; ready.setHours(ready.getHours() + step);
+        if (left > 0) { ready.setDate(ready.getDate() + 1); ready.setHours(9); left = Math.max(0, left - 14); }
+      }
+    }
+    return { bike, delivery, lines, total, day: d, slot, ready, name: $('#name').value.trim() };
+  }
+  const fmtDay = d => `${t().daysLong[d.getDay()]} ${d.getDate()} ${t().months[d.getMonth()]}`;
+  let lastTotal = null;
+  function renderTicket(bump) {
+    const o = orderData();
+    $('#t-lines').innerHTML = o.lines.length
+      ? o.lines.map(l => `<div class="t-row"><span>${l.name}${l.wheel ? ` · ${t().wheels(l.qty)}` : ''}</span><span>${money(l.amount)}</span></div>`).join('')
+      : `<p class="t-empty">${t().empty}</p>`;
+    const meta = [`<span>${t().bike}: <b>${t().bikeT[o.bike]}</b></span>`];
+    if (o.day) meta.push(`<span>${t().drop}: <b>${fmtDay(o.day)}, ${hhmm(o.slot)}</b> · ${o.delivery === 'taller' ? t().shop : t().pickup}</span>`);
+    if (o.ready) meta.push(`<span>${t().ready}: <b>${fmtDay(o.ready)}</b></span>`);
+    if (state.plan) meta.push(`<span>${t().plan}: <b>${state.plan}</b></span>`);
+    $('#t-meta').innerHTML = meta.join('');
+    const tot = $('#t-total'); tot.textContent = money(o.total);
+    if (bump && lastTotal !== o.total && !reduce) { tot.classList.remove('bump'); void tot.offsetWidth; tot.classList.add('bump'); }
+    lastTotal = o.total;
+    $('#wa').href = 'https://wa.me/?text=' + encodeURIComponent(message(o));
+    $('#wa').toggleAttribute('aria-disabled', !o.lines.length);
+  }
+  function message(o) {
+    const L = [t().hello, ''];
+    o.lines.forEach(l => L.push(`• ${l.name}${l.wheel ? ` (${t().wheels(l.qty)})` : ''}: ${money(l.amount)}`));
+    L.push('', `${t().total}: ${money(o.total)} MXN`, `${t().bike}: ${t().bikeT[o.bike]}`);
+    if (o.day) L.push(`${t().drop}: ${fmtDay(o.day)}, ${hhmm(o.slot)} (${o.delivery === 'taller' ? t().shop : t().pickup})`);
+    if (state.plan) L.push(`${t().plan}: ${state.plan}`);
+    if (o.name) L.push(`${t().name}: ${o.name}`);
+    L.push('', `#${$('#t-num').textContent}`);
+    return L.join('\n');
+  }
+  $('#order-form').addEventListener('change', e => {
+    if (e.target.name === 'delivery') $('#colonia-field').hidden = e.target.value !== 'recoleccion';
+    renderTicket(true);
+  });
+  $('#name').addEventListener('input', () => renderTicket());
+  $('#copy').addEventListener('click', async () => {
+    const btn = $('#copy'), txt = message(orderData());
+    try { await navigator.clipboard.writeText(txt); btn.textContent = t().copied; }
+    catch { const ta = document.createElement('textarea'); ta.value = txt; document.body.append(ta); ta.select(); try { document.execCommand('copy'); btn.textContent = t().copied; } catch {} ta.remove(); }
+    setTimeout(() => btn.textContent = t().copy, 1600);
+  });
+  $$('[data-plan]').forEach(a => a.addEventListener('click', () => {
+    state.plan = a.textContent.replace(/^(Elegir|Choose)\s+/, '').trim();
+    renderTicket(true);
+  }));
+  $('#t-num').textContent = 'TC-' + (1044 + (new Date().getDate() % 9));
+
+  /* ---------- seguimiento ---------- */
+  const ORDERS = { 'TC-1042': { stage: 2, bike: 'ruta' }, 'TC-1043': { stage: 3, bike: 'urbana' }, 'TC-1040': { stage: 4, bike: 'montana' } };
+  let currentTrack = 'TC-1042';
+  function renderTrack() {
+    const o = ORDERS[currentTrack], tl = $('#timeline');
+    if (!o) { $('#track-msg').textContent = t().notFound; tl.innerHTML = ''; return; }
+    $('#track-msg').textContent = `${currentTrack} · ${t().bikeT[o.bike]}`;
+    const base = new Date(); base.setHours(9, 0, 0, 0);
+    do { base.setDate(base.getDate() - 1); } while (base.getDay() === 0 || base.getDay() === 6);
+    const OFF = [1.1, 3.6, 8.2, 26.5, 28.2];
+    tl.innerHTML = t().stages.map(([n, d], i) => {
+      const cls = i < o.stage ? 'done' : i === o.stage ? 'now' : '';
+      const when = i <= o.stage ? new Date(base.getTime() + OFF[i] * 3600e3) : null;
+      return `<li class="${cls}"><span class="b"></span><span><strong>${n}</strong><small>${d}</small></span><time>${when ? `${t().days[when.getDay()]} ${String(when.getHours()).padStart(2, '0')}:${String(when.getMinutes()).padStart(2, '0')}` : ''}</time></li>`;
+    }).join('');
+  }
+  $('#track-form').addEventListener('submit', e => { e.preventDefault(); currentTrack = $('#track-id').value.trim().toUpperCase(); renderTrack(); });
+  $$('[data-track]').forEach(b => b.addEventListener('click', () => { $('#track-id').value = b.dataset.track; currentTrack = b.dataset.track; renderTrack(); }));
+
+  /* ---------- bici: rayos y giro con el scroll ---------- */
+  $$('#bike .spokes').forEach(g => {
+    const wheel = g.closest('g[id^=wheel]'), cx = wheel.id === 'wheel-r' ? 160 : 490, cy = 280;
+    let s = '';
+    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; s += `<line x1="${cx + Math.cos(a) * 10}" y1="${cy + Math.sin(a) * 10}" x2="${cx + Math.cos(a + .35) * 95}" y2="${cy + Math.sin(a + .35) * 95}"/>`; }
+    g.innerHTML = s;
+  });
+  if (!reduce) {
+    const wr = $('#wheel-r'), wf = $('#wheel-f'), cr = $('#crank');
+    let ticking = false;
+    const spin = () => { const a = scrollY * .55; wr.style.transform = wf.style.transform = `rotate(${a}deg)`; cr.style.transform = `rotate(${a * .45}deg)`; ticking = false; };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(spin); } }, { passive: true });
+  } else $('#bike').classList.remove('draw');
+
+  /* ---------- antes y después: piñones dibujados ---------- */
+  function gear(cx, cy, r, teeth, depth) {
+    let d = '';
+    for (let i = 0; i < teeth; i++) {
+      const a = i / teeth * Math.PI * 2, s = Math.PI * 2 / teeth;
+      const pts = [[a, r - depth], [a + s * .18, r], [a + s * .5, r], [a + s * .68, r - depth]];
+      pts.forEach(([ang, rad], j) => d += `${i === 0 && j === 0 ? 'M' : 'L'}${(cx + Math.cos(ang) * rad).toFixed(1)} ${(cy + Math.sin(ang) * rad).toFixed(1)}`);
+    }
+    return d + 'Z';
+  }
+  function cassette(dirty) {
+    const rings = [[178, 46], [156, 40], [136, 35], [118, 30], [100, 26], [84, 22], [70, 18]];
+    const id = dirty ? 'd' : 'c';
+    let s = `<defs>
+      <radialGradient id="bg${id}" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="${dirty ? '#2B2A24' : '#25302B'}"/><stop offset="1" stop-color="${dirty ? '#141310' : '#101614'}"/></radialGradient>
+      <linearGradient id="m${id}" x1="0" y1="0" x2="1" y2="1">${dirty
+        ? '<stop offset="0" stop-color="#5A4A35"/><stop offset=".5" stop-color="#3A2F22"/><stop offset="1" stop-color="#22190F"/>'
+        : '<stop offset="0" stop-color="#F4F6F7"/><stop offset=".45" stop-color="#A9B3BA"/><stop offset=".6" stop-color="#E3E8EB"/><stop offset="1" stop-color="#7E8A92"/>'}</linearGradient>
+      ${dirty ? `<filter id="grime" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".055" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 .1  0 0 0 0 .07  0 0 0 0 .03  0 0 0 -2.4 1.45"/><feComposite in2="SourceGraphic" operator="in"/></filter>` : ''}
+    </defs><rect width="400" height="400" fill="url(#bg${id})"/>`;
+    rings.forEach(([r, n], i) => {
+      s += `<path d="${gear(200, 200, r, n, 9)}" fill="url(#m${id})" stroke="${dirty ? '#120E09' : '#5B666D'}" stroke-width="1.4"/>`;
+      s += `<circle cx="200" cy="200" r="${r - 15}" fill="${dirty ? '#1B150E' : '#26302C'}"/>`;
+    });
+    s += `<circle cx="200" cy="200" r="38" fill="url(#m${id})" stroke="${dirty ? '#120E09' : '#5B666D'}"/><circle cx="200" cy="200" r="16" fill="${dirty ? '#0E0B07' : '#1A221F'}"/>`;
+    for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; s += `<circle cx="${200 + Math.cos(a) * 27}" cy="${200 + Math.sin(a) * 27}" r="2.6" fill="${dirty ? '#0E0B07' : '#56626A'}"/>`; }
+    if (dirty) {
+      s += `<g filter="url(#grime)"><circle cx="200" cy="200" r="186" fill="#000"/></g>`;
+      const blobs = [[110, 130, 22], [290, 260, 30], [250, 95, 16], [140, 290, 26], [310, 170, 14], [80, 220, 12], [205, 330, 18]];
+      blobs.forEach(([x, y, r]) => s += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .7}" fill="#0D0904" opacity=".55"/>`);
+    } else {
+      s += `<path d="M90 120 A150 150 0 0 1 220 52" stroke="rgba(255,255,255,.55)" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    }
+    return s;
+  }
+  $('#compare .after').innerHTML = cassette(false);
+  $('#compare .before').innerHTML = cassette(true);
+  const cmp = $('#compare'), range = $('#compare-range');
+  range.addEventListener('input', () => cmp.style.setProperty('--pos', range.value + '%'));
+
+  /* ---------- render ---------- */
+  function renderAll() { renderStatus(); renderHours(); renderLines(); renderDays(); renderColonias(); renderTicket(); renderTrack(); }
+  const hashLang = location.hash === '#en' ? 'en' : null;
+  setLang(hashLang || store.get('tc-lang') || ((navigator.language || 'es').startsWith('es') ? 'es' : 'es'));
+  setInterval(renderStatus, 60e3);
+})();
+</script>
+</body>
+</html>
