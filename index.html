@@ -14,17 +14,18 @@
 <meta name="theme-color" content="#0A0F18" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='24' height='24' rx='2' fill='%23fff' stroke='%231F4FE0' stroke-width='3'/%3E%3Crect x='24' y='24' width='7' height='7' fill='%231F4FE0'/%3E%3Ctext x='15' y='20' font-family='monospace' font-weight='700' font-size='11' text-anchor='middle' fill='%230D1626'%3EEP%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400..800&display=swap">
+<script type="speculationrules">{"prerender":[{"source":"list","urls":["demos/taller-cadena/index.html"],"eagerness":"moderate"}]}</script>
 <style>/* Layout: una hoja de cálculo viva. La página se apoya en una cuadrícula de celdas tenue,
    el encabezado es una barra de fórmulas que sigue la sección, la navegación son pestañas de hoja
    y lo que eliges se marca con el contorno de selección y su controlador de relleno. */
 :root{
   --paper:#F4F6F9; --sheet:#FFFFFF; --band:#EBEFF4; --head:#E6EBF1;
-  --ink:#0D1626; --ink-2:#465267; --ink-3:#768296;
+  --ink:#0D1626; --ink-2:#465267; --ink-3:#5E6A7E;
   --line:#D7DEE7; --line-2:#C3CCD8; --grid:rgba(13,22,38,.055);
   --accent:#1F4FE0; --accent-ink:#FFFFFF; --accent-soft:rgba(31,79,224,.09); --accent-line:rgba(31,79,224,.35);
   --mark:#FFC531; --mark-soft:rgba(255,197,49,.45);
-  --good:#0E7F47; --good-soft:#E1F3E8; --bad:#C93434; --bad-soft:#FBE4E4;
-  --r1:#1F4FE0; --r2:#D2550F; --r3:#7A3BDB; --r4:#0E7F47;
+  --good:#0B7340; --good-soft:#E1F3E8; --bad:#B22A2A; --bad-soft:#FBE4E4;
+  --r1:#1F4FE0; --r2:#B5470B; --r3:#7A3BDB; --r4:#0B7340;
   --shadow:0 28px 60px -28px rgba(13,22,38,.32);
   --scrim:rgba(13,22,38,.42);
   --display:"Archivo","Helvetica Neue",Arial,system-ui,sans-serif;
@@ -34,7 +35,7 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#0A0F18; --sheet:#111A28; --band:#0E1521; --head:#162133;
-  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#717E93;
+  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#8691A6;
   --line:#223049; --line-2:#2E3E5C; --grid:rgba(231,236,244,.045);
   --accent:#7D9CFF; --accent-ink:#0A0F18; --accent-soft:rgba(125,156,255,.13); --accent-line:rgba(125,156,255,.45);
   --mark:#FFCB45; --mark-soft:rgba(255,203,69,.30);
@@ -46,7 +47,7 @@
 }}
 :root[data-theme="dark"]{
   --paper:#0A0F18; --sheet:#111A28; --band:#0E1521; --head:#162133;
-  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#717E93;
+  --ink:#E7ECF4; --ink-2:#A5B0C2; --ink-3:#8691A6;
   --line:#223049; --line-2:#2E3E5C; --grid:rgba(231,236,244,.045);
   --accent:#7D9CFF; --accent-ink:#0A0F18; --accent-soft:rgba(125,156,255,.13); --accent-line:rgba(125,156,255,.45);
   --mark:#FFCB45; --mark-soft:rgba(255,203,69,.30);
@@ -58,7 +59,7 @@
 }
 
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px;scroll-padding-bottom:64px}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
      padding-bottom:calc(52px + env(safe-area-inset-bottom,0px));overflow-x:hidden}
 :root:not([data-lang="en"]) [data-l="en"],:root[data-lang="en"] [data-l="es"]{display:none!important}
@@ -66,7 +67,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);f
 a{color:var(--accent)}
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
 .mono{font-family:var(--mono);font-feature-settings:"calt" 0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--accent);color:var(--accent-ink);padding:10px 14px;border-radius:8px;font-weight:700}
@@ -104,8 +105,9 @@ mark{color:inherit;background:linear-gradient(to top,var(--mark-soft) 0 40%,tran
 .seg button:focus-visible{outline:2px solid var(--accent)}
 
 /* ---------- barra de fórmulas ---------- */
-.fx{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--paper) 86%,transparent);
+.fx{position:sticky;isolation:isolate;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--paper) 86%,transparent);
     -webkit-backdrop-filter:saturate(1.4) blur(12px);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.fx-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
 .fx-in{display:flex;align-items:center;gap:12px;height:62px;max-width:1440px;margin:0 auto;
        padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none}
@@ -189,16 +191,41 @@ mark{color:inherit;background:linear-gradient(to top,var(--mark-soft) 0 40%,tran
 .status.ok{color:var(--good)}
 @media (max-width:560px){.live-foot{grid-template-columns:1fr}.status{text-align:left;max-width:none}.bar-row{grid-template-columns:110px 1fr 64px}}
 
-/* ---------- prueba ---------- */
+/* ---------- prueba: bento ---------- */
 .proof{border-bottom:1px solid var(--line);background:var(--sheet)}
 .proof-k{font-size:.72rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;padding-top:26px}
-.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);margin:14px 0 0;padding-bottom:30px}
-.proof-grid div{padding:6px 24px 0;border-left:1px solid var(--line);min-width:0}
-.proof-grid div:first-child{border-left:0;padding-left:0}
+.bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(150px,auto);gap:12px;margin:14px 0 0;padding-bottom:30px}
+.tile{position:relative;display:flex;flex-direction:column;gap:8px;padding:20px;border:1px solid var(--line);border-radius:4px;background:var(--paper);
+      color:var(--ink);text-decoration:none;min-width:0;overflow:visible;transition:box-shadow .15s,transform .2s,background .2s}
+.tile:hover{transform:translateY(-2px);background:var(--sheet)}
+.tile:focus-visible{outline:none}
+.tile-xl{grid-column:span 2;grid-row:span 2;background:var(--sheet)}
+.tile-wide{grid-column:span 2}
+.tile-k{font-size:.72rem;color:var(--ink-3);letter-spacing:.02em}
 .num{font-family:var(--display);font-weight:800;font-stretch:120%;font-size:clamp(2rem,3.2vw,2.8rem);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.proof dd{margin:10px 0 0;color:var(--ink-2);font-size:.9rem;line-height:1.45;max-width:30ch}
-@media (max-width:860px){.proof-grid{grid-template-columns:1fr 1fr;row-gap:26px}.proof-grid div:nth-child(3){border-left:0;padding-left:0}}
-@media (max-width:440px){.proof-grid{grid-template-columns:1fr}.proof-grid div{border-left:0;padding-left:0}}
+.tile .num{margin-top:auto}
+.tile-xl .num{font-size:clamp(3rem,6vw,5.2rem);margin-top:6px}
+.tile-t{color:var(--ink-2);font-size:.9rem;line-height:1.45;max-width:38ch}
+.tile-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:auto}
+.tile-go{margin-top:auto;font-size:.8rem;color:var(--accent);font-weight:600}
+/* campo de celdas que se llena al entrar en pantalla */
+.cellfield{position:relative;display:block;height:64px;margin-top:6px;border:1px solid var(--line);border-radius:3px;overflow:hidden;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:12px 12px;background-position:-1px -1px}
+.cellfield i{position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in srgb,var(--good) 30%,transparent),color-mix(in srgb,var(--good) 18%,transparent));
+  transform-origin:left;border-right:2px solid var(--good)}
+.errs{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem;color:var(--ink-2)}
+.errs b{color:var(--good)}
+.term{display:grid;gap:4px;margin-top:4px;padding:10px 12px;border-radius:6px;background:#0B111B;color:#D6DDE8;font-size:.72rem;box-shadow:inset 0 0 0 1px var(--line)}
+.term .dim{color:#A9B4C6}
+.term .ok{color:#7BE3A8;font-weight:700}
+.dots-ok{display:flex;flex-wrap:wrap;gap:3px}
+.dots-ok i{width:6px;height:6px;border-radius:50%;background:#7BE3A8}
+.stackbar{display:flex;width:100%;gap:3px;margin-top:6px}
+.stackbar > span{flex:var(--n) 1 0;min-width:0;padding:8px 8px 6px;border-top:4px solid var(--accent);font-size:.76rem;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stackbar b{font-family:var(--mono);color:var(--ink)}
+.stackbar .sb-python{border-color:var(--r3)}.stackbar .sb-web{border-color:var(--r2)}.stackbar .sb-extras{border-color:var(--ink-3)}
+@media (max-width:860px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}.tile-xl{grid-row:auto}}
+@media (max-width:440px){.bento{grid-template-columns:1fr}.tile-xl,.tile-wide{grid-column:auto}.stackbar{flex-wrap:wrap}.stackbar > span{flex-basis:40%}}
 
 /* ---------- secciones ---------- */
 main > section{padding-block:96px}
@@ -214,7 +241,7 @@ main > section{padding-block:96px}
 .filter .af{font-size:.7rem;color:var(--ink-3)}
 .filter .cnt{font-size:.72rem;padding:1px 6px;border-radius:5px;background:var(--head);color:var(--ink-2)}
 .filter.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.filter.on .af{color:inherit}.filter.on .cnt{background:rgba(255,255,255,.22);color:inherit}
+.filter.on .af{color:inherit}.filter.on .cnt{background:rgba(0,0,0,.2);color:inherit}
 .filter:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media (max-width:1180px){.svc-grid{grid-template-columns:repeat(3,1fr)}}
@@ -459,6 +486,12 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
 .tabs a[aria-current="true"]{background:var(--sheet);color:var(--accent)}
 .tabs a[aria-current="true"]::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
 .tabs a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tabs{display:flex;align-items:stretch}
+.tabs .tabs-in{flex:1;min-width:0;margin:0}
+.tabs .tabs-cta{display:none;border:0;position:static;flex:none;align-items:center;gap:6px;margin:4px max(8px,env(safe-area-inset-right,0px)) 4px 6px;padding:0 16px;border-radius:9px;
+          background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.9rem;text-decoration:none;box-shadow:0 8px 18px -10px var(--accent)}
+@media (max-width:860px){.tabs .tabs-cta{display:inline-flex}}
+.tabs .tabs-cta:hover{background:var(--accent);color:var(--accent-ink);filter:brightness(1.08)}
 
 /* paleta de búsqueda */
 .palette{position:fixed;inset:0;z-index:90;background:var(--scrim);display:flex;justify-content:center;align-items:flex-start;padding:12vh max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
@@ -484,7 +517,48 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
   }
 }
 @keyframes rise{from{transform:translateY(26px)}to{transform:none}}
+
+/* ---------- objetivos táctiles de 44 px en pantallas táctiles ---------- */
+@media (pointer:coarse){
+  .btn,.btn-sm,.btn-xs,.icon-btn,.run,.filter,.tabs-demo button{min-height:44px}
+  .icon-btn{min-width:44px}
+  .seg button{min-height:44px;display:inline-flex;align-items:center;min-width:44px;justify-content:center}
+  .brand{min-height:44px;min-width:44px}
+  .demo-chip{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;margin:-9px 0}
+  .xl .sheet td.ed input{min-height:44px}
+  .check{min-height:44px}
+  .check input{width:22px;height:22px}
+  .proj-links .btn-link{min-height:44px;display:inline-flex;align-items:center}
+  .foot-links .btn{min-height:44px}
+  .tabs-in{height:52px}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+}
+
+/* ---------- contenedores: cada tarjeta se acomoda a su propio ancho ---------- */
+.svc,.proj-body,.tier{container-type:inline-size}
+@container (max-width:250px){.svc-foot{flex-direction:column;align-items:flex-start;gap:6px}}
+@container (max-width:340px){.proj-links .btn{flex:1 1 100%}}
+
+/* ---------- transiciones de vista (tema, pestañas, navegación entre páginas) ---------- */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.32s}
+:root.vt-theme::view-transition-old(root){animation:none}
+:root.vt-theme::view-transition-new(root){animation:theme-in .55s cubic-bezier(.4,0,.2,1)}
+@keyframes theme-in{from{clip-path:circle(0 at var(--vx,100%) var(--vy,0))}to{clip-path:circle(150vmax at var(--vx,100%) var(--vy,0))}}
+
+/* ---------- movimiento ligado al desplazamiento (hilo del compositor) ---------- */
+@supports (animation-timeline:scroll()){
+  @media (prefers-reduced-motion:no-preference){
+    .fx-progress{animation:grow linear both;animation-timeline:scroll(root)}
+    .cellfield i{animation:fillx linear both;animation-timeline:view();animation-range:entry 20% cover 55%}
+    .tile{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  }
+}
+@supports not (animation-timeline:scroll()){.fx-progress{display:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes fillx{from{transform:scaleX(.04)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
 </style>
 </head>
 <body>
@@ -515,6 +589,7 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
     </button>
     <a class="btn btn-accent btn-sm cta-top" href="#brief"><span data-l="es">Cotiza tu proyecto</span><span data-l="en">Get a quote</span></a>
   </div>
+  <span class="fx-progress" aria-hidden="true"></span>
 </header>
 
 <main>
@@ -578,12 +653,37 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
 <div class="proof">
   <div class="wrap">
     <p class="proof-k mono"><span data-l="es">Medido en los proyectos de muestra</span><span data-l="en">Measured on the sample projects</span></p>
-    <dl class="proof-grid">
-      <div><dt class="num" data-count="8280">8,280</dt><dd><span data-l="es">fórmulas sin un solo error en la plantilla de ventas, comparadas contra un cálculo independiente en pandas</span><span data-l="en">formulas with zero errors in the sales template, checked against an independent pandas calculation</span></dd></div>
-      <div><dt class="num" data-count="23">23</dt><dd><span data-l="es">pruebas automáticas que pasan en el limpiador de reportes de Python</span><span data-l="en">automated tests passing in the Python report cleaner</span></dd></div>
-      <div><dt class="num" data-count="16">16</dt><dd><span data-l="es">servicios que puedo entregar completos, de la fórmula al sitio web</span><span data-l="en">services I can deliver end to end, from a formula to a website</span></dd></div>
-      <div><dt class="num" data-count="0">0</dt><dd><span data-l="es">plantillas o constructores en este sitio: HTML, CSS y JavaScript escritos a mano</span><span data-l="en">templates or site builders behind this site: hand-written HTML, CSS and JavaScript</span></dd></div>
-    </dl>
+    <div class="bento">
+      <a class="tile tile-xl sel" href="#proyectos">
+        <span class="tile-k mono"><span data-l="es">Plantilla de ventas e inventario</span><span data-l="en">Sales and inventory template</span></span>
+        <span class="num" data-count="8280">8,280</span>
+        <span class="tile-t"><span data-l="es">fórmulas recalculadas sin un solo error y comparadas contra un cálculo independiente en pandas</span><span data-l="en">formulas recalculated with zero errors and checked against an independent pandas calculation</span></span>
+        <span class="cellfield" aria-hidden="true"><i></i></span>
+        <span class="errs mono" aria-hidden="true"><span><span data-l="es">#¡REF!</span><span data-l="en">#REF!</span> <b>0</b></span><span><span data-l="es">#¡VALOR!</span><span data-l="en">#VALUE!</span> <b>0</b></span><span><span data-l="es">#N/D</span><span data-l="en">#N/A</span> <b>0</b></span><span>#DIV/0! <b>0</b></span></span>
+        <span class="tile-go mono" aria-hidden="true"><span data-l="es">Ver proyecto</span><span data-l="en">See project</span> →</span>
+        <span class="handle" aria-hidden="true"></span>
+      </a>
+      <a class="tile sel" href="#demos" data-open-demo="limpiador">
+        <span class="tile-k mono"><span data-l="es">Limpiador de reportes</span><span data-l="en">Report cleaner</span></span>
+        <span class="num" data-count="23">23</span>
+        <span class="tile-t"><span data-l="es">pruebas automáticas que pasan</span><span data-l="en">automated tests passing</span></span>
+        <span class="term mono" aria-hidden="true"><span class="dim">$ pytest -q</span><span class="dots-ok"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ok">23 passed</span></span>
+        <span class="handle" aria-hidden="true"></span>
+      </a>
+      <a class="tile sel" href="#proyectos">
+        <span class="tile-k mono"><span data-l="es">Este sitio</span><span data-l="en">This site</span></span>
+        <span class="num" data-count="0">0</span>
+        <span class="tile-t"><span data-l="es">plantillas, constructores o librerías: HTML, CSS y JavaScript escritos a mano</span><span data-l="en">templates, site builders or libraries: hand-written HTML, CSS and JavaScript</span></span>
+        <span class="handle" aria-hidden="true"></span>
+      </a>
+      <a class="tile tile-wide sel" href="#servicios">
+        <span class="tile-k mono"><span data-l="es">De la fórmula al sitio web</span><span data-l="en">From a formula to a website</span></span>
+        <span class="tile-row"><span class="num" data-count="16">16</span><span class="tile-t"><span data-l="es">servicios que entrego completos</span><span data-l="en">services I deliver end to end</span></span></span>
+        <span class="stackbar" aria-hidden="true"><span style="--n:5" class="sb-sheets"><b>5</b> <span data-l="es">Hojas de cálculo</span><span data-l="en">Spreadsheets</span></span><span style="--n:6" class="sb-python"><b>6</b> <span data-l="es">Python y datos</span><span data-l="en">Python and data</span></span><span style="--n:3" class="sb-web"><b>3</b> <span data-l="es">Web</span><span data-l="en">Web</span></span><span style="--n:2" class="sb-extras"><b>2</b> <span data-l="es">Extras</span><span data-l="en">Extras</span></span>
+        </span>
+        <span class="handle" aria-hidden="true"></span>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -891,7 +991,7 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
               <button type="button" data-device="desk" aria-pressed="true"><span data-l="es">Escritorio</span><span data-l="en">Desktop</span></button>
               <button type="button" data-device="phone" aria-pressed="false"><span data-l="es">Celular</span><span data-l="en">Phone</span></button>
             </div>
-            <a class="btn btn-ghost btn-sm" href="demos/taller-cadena/index.html" target="_blank" rel="noopener"><span data-l="es">Abrir completa ↗</span><span data-l="en">Open full page ↗</span></a>
+            <a class="btn btn-ghost btn-sm" href="demos/taller-cadena/index.html"><span data-l="es">Abrir completa →</span><span data-l="en">Open full page →</span></a>
           </div>
         </div>
         <div class="device desk" id="device">
@@ -1184,6 +1284,7 @@ select,input[type=text]{font:inherit;width:100%;padding:11px 12px;border-radius:
     <a href="#faq" data-tab="7"><span data-l="es">Preguntas</span><span data-l="en">FAQ</span></a>
     <a href="#sobre-mi" data-tab="8"><span data-l="es">Sobre mí</span><span data-l="en">About</span></a>
   </div>
+  <a class="tabs-cta" href="#brief"><span data-l="es">Cotizar</span><span data-l="en">Get a quote</span><svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h12M10 4l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </nav>
 
 <div class="palette" id="palette" hidden>
@@ -1210,6 +1311,16 @@ const money = (n, d = 0) => '$' + fmt(n, d);
 let lang = 'es';
 const L = (es, en) => lang === 'en' ? en : es;
 const P = p => Array.isArray(p) ? (lang === 'en' ? p[1] : p[0]) : p;
+
+/* transición de vista solo si el navegador la soporta y el usuario no pidió menos movimiento */
+function vt(fn, cls) {
+  if (reduce || !document.startViewTransition) { fn(); return; }
+  if (cls) root.classList.add(cls);
+  const tr = document.startViewTransition(fn);
+  tr.finished.finally(() => cls && root.classList.remove(cls));
+}
+/* cede el hilo principal entre tareas para no bloquear clics (INP) */
+const yieldMain = () => globalThis.scheduler?.yield ? scheduler.yield() : new Promise(r => setTimeout(r, 0));
 
 function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('on');
@@ -1400,10 +1511,11 @@ function openDemo(name, focus) {
   tabs.forEach(t => { const on = t.dataset.demo === name; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; $('#' + t.getAttribute('aria-controls')).hidden = !on; if (on && focus) t.focus(); });
   if (name === 'landing' && !frameLoaded) { const f = $('#landing-frame'); f.src = f.dataset.src; frameLoaded = true; fitFrame(); }
   if (name === 'dashboard') drawDash();
+  if (name === 'limpiador' && CL.stale) CL.show();
   paintBar();
 }
 tabs.forEach((t, i) => {
-  t.addEventListener('click', () => openDemo(t.dataset.demo));
+  t.addEventListener('click', () => { if (t.getAttribute('aria-selected') !== 'true') vt(() => openDemo(t.dataset.demo)); });
   t.addEventListener('keydown', e => {
     const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (!k) return;
     e.preventDefault(); openDemo(tabs[(i + k + tabs.length) % tabs.length].dataset.demo, true);
@@ -1589,10 +1701,11 @@ const CL = (() => {
     pr.querySelector('summary').textContent = L(`${res.prob.length} filas separadas para revisar (no se borran)`, `${res.prob.length} rows set aside for review (not deleted)`);
     pr.querySelector('ul').innerHTML = res.prob.map(([f, w]) => `<li>${L('Fila', 'Row')} ${f}: ${esc(w)}</li>`).join('');
   }
-  $('#cl-run').addEventListener('click', show);
-  $('#cl-sample').addEventListener('click', () => { $('#cl-text').value = D.sampleCSV; show(); });
-  $('#cl-text').value = D.sampleCSV; show();
-  return { show };
+  $('#cl-run').addEventListener('click', () => api.show());
+  $('#cl-sample').addEventListener('click', () => { $('#cl-text').value = D.sampleCSV; api.show(); });
+  $('#cl-text').value = D.sampleCSV;
+  const api = { stale: true, show() { api.stale = false; show(); } };
+  return api;
 })();
 
 /* ============ 03 dashboard ============ */
@@ -1650,12 +1763,12 @@ $$('[data-device]').forEach(b => b.addEventListener('click', () => {
 if ('ResizeObserver' in window) new ResizeObserver(() => frameLoaded && fitFrame()).observe($('#device-screen'));
 
 /* ============ precios ============ */
-$$('[data-pk]').forEach(b => b.addEventListener('click', () => {
+$$('[data-pk]').forEach(b => b.addEventListener('click', () => vt(() => {
   state.pk = b.dataset.pk;
   $$('[data-pk]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   $$('[data-pk-panel]').forEach(p => p.hidden = p.dataset.pkPanel !== state.pk);
   paintBar();
-}));
+})));
 
 /* ============ brief ============ */
 const pickMap = { excel: 'sheets', python: 'python', landing: 'web' };
@@ -1771,7 +1884,11 @@ if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $('#kbd-h
 /* ============ tema ============ */
 function effectiveDark() { const t = root.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
 function toggleTheme() { const next = effectiveDark() ? 'light' : 'dark'; root.dataset.theme = next; store.set('ep-theme', next); }
-$('#theme').addEventListener('click', toggleTheme);
+$('#theme').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  root.style.setProperty('--vx', (r.left + r.width / 2) + 'px'); root.style.setProperty('--vy', (r.top + r.height / 2) + 'px');
+  vt(toggleTheme, 'vt-theme');
+});
 const savedTheme = store.get('ep-theme'); if (savedTheme === 'dark' || savedTheme === 'light') root.dataset.theme = savedTheme;
 
 /* ============ idioma ============ */
@@ -1785,9 +1902,17 @@ function setLang(l) {
   $$('option[data-es]').forEach(o => o.textContent = lang === 'en' ? o.dataset.en : o.dataset.es);
   const w = $('#b-what'); if (!whatTouched) w.value = lang === 'en' ? w.dataset.valEn : w.dataset.valEs;
   store.set('ep-lang', lang);
-  lastFormula = ''; paintBar(); XL.render(); CL.show(); brief(); links();
-  if (!$('#p-dashboard').hidden) drawDash();
+  lastFormula = ''; paintBar(); links();
   if (!pal.hidden) palRender();
+  const job = (setLang.job = {});
+  (async () => {
+    await yieldMain(); if (job !== setLang.job) return;
+    XL.render();
+    await yieldMain(); if (job !== setLang.job) return;
+    if (!$('#p-limpiador').hidden) CL.show(); else CL.stale = true;
+    brief();
+    if (!$('#p-dashboard').hidden) { await yieldMain(); drawDash(); }
+  })();
 }
 $$('[data-set-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.setLang)));
 const h = location.hash.replace('#', '');
